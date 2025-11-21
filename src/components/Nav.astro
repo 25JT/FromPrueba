@@ -1,0 +1,157 @@
+---
+import Logo from "../assets/Logo/lOGOPNG (1).svg";
+import { Image } from "astro:assets";
+---
+
+<nav
+  class="relative border-2 rounded-lg shadow-md shadow-black px-4 py-2 flex items-center justify-between"
+>
+  <!-- Botón hamburguesa -->
+  <button id="menuToggle" class="hidden text-2xl" title="Menú"> ☰ </button>
+
+  <!-- Logo centrado -->
+  <div class="flex-1 flex justify-center" onclick="location.href = '/';">
+    <Image
+      src={Logo}
+      alt="Logo"
+      class="md:w-20 md:h-20 h-20 w-20"
+      priority={true}
+    />
+  </div>
+
+  <!-- Botones derecha -->
+  <div class="hidden md:flex gap-4 items-center" id="desktopButtons">
+    <button class="px-4 py-2 uppercase">BLOG</button>
+    <button id="btnIniciar" class="px-4 py-2 uppercase hidden"
+      >Inicia sesión</button
+    >
+    <button id="btnCerrar" class="px-4 py-2 uppercase hidden"
+      >Cerrar sesión</button
+    >
+  </div>
+
+  <!-- Botón iniciar sesión en móviles -->
+  <button id="btnIniciarMobile" class="md:hidden px-4 py-2 uppercase hidden"
+    >Inicia sesión</button
+  >
+
+  <!-- Sidebar -->
+  <div
+    id="sidebar"
+    class="fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-white via-white to-[#ff5a5f] shadow-lg transform -translate-x-full transition-transform duration-300 z-50"
+  >
+    <div class="flex justify-between items-center p-4 border-b">
+      <h2 class="font-bold text-[#ff5a5f] text-3xl">Menú</h2>
+      <button id="closeSidebar" class="text-2xl">&times;</button>
+    </div>
+    <div class="p-4 space-y-4">
+      <button class="w-full text-left px-4 py-2 hover:bg-pink-50 rounded" id="Negocio"
+        >Mi Negocio</button
+      >
+      
+      <button class="w-full text-left px-4 py-2 hover:bg-pink-50 rounded" id="Citas"
+        > Mis Citas</button
+      >
+      <!-- <button class="w-full text-left px-4 py-2 hover:bg-pink-50 rounded"
+        >Opción 3</button
+      > -->
+      <hr />
+      <!-- Cerrar sesión -->
+      <button
+        id="btnCerrarSidebar"
+        class="w-full text-left px-4 py-2 hover:bg-red-50 rounded text-[#ff5a5f]"
+      >
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- Fondo desenfocado -->
+  <div
+    id="overlay"
+    class="hidden fixed inset-0 bg-opacity-40 backdrop-blur-sm z-40"
+  >
+  </div>
+
+  <!-- Modal de inicio de sesión (igual al original) -->
+  <div
+    id="loginDropdown"
+    class="hidden fixed top-0 left-0 w-full h-full bg-opacity-40 backdrop-blur-md flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-xs p-6 relative">
+      <button
+        id="closeLogin"
+        class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl"
+        >&times;</button
+      >
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label
+            for="loginEmail"
+            class="block text-sm font-semibold text-gray-700"
+            >Correo electrónico</label
+          >
+          <input
+            type="email"
+            id="loginEmail"
+            required
+            class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#ff5a5f]"
+            placeholder="usuario@correo.com"
+          />
+        </div>
+        <div>
+          <label
+            for="loginPassword"
+            class="block text-sm font-semibold text-gray-700">Contraseña</label
+          >
+          <input
+            type="password"
+            id="loginPassword"
+            required
+            class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#ff5a5f]"
+            placeholder="********"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#ff5a5f] text-white font-bold py-2 rounded hover:bg-[#e04e52] transition"
+          >Ingresar</button
+        >
+      </form>
+      <div class="mt-4 text-center">
+        <button id="showForgot" class="text-[#000000] hover:underline text-sm"
+          >Olvidé la contraseña</button
+        >
+      </div>
+      <form id="forgotForm" class="space-y-4 hidden mt-2">
+        <div>
+          <label
+            for="forgotEmail"
+            class="block text-sm font-semibold text-gray-700"
+            >Introduce tu correo para restablecer</label
+          >
+          <input
+            type="email"
+            id="forgotEmail"
+            required
+            class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#ff5a5f]"
+            placeholder="usuario@correo.com"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#ff5a5f] text-white font-bold py-2 rounded hover:bg-[#e04e52] transition"
+          >Enviar enlace</button
+        >
+        <button
+          type="button"
+          id="backToLogin"
+          class="w-full mt-2 text-gray-500 hover:underline text-xs"
+          >Volver al inicio de sesión</button
+        >
+      </form>
+    </div>
+  </div>
+
+</nav>
+<script src="../utils/navJs.js"></script>

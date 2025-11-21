@@ -1,0 +1,34 @@
+<main>
+<div class="text-center mb-15">
+    <h1 class="uppercase text-5xl m-5">Menu de negocio</h1>
+</div>
+<div class="overflow-x-auto md:overflow-visible">
+    <!-- Tabla para escritorio -->
+    <table class="hidden md:table w-full border border-gray-300 text-center">
+        <thead class="bg-white">
+            <tr class="text-[#ff5a5f] font-semibold">
+                <th class="border border-gray-300 px-4 py-2">HORA</th>
+                <th class="border border-gray-300 px-4 py-2">FECHA</th>
+                <th class="border border-gray-300 px-4 py-2">CLIENTE</th>
+                <th class="border border-gray-300 px-4 py-2">MENSAJE</th>
+                <th class="border border-gray-300 px-4 py-2">CONFIRMACIÓN</th>
+                <th class="border border-gray-300 px-4 py-2">CANCELAR</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-body">
+            <!-- Se llena dinámicamente -->
+        </tbody>
+    </table>
+
+    <!-- Vista móvil tipo tarjetas (vacía inicialmente) -->
+    <div class="md:hidden space-y-4 p-4" id="contenedor-tarjetas">
+        <!-- Se llena dinámicamente -->
+    </div>
+
+    <!-- Ver más -->
+    <!-- <div class="text-center py-4">
+        <span class="text-[#ff5a5f] italic cursor-pointer hover:underline">Ver más...</span>
+    </div> -->
+</div>
+</main>
+<script  src="../utils/BodyMenuNegocioJs.js"></script>

@@ -1,0 +1,35 @@
+---
+import Logo from "../assets/Logo/lOGOPNG (1).svg";
+import { Image } from "astro:assets";
+---
+
+<footer class="bg-[#e04e52] text-black py-6 px-4 rounded-t-lg border-t border-black">
+    <div class="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto gap-6 md:gap-16">
+      
+      <!-- Columna izquierda -->
+      <div class="flex flex-col items-center md:items-start text-center md:text-left space-y-2 ">
+        <span class="bg-white px-4 py-1 rounded-lg font-bold">CONTACTO</span>
+        <span class="bg-white px-4 py-1 rounded-lg">HoraLista@gmail.com</span>
+      </div>
+  
+      <!-- Columna centro -->
+      <div class="flex flex-col items-center">
+        <Image src={Logo} alt="Logo" class="md:w-50 md:h-50 h-20 w-20" />
+        
+      </div>
+  
+      <!-- Columna derecha -->
+      <div class="flex flex-col items-center md:items-end text-center md:text-right space-y-2">
+        <span class="bg-white px-4 py-1 rounded-lg font-bold">BLOG</span>
+        <span class="bg-white px-4 py-1 rounded-lg">SOBRA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    import { gsap } from "gsap/dist/gsap";
+    import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+   
+  </script>
+  
