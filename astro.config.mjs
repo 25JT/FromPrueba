@@ -10,7 +10,13 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   integrations: [react()],
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: node({ 
+    mode: 'standalone'
+  }),
+  server: {
+    host: '0.0.0.0',
+    port: process.env.PORT || 4321
+  },
 
   vite: {
     plugins: [tailwindcss()],
