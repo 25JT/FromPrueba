@@ -4,22 +4,20 @@ const { id } = Astro.params;
 
 import "/src/styles/global.css";
 import Nav from "../../components/Nav.astro";
-import LayoutAgendar from "../../layouts/LayoutAgendar.astro";
+import Layout from "../../layouts/Layout.astro";
 ---
 
-<LayoutAgendar>
+<Layout title = "Agenda cita" >
     <Nav />
     <br />
 
-    <div class="text-center">
-        <h1 class="text-5xl uppercase font-bold text-[#ff5a5f]">Agendar</h1>
+    <div class="text-center ">
+        <h1 class="text-5xl uppercase font-bold text-[#ff5a5f] ">Agendar</h1>
     </div>
-    <div
-        class="flex items-center justify-center min-h-[60vh] bg-[#ffeceda2] p-4"
-    ><form id="citaForm" class="bg-white shadow-lg rounded-xl p-2 w-full max-w-md space-y-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">
-            Agendar Cita
-        </h2>
+    <div class="flex items-center justify-center min-h-[60vh]  p-4 " >
+    
+    <form id="citaForm" class="bg-white shadow-lg rounded-xl p-2 w-full max-w-md space-y-4 ">
+      
     
         <div>
             <label for="nombre" class="block text-gray-600 text-sm font-medium">Nombre</label>
@@ -43,22 +41,22 @@ import LayoutAgendar from "../../layouts/LayoutAgendar.astro";
         </div>
         
         <div>
-            <label for="negocio" class="block text-gray-600 text-sm font-medium">NEGOCIO </label>
-            <h1 id="negocio" class="text-sm font-semibold text-gray-800 break-words">
+            <label for="negocio" class="block text-gray-600 text-sm font-medium">Negocio</label>
+            <h1 id="negocio" class="text-sm font-semibold text-gray-800">
                 -
             </h1>
         </div>
 
         <div>
-            <label for="dias" class="block text-gray-600 text-sm font-medium">Dias de atencion del servicio </label>
-            <h1 id="dias" class="text-sm font-semibold text-gray-800 break-words">
+            <label for="dias" class="block text-gray-600 text-sm font-medium">Dias de atencion</label>
+            <h1 id="dias" class="text-sm font-semibold text-gray-800">
                 -
             </h1>
         </div>
 
         <div>
-            <label for="telefono_negocio" class="block text-gray-600 text-sm font-medium">telefono negocio </label>
-            <h1 id="telefono_negocio" class="text-sm font-semibold text-gray-800 break-words">
+            <label for="telefono_negocio" class="block text-gray-600 text-sm font-medium">Telefono del negocio </label>
+            <h1 id="telefono_negocio" class="text-sm font-semibold text-gray-800">
                 -
             </h1>
         </div>
@@ -68,7 +66,7 @@ import LayoutAgendar from "../../layouts/LayoutAgendar.astro";
             <input
                 type="date"
                 id="fecha"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff5a5f]"
             />
         </div>
         <div id="horas" class="grid grid-cols-4 gap-4"></div>
@@ -82,7 +80,7 @@ import LayoutAgendar from "../../layouts/LayoutAgendar.astro";
                 id="mensaje"
                 maxlength="100"
                 rows="4"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff5a5f]"
             ></textarea>
             <div class="text-right text-xs text-gray-500">
                 <span id="contador-mensaje">100</span> caracteres restantes
@@ -117,6 +115,6 @@ import LayoutAgendar from "../../layouts/LayoutAgendar.astro";
 
     <!-- GSAP -->
 
-</LayoutAgendar>
+</Layout>
 <script src="../../utils/idJs.js"></script>
 

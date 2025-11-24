@@ -1,304 +1,314 @@
 ---
 import { Image } from "astro:assets";
-
 import ImgCalendar from "../assets/img/Calendar-pana.svg";
 import ImgMC from "../assets/img/Makeup artist-amico.svg";
 import ImgMC2 from "../assets/img/Online calendar-rafiki.svg";
 import Foto from "../assets/img/fotos/foto1.jpg";
 import Foto2 from "../assets/img/fotos/foto2.jpg";
 import Foto3 from "../assets/img/fotos/foto3.jpg";
+
+
 ---
 
-<section
-	class="flex flex-col md:flex-row md:gap-50 gap-10 justify-center items-center min-h-[50vh] px-4 text-center md:text-left"
->
-	<!-- Texto -->
-	<div class="flex flex-col items-center md:items-start max-w-md">
-		<h1
-			id="Ptext"
-			class="uppercase font-bold text-5xl md:text-6xl text-center text-[#ff5a5f] italic"
-		>
-			horalista
-		</h1>
-		<p id="Ptext2" class="mt-4 text-base md:text-2xl text-justify">
-			Gestiona tu agenda y permite que tus clientes reserven citas online
-			en segundos. Optimiza la administración del calendario y elimina las
-			esperas.
-		</p>
-	</div>
 
-	<!-- Imagen -->
-	<div>
-		<Image
-			id="imgP"
-			src={ImgCalendar}
-			alt="Logo"
-			class="shadow-lg w-[300px] md:w-[400px] lg:w-[600px] h-auto"
-			priority={true}
-		/>
-	</div>
-</section>
 
-<!--boton -->
-<div class="flex gap-15 justify-center items-center align-center h-[10vh]">
-	<button class="w-50 h-10 uppercase" id="btnReg"> Registrate</button>
-</div>
 
-<!--para ti-->
-<section class="md:text-5xl text-3xl">
-	<div>
-		<div class="mt-10 md:mt-40 flex justify-center">
-			<h1 id="ParaTi">PARA TI</h1>
-		</div>
-		<br />
-
-		<div
-			class="flex flex-col md:flex-row md:gap-50 gap-10 justify-center items-center px-4 text-center md:text-left"
-		>
-			<!-- Texto -->
-			<div class="flex flex-col items-center md:items-start max-w-md">
-				<h1
-					id="cliente"
-					class="uppercase font-bold text-2xl md:text-6xl text-center text-[#ff5a5f] italic"
-				>
-					CLIENTE
-				</h1>
-				<Image src={ImgMC2} alt="Cliente" id="clienteImg" />
-				<p class="mt-4 text-base md:text-2xl text-justify md:text-left">
-					Reserva cualquier servicio en un par de clics. Agenda tu
-					servicio en segundos
-				</p>
-			</div>
-
-			<!-- Texto2 -->
-			<div class="flex flex-col items-center md:items-start max-w-md">
-				<h1
-					id="Profesional"
-					class="uppercase font-bold text-2xl md:text-6xl text-center text-[#ff5a5f] italic"
-				>
-					PROFESIONAL
-				</h1>
-				<Image src={ImgMC} alt="Profesionalimg" id="Profesionalimg" />
-				<p class="mt-4 text-base md:text-2xl text-justify">
-					Administra tu agenda, cobra y haz crecer tu clientela.
-				</p>
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- Contacto -->
-<section class="py-16 px-4 bg-gray-50" id="registro1">
-	<div class="max-w-4xl mx-auto">
-		<h2
-			class="text-3xl md:text-4xl font-bold text-center text-[#ff5a5f] mb-12"
-		>
-			¡INICIA AHORA!
-		</h2>
-
-		<form
-			class="bg-white p-6 md:p-8 rounded-lg shadow-md max-w-2xl mx-auto"
-			id="registro"
-		>
-			<div class="mb-6">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="name">Nombre</label
-				>
-				<input
-					id="name"
-					name="name"
-					type="text"
-					placeholder="Tu nombre"
-					required
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-				/>
-			</div>
-
-			<div class="mb-6">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="lastname">Apellido</label
-				>
-				<input
-					id="lastname"
-					name="lastname"
-					type="text"
-					placeholder="Tu Apellido "
-					required
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-				/>
-			</div>
-
-			<div class="mb-6">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="email">Correo Electrónico</label
-				>
-				<input
-					id="email"
-					name="email"
-					type="email"
-					placeholder="tucorreo@ejemplo.com"
-					required
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-				/>
-			</div>
-
-			<div class="mb-6">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="password">Contraseña</label
-				>
-				<input
-					id="password"
-					name="password"
-					type="password"
-					placeholder="********"
-					required
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-				/>
-			</div>
-
-			<div class="mb-6">
-				<fieldset>
-					<legend class="block text-gray-700 text-sm font-bold mb-2"
-						>Rol</legend
-					>
-					<div class="flex flex-col md:flex-row gap-4">
-						<label class="inline-flex items-center">
-							<input
-								type="radio"
-								name="role"
-								value="cliente"
-								checked
-								class="form-radio text-[#ff5a5f]"
-							/>
-							<span class="ml-2">Cliente</span>
-						</label>
-						<label class="inline-flex items-center">
-							<input
-								type="radio"
-								name="role"
-								value="profesional"
-								class="form-radio text-[#ff5a5f]"
-							/>
-							<span class="ml-2">Profesional</span>
-						</label>
-					</div>
-				</fieldset>
-			</div>
-
-			<div class="mb-6">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="phone">Teléfono</label
-				>
-				<input
-					id="phone"
-					name="phone"
-					type="tel"
-					required
-					placeholder="+57 325 256 66 871"
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-				/>
-			</div>
-
-			<div class="flex items-center justify-between">
-				<button
-					type="submit"
-					class="bg-black hover:bg-[#e04e52] text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors"
-				>
-					Registrarse
-				</button>
-			</div>
-		</form>
-	</div>
-</section>
-<!-- testimonios -->
-<section class="text-center m-10 overflow-hidden">
-	<h1 class="text-2xl md:text-5xl mb-4 testimonial-title">TESTIMONIOS</h1>
-	<p class="mb-10 max-w-3xl mx-auto testimonial-subtitle">
-		NUESTROS CLIENTES SATISFECHOS POR NUESTRO SERVICIO QUE ESPERAS NO DUDES
-		EN UNIRTE
-	</p>
-
-	<div
-		class="testimonials-container flex flex-col md:flex-row md:justify-center md:gap-10 items-center"
+	<section
+		class="flex flex-col md:flex-row md:gap-50 gap-10 justify-center items-center min-h-[50vh] px-4 text-center md:text-left"
 	>
-		<!-- Testimonio 1 -->
-		<div
-			class="testimonial-card flex-1 max-w-sm mb-10 md:mb-0 transform transition-transform duration-500 hover:scale-105"
-		>
-			<div class="testimonial-image flex justify-center">
-				<Image
-					src={Foto}
-					alt="Testimonio1"
-					class="w-[200px] h-[250px] rounded-lg shadow-lg"
-				/>
-			</div>
-			<p
-				class="testimonial-name mt-4 text-base md:text-3xl flex justify-center font-semibold"
+		<!-- Texto -->
+		<div class="flex flex-col items-center md:items-start max-w-md">
+			<h1
+				id="Ptext"
+				class="uppercase font-bold text-5xl md:text-6xl text-center text-[#ff5a5f] italic"
 			>
-				JAMES BARELA
-			</p>
-			<p class="testimonial-rating">⭐⭐⭐⭐⭐</p>
-			<p class="testimonial-text text-center italic">
-				"Desde que uso este sistema, la organización de mis clientes
-				mejoró muchísimo. Ahora puedo dedicar más tiempo a crecer mi
-				negocio y menos a problemas administrativos."
+				horalista
+			</h1>
+			<p id="Ptext2" class="mt-4 text-base md:text-2xl text-justify">
+				Gestiona tu agenda y permite que tus clientes reserven citas
+				online en segundos. Optimiza la administración del calendario y
+				elimina las esperas.
 			</p>
 		</div>
 
-		<!-- Testimonio 2 -->
-		<div
-			class="testimonial-card flex-1 max-w-sm mb-10 md:mb-0 transform transition-transform duration-500 hover:scale-105"
-		>
-			<div class="testimonial-image flex justify-center">
-				<Image
-					src={Foto2}
-					alt="Testimonio2"
-					class="w-[250px] h-[250px] rounded-lg shadow-lg"
-				/>
-			</div>
-			<p
-				class="testimonial-name mt-4 text-base md:text-3xl flex justify-center font-semibold"
-			>
-				Andrés Castillo
-			</p>
-			<p class="testimonial-rating">⭐⭐⭐⭐⭐</p>
-			<p class="testimonial-text text-center italic">
-				"Me encanta lo intuitivo que es el sistema. Puedo gestionar todo
-				desde mi celular y mis clientes reciben un servicio más rápido y
-				profesional"
-			</p>
+		<!-- Imagen -->
+		<div>
+			<Image
+				id="imgP"
+				src={ImgCalendar}
+				alt="Logo"
+				class="shadow-lg w-[300px] md:w-[400px] lg:w-[600px] h-auto"
+				priority={true}
+			/>
 		</div>
+	</section>
 
-		<!-- Testimonio 3 -->
-		<div
-			class="testimonial-card flex-1 max-w-sm transform transition-transform duration-500 hover:scale-105"
-		>
-			<div class="testimonial-image flex justify-center">
-				<Image
-					src={Foto3}
-					alt="Testimonio3"
-					class="w-[250px] h-[250px] rounded-lg shadow-lg"
-				/>
-			</div>
-			<p
-				class="testimonial-name mt-4 text-base md:text-3xl flex justify-center font-semibold"
-			>
-				Valeria Torres
-			</p>
-			<p class="testimonial-rating">⭐⭐⭐⭐⭐</p>
-			<p class="testimonial-text text-center italic">
-				"Este software me ha facilitado la vida. Antes llevaba todo en
-				libretas y hojas sueltas, ahora tengo el control de mis citas y
-				clientes en un solo lugar"
-			</p>
-		</div>
+	<!--boton -->
+	<div class="flex gap-15 justify-center items-center align-center h-[10vh]">
+		<button class="w-50 h-10 uppercase" id="btnReg"> Registrate</button>
 	</div>
-</section>
 
-<script  src="../utils/welcomJs.js"></script>
+	<!--para ti-->
+	<section class="md:text-5xl text-3xl">
+		<div>
+			<div class="mt-10 md:mt-40 flex justify-center">
+				<h1 id="ParaTi">PARA TI</h1>
+			</div>
+			<br />
+
+			<div
+				class="flex flex-col md:flex-row md:gap-50 gap-10 justify-center items-center px-4 text-center md:text-left"
+			>
+				<!-- Texto -->
+				<div class="flex flex-col items-center md:items-start max-w-md">
+					<h1
+						id="cliente"
+						class="uppercase font-bold text-2xl md:text-6xl text-center text-[#ff5a5f] italic"
+					>
+						CLIENTE
+					</h1>
+					<Image src={ImgMC2} alt="Cliente" id="clienteImg" />
+					<p
+						class="mt-4 text-base md:text-2xl text-justify md:text-left"
+					>
+						Reserva cualquier servicio en un par de clics. Agenda tu
+						servicio en segundos
+					</p>
+				</div>
+
+				<!-- Texto2 -->
+				<div class="flex flex-col items-center md:items-start max-w-md">
+					<h1
+						id="Profesional"
+						class="uppercase font-bold text-2xl md:text-6xl text-center text-[#ff5a5f] italic"
+					>
+						PROFESIONAL
+					</h1>
+					<Image
+						src={ImgMC}
+						alt="Profesionalimg"
+						id="Profesionalimg"
+					/>
+					<p class="mt-4 text-base md:text-2xl text-justify">
+						Administra tu agenda, cobra y haz crecer tu clientela.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Contacto -->
+	<section class="py-16 px-4 bg-gray-50" id="registro1">
+		<div class="max-w-4xl mx-auto">
+			<h2
+				class="text-3xl md:text-4xl font-bold text-center text-[#ff5a5f] mb-12"
+			>
+				¡INICIA AHORA!
+			</h2>
+
+			<form
+				class="bg-white p-6 md:p-8 rounded-lg shadow-md max-w-2xl mx-auto"
+				id="registro"
+			>
+				<div class="mb-6">
+					<label
+						class="block text-gray-700 text-sm font-bold mb-2"
+						for="name">Nombre</label
+					>
+					<input
+						id="name"
+						name="name"
+						type="text"
+						placeholder="Tu nombre"
+						required
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					/>
+				</div>
+
+				<div class="mb-6">
+					<label
+						class="block text-gray-700 text-sm font-bold mb-2"
+						for="lastname">Apellido</label
+					>
+					<input
+						id="lastname"
+						name="lastname"
+						type="text"
+						placeholder="Tu Apellido "
+						required
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					/>
+				</div>
+
+				<div class="mb-6">
+					<label
+						class="block text-gray-700 text-sm font-bold mb-2"
+						for="email">Correo Electrónico</label
+					>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						placeholder="tucorreo@ejemplo.com"
+						required
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					/>
+				</div>
+
+				<div class="mb-6">
+					<label
+						class="block text-gray-700 text-sm font-bold mb-2"
+						for="password">Contraseña</label
+					>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						placeholder="********"
+						required
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+					/>
+				</div>
+
+				<div class="mb-6">
+					<fieldset>
+						<legend
+							class="block text-gray-700 text-sm font-bold mb-2"
+							>Rol</legend
+						>
+						<div class="flex flex-col md:flex-row gap-4">
+							<label class="inline-flex items-center">
+								<input
+									type="radio"
+									name="role"
+									value="cliente"
+									checked
+									class="form-radio text-[#ff5a5f]"
+								/>
+								<span class="ml-2">Cliente</span>
+							</label>
+							<label class="inline-flex items-center">
+								<input
+									type="radio"
+									name="role"
+									value="profesional"
+									class="form-radio text-[#ff5a5f]"
+								/>
+								<span class="ml-2">Profesional</span>
+							</label>
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="mb-6">
+					<label
+						class="block text-gray-700 text-sm font-bold mb-2"
+						for="phone">Teléfono</label
+					>
+					<input
+						id="phone"
+						name="phone"
+						type="tel"
+						required
+						placeholder="+57 325 256 66 871"
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					/>
+				</div>
+
+				<div class="flex items-center justify-between">
+					<button
+						type="submit"
+						class="bg-black hover:bg-[#e04e52] text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors"
+					>
+						Registrarse
+					</button>
+				</div>
+			</form>
+		</div>
+	</section>
+	<!-- testimonios -->
+	<section class="text-center m-10 overflow-hidden">
+		<h1 class="text-2xl md:text-5xl mb-4 testimonial-title">TESTIMONIOS</h1>
+		<p class="mb-10 max-w-3xl mx-auto testimonial-subtitle">
+			NUESTROS CLIENTES SATISFECHOS POR NUESTRO SERVICIO QUE ESPERAS NO
+			DUDES EN UNIRTE
+		</p>
+
+		<div
+			class="testimonials-container flex flex-col md:flex-row md:justify-center md:gap-10 items-center"
+		>
+			<!-- Testimonio 1 -->
+			<div
+				class="testimonial-card flex-1 max-w-sm mb-10 md:mb-0 transform transition-transform duration-500 hover:scale-105"
+			>
+				<div class="testimonial-image flex justify-center">
+					<Image
+						src={Foto}
+						alt="Testimonio1"
+						class="w-[200px] h-[250px] rounded-lg shadow-lg"
+					/>
+				</div>
+				<p
+					class="testimonial-name mt-4 text-base md:text-3xl flex justify-center font-semibold"
+				>
+					JAMES BARELA
+				</p>
+				<p class="testimonial-rating">⭐⭐⭐⭐⭐</p>
+				<p class="testimonial-text text-center italic">
+					"Desde que uso este sistema, la organización de mis clientes
+					mejoró muchísimo. Ahora puedo dedicar más tiempo a crecer mi
+					negocio y menos a problemas administrativos."
+				</p>
+			</div>
+
+			<!-- Testimonio 2 -->
+			<div
+				class="testimonial-card flex-1 max-w-sm mb-10 md:mb-0 transform transition-transform duration-500 hover:scale-105"
+			>
+				<div class="testimonial-image flex justify-center">
+					<Image
+						src={Foto2}
+						alt="Testimonio2"
+						class="w-[250px] h-[250px] rounded-lg shadow-lg"
+					/>
+				</div>
+				<p
+					class="testimonial-name mt-4 text-base md:text-3xl flex justify-center font-semibold"
+				>
+					Andrés Castillo
+				</p>
+				<p class="testimonial-rating">⭐⭐⭐⭐⭐</p>
+				<p class="testimonial-text text-center italic">
+					"Me encanta lo intuitivo que es el sistema. Puedo gestionar
+					todo desde mi celular y mis clientes reciben un servicio más
+					rápido y profesional"
+				</p>
+			</div>
+
+			<!-- Testimonio 3 -->
+			<div
+				class="testimonial-card flex-1 max-w-sm transform transition-transform duration-500 hover:scale-105"
+			>
+				<div class="testimonial-image flex justify-center">
+					<Image
+						src={Foto3}
+						alt="Testimonio3"
+						class="w-[250px] h-[250px] rounded-lg shadow-lg"
+					/>
+				</div>
+				<p
+					class="testimonial-name mt-4 text-base md:text-3xl flex justify-center font-semibold"
+				>
+					Valeria Torres
+				</p>
+				<p class="testimonial-rating">⭐⭐⭐⭐⭐</p>
+				<p class="testimonial-text text-center italic">
+					"Este software me ha facilitado la vida. Antes llevaba todo
+					en libretas y hojas sueltas, ahora tengo el control de mis
+					citas y clientes en un solo lugar"
+				</p>
+			</div>
+		</div>
+	</section>
+	<script src="../utils/welcomJs.js"></script>
 

@@ -51,7 +51,7 @@
   <p><strong>Teléfono:</strong> <span class="text-gray-600">${servicio.telefono_establecimiento || "N/A"}</span></p>
   <p><strong>Dirección:</strong> <span class="text-gray-600">${servicio.direccion || "N/A"}</span></p>
   <p><strong>Precio:</strong> <span class="text-gray-600">${servicio.Precio || "N/A"}</span></p>
-  <p class="break-words"><strong>Atención:</strong> <span class="text-gray-600">${servicio.dias_trabajo.replace(/Domin/g, "Domingo") || "N/A"}</span></p>
+  <p ><strong>Atención:</strong> <span class="text-gray-600">${servicio.dias_trabajo.replace(/Domin/g, "Domingo") || "N/A"}</span></p>
   <p><strong>Horario:</strong> <span class="text-gray-600">${to12HourFormat(servicio.hora_inicio) || "N/A"} - ${to12HourFormat(servicio.hora_fin) || "N/A"}</span></p>
   <div class="border-t border-gray-300 my-4"></div>
   <button id="btn-reservar-${servicio.id}" class="bg-black hover:bg-[#e04e52] text-white font-semibold py-2 px-4 rounded-xl w-full transition-all">
