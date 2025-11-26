@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import Lenis from "@studio-freight/lenis";
+import Lenis from "lenis";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/dist/ScrollSmoother";
 

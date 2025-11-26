@@ -19,11 +19,6 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
-    build: {
-      rollupOptions: {
-        external: ['@studio-freight/lenis']
-      }
-    }
+    plugins: [tailwindcss()]
   }
 });
