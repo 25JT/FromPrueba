@@ -74,7 +74,7 @@ function mostrarHorasDisponibles(data) {
         const label = `${hora12}:00 ${ampm}`;
 
         const boton = document.createElement('button');
-        boton.className = 'hora bg-[#ff5a5f] hover:bg-blue-300 text-gray-800 py-2 px-4 rounded-md transition m-1';
+        boton.className = 'hora bg-blue-100 hover:bg-blue-300 text-blue-800 py-2 px-4 rounded-md transition m-1';
         boton.dataset.id = hora24;
         boton.type = 'button';
         boton.textContent = label;
@@ -83,7 +83,7 @@ function mostrarHorasDisponibles(data) {
             document.querySelectorAll('.hora').forEach(b => {
                 b.classList.remove('bg-blue-500', 'text-white');
                 b.classList.add('bg-blue-100', 'text-blue-800');
-            }); 
+            });
             boton.classList.add('bg-blue-500', 'text-white');
             document.getElementById('hora').value = hora24;
         });

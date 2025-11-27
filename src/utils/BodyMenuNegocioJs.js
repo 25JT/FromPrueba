@@ -77,7 +77,7 @@ fetch(`${ruta}/api/Reservas`, {
 
             // Tarjeta en vista móvil
             contenedorTarjetas.innerHTML += `
-                <div class="tarjeta bg-white border border-gray-600 rounded-lg p-4 shadow text-center">
+                <div class="tarjeta bg-white border border-gray-300 rounded-lg p-4 shadow text-center">
                     <p><span class="font-semibold text-[#ff5a5f]">HORA:</span> ${cita.hora}</p>
                     <p><span class="font-semibold text-[#ff5a5f]">FECHA:</span> ${fechaFormateada}</p>
                     <p><span class="font-semibold text-[#ff5a5f]">CLIENTE:</span> ${cita.nombre}</p>
