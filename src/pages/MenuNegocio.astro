@@ -1,15 +1,15 @@
 ---
-import LayoutMenuNegocio from "../layouts/LayoutMenuNegocio.astro";
+import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import "../styles/global.css"
 import BodyMenuNegocio from "../components/BodyMenuNegocio.astro";
 ---
 
-<LayoutMenuNegocio>
+<Layout title = "Menu para Negocios">
     <Nav/>
     <br>
     <BodyMenuNegocio/>
-</LayoutMenuNegocio>
+</Layout>
 
 
 <script  src="../utils/validarInicio.js"></script>
