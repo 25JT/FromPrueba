@@ -22,11 +22,14 @@
 
     if (!userid) {
       btnIniciar.classList.remove("hidden");
+      btnIniciar.classList.add("bg-[#135bec]", "rounded-2xl");
       btnIniciarMobile.classList.remove("hidden");
+            btnIniciarMobile.classList.add("bg-[#135bec]", "rounded-2xl");
       btnCerrar.classList.add("hidden");
     } else {
       btnIniciar.classList.add("hidden");
       btnIniciarMobile.classList.add("hidden");
+      
       btnCerrar.classList.remove("hidden");
       btnCerrar.addEventListener("click", cerrarSesion);
     }
