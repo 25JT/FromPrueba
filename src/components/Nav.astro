@@ -1,5 +1,5 @@
 ---
-import Logo from "../assets/Logo/lOGO.png";
+import Logo from "../assets/Logo/logo.png";
 import { Image } from "astro:assets";
 ---
 
@@ -164,11 +164,11 @@ import { Image } from "astro:assets";
   <!--   de inicio de sesión (igual al original) -->
   <div
     id="loginDropdown"
-    class=" hidden fixed top-0 left-0 w-full h-full backdrop-blur-md flex items-center justify-center z-50"
+    class="hidden fixed top-0 left-0 w-full h-full backdrop-blur-md flex items-center justify-center z-50"
   >
     <div
       class="border-2 border-gray-400 relative z-10 w-full max-w-sm p-8 bg-white rounded-lg shadow-2xl modal-fade-in"
-     >
+    >
       <button
         class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
         type="button"
@@ -176,7 +176,7 @@ import { Image } from "astro:assets";
         <span id="closeLogin" class="material-icons-outlined">&times;</span>
       </button>
       <form id="loginForm">
-        <div class="space-y-6 ">
+        <div class="space-y-6">
           <div>
             <label
               class="block text-sm font-medium text-gray-700"
@@ -221,10 +221,9 @@ import { Image } from "astro:assets";
             </button>
           </div>
         </div>
-        <div  id="showForgot" class="mt-6 text-center">
+        <div id="showForgot" class="mt-6 text-center">
           <a
-           
-            class="font-bold text-gray-800 hover:text-primary transition-colors text-md hover:text-red-500 "
+            class="font-bold text-gray-800 hover:text-primary transition-colors text-md hover:text-red-500"
             href="#"
           >
             Olvidé la contraseña
@@ -234,29 +233,26 @@ import { Image } from "astro:assets";
           <p class="text-md text-gray-600">
             ¿No tienes una cuenta? <a
               class="font-bold text-primary hover:text-red-500 transition-colors"
-              href="#">Registrarse</a>
+              href="#">Registrarse</a
+            >
           </p>
         </div>
       </form>
 
-
       <form id="forgotForm" class="space-y-4 hidden mt-2">
         <div>
-             <div   class="mt-6 text-center">
-          <h4
-           
-            class="font-bold text-gray-800  text-md "
-            
-          >
-            Olvidé la contraseña
-             </h4>
-        </div>
+          <div class="mt-6 text-center">
+            <h4 class="font-bold text-gray-800 text-md">
+              Olvidé la contraseña
+            </h4>
+          </div>
           <label
             for="forgotEmail"
             class="block text-sm font-semibold text-slate-600"
-            >Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</label
+            >Ingresa tu correo electrónico y te enviaremos un enlace para
+            restablecer tu contraseña.</label
           >
-          <br>
+          <br />
           <input
             type="email"
             id="forgotEmail"
@@ -267,8 +263,8 @@ import { Image } from "astro:assets";
         </div>
         <button
           type="submit"
-          class="w-full bg-primary text-black font-bold py-3 px-4 rounded-md hover:bg-red-500 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-slate-800" type="submit"
-          >Enviar enlace</button
+          class="w-full bg-primary text-black font-bold py-3 px-4 rounded-md hover:bg-red-500 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-slate-800"
+          type="submit">Enviar enlace</button
         >
         <a
           type="button"
