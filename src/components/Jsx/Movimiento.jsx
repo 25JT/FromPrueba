@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function Movimiento() {
+function Movimiento({ children }) {
   useEffect(() => {
     const container = document.getElementById("pagina-Container");
     const sections = Array.from(container.getElementsByClassName("section"));
@@ -55,7 +55,7 @@ function Movimiento() {
         
     }
 //Teclado
-    function onKerDown(e) {
+  async  function onKerDown(e) {
         if(isScrolling) return;
         if(e.key === "ArrowUp"){
             scrollASection(currentSection - 1);
@@ -111,7 +111,8 @@ function Movimiento() {
     };
     
   }, []);
-  return null;
+  
+  return <>{children}</>;
 }
 
 export default Movimiento;

@@ -1,98 +1,121 @@
 import { ruta } from "../utils/ruta.js";
-	import { animar } from "../assets/Animaciones/animawelcome.js";
-	import {
-		alertaCheck2,
-		alertaFallo,
-	} from "../assets/Alertas/Alertas.js";
-	const formData = document.getElementById("registro");
-	let formSubmitted = false; // Bandera para controlar envíos
+import { animarTitulo, animarParrafo, animarFormulario } from "../assets/Animaciones/animawelcome.js";
+import { alertaCheck2, alertaFallo, } from "../assets/Alertas/Alertas.js";
 
-	if (formData && !formData.dataset.listenerAdded) {
-		formData.addEventListener("submit", (e) => {
-			e.preventDefault();
+// ============================================
+// SISTEMA DE CARGA PROGRESIVA Y PRIORIZADA
+// ============================================
+// Sección 0: Carga inmediata (máxima prioridad)
+// Secciones 1+: Carga diferida y escalonada (menor prioridad)
 
-			if (formSubmitted) return; // Evitar múltiples envíos
-			formSubmitted = true;
+function cargarAnimacionesProgresivamente() {
+	// PRIORIDAD ALTA: Cargar sección 0 inmediatamente
+	animarTitulo();
 
-			// Deshabilitar el botón para evitar clicks múltiples
-			const submitButton = e.target.querySelector('[type="submit"]');
-			submitButton.disabled = true;
+	animarParrafo();
+	animarFormulario();
 
-			fetch(`${ruta}/registro`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(
-					Object.fromEntries(new FormData(e.target)),
-				),
-			})
-				.then((res) => res.json())
-				.then((data) => {
-					if (data.success) {
-						const id = data.id;
-						const correo = data.email;
+	// PRIORIDAD BAJA: Cargar otras secciones de forma escalonada
+	// Usamos requestIdleCallback para no bloquear el hilo principal
+	const cargarSeccionesSecundarias = () => {
+		// Aquí puedes agregar animaciones de otras secciones cuando las tengas
+		// Por ejemplo:
+		// - Sección 1: cargar después de 100ms
+		// - Sección 2: cargar después de 200ms
+		// - Sección 3: cargar después de 300ms
+		// etc.
 
-						TokenRegistro(correo, id);
-					} else {
-						alertaFallo(data.message);
-					}
-				})
-				.catch((err) => {
-					console.error(err);
-					alertaFallo("Error al enviar el formulario");
-				})
-				.finally(() => {
-					formSubmitted = false;
-					if (submitButton) submitButton.disabled = false;
-				});
-		});
+		// Ejemplo de carga escalonada:
+		// setTimeout(() => animarSeccion1(), 100);
+		// setTimeout(() => animarSeccion2(), 200);
+		// setTimeout(() => animarSeccion3(), 300);
+	};
 
-		// Marcar el formulario como ya procesado
-		formData.dataset.listenerAdded = "true";
+	// Usar requestIdleCallback si está disponible, sino setTimeout
+	if ('requestIdleCallback' in window) {
+		requestIdleCallback(cargarSeccionesSecundarias, { timeout: 2000 });
+	} else {
+		setTimeout(cargarSeccionesSecundarias, 100);
 	}
-	//Desplazamiento al formualrio
+}
 
-	// Scroll suave al formulario de registro
-	document.addEventListener("DOMContentLoaded", function () {
-		const btnReg = document.getElementById("btnReg");
-		const registro = document.getElementById("registro1");
-		if (btnReg && registro) {
-			btnReg.addEventListener("click", function (e) {
-				e.preventDefault();
-				registro.scrollIntoView({ behavior: "smooth", block: "start" });
-			});
-		}
-	});
+// Iniciar carga progresiva
+cargarAnimacionesProgresivamente();
 
-	animar();
+const formData = document.getElementById("registro");
+let formSubmitted = false; // Bandera para controlar envíos
 
-	//ENVIO DE TOKENS
+if (formData && !formData.dataset.listenerAdded) {
+	formData.addEventListener("submit", (e) => {
+		e.preventDefault();
 
-	function TokenRegistro(correo, id) {
-		// 0	console.log(id);
-		fetch(`${ruta}/TokenRegistro`, {
+		if (formSubmitted) return; // Evitar múltiples envíos
+		formSubmitted = true;
+
+		// Deshabilitar el botón para evitar clicks múltiples
+		const submitButton = e.target.querySelector('[type="submit"]');
+		submitButton.disabled = true;
+
+		fetch(`${ruta}/registro`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ correo, id }),
+			body: JSON.stringify(
+				Object.fromEntries(new FormData(e.target)),
+			),
 		})
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.success) {
-					alertaCheck2("Correo enviado correctamente");
+					const id = data.id;
+					const correo = data.email;
+
+					TokenRegistro(correo, id);
 				} else {
-					alertaCheck2("Registro correcto " + data.message);
+					alertaFallo(data.message);
 				}
 			})
 			.catch((err) => {
 				console.error(err);
 				alertaFallo("Error al enviar el formulario");
+			})
+			.finally(() => {
+				formSubmitted = false;
+				if (submitButton) submitButton.disabled = false;
 			});
-	}
+	});
 
-	let data = null;
+	// Marcar el formulario como ya procesado
+	formData.dataset.listenerAdded = "true";
+}
+
+//ENVIO DE TOKENS
+
+function TokenRegistro(correo, id) {
+	// 0	console.log(id);
+	fetch(`${ruta}/TokenRegistro`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ correo, id }),
+	})
+		.then((res) => res.json())
+		.then((data) => {
+			if (data.success) {
+				alertaCheck2("Correo enviado correctamente");
+			} else {
+				alertaCheck2("Registro correcto " + data.message);
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			alertaFallo("Error al enviar el formulario");
+		});
+}
+
+let data = null;
 let error = null;
 
 try {
