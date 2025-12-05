@@ -10,14 +10,9 @@ const userid = sessionStorage.getItem("Id");
 const role = sessionStorage.getItem("Role");
 
 // ===== DOM ELEMENTS =====
-const menuToggle = document.getElementById("menuToggle");
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
-const closeSidebar = document.getElementById("closeSidebar");
 const btnCerrar = document.getElementById("btnCerrar");
 const btnIniciar = document.getElementById("btnIniciar");
 const btnIniciarMobile = document.getElementById("btnIniciarMobile");
-const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
 
 // ===== UTILITY FUNCTIONS =====
 function cerrarSesion() {
@@ -25,10 +20,7 @@ function cerrarSesion() {
   location.href = "/";
 }
 
-function cerrarMenu() {
-  if (sidebar) sidebar.classList.add("-translate-x-full");
-  if (overlay) overlay.classList.add("hidden");
-}
+
 
 // ===== INITIALIZE UI BASED ON SESSION =====
 function initializeAuthButtons() {
@@ -53,8 +45,6 @@ function initializeAuthButtons() {
       btnCerrar.classList.remove("hidden");
       btnCerrar.addEventListener("click", cerrarSesion);
     }
-    // Mostrar botón hamburguesa si hay sesión
-    if (menuToggle) menuToggle.classList.remove("hidden");
   }
 }
 
@@ -71,21 +61,7 @@ if (btnIniciarMobile) {
   });
 }
 
-// Funciones menú lateral
-if (menuToggle && sidebar && overlay) {
-  menuToggle.addEventListener("click", () => {
-    sidebar.classList.remove("-translate-x-full");
-    overlay.classList.remove("hidden");
-  });
-}
 
-if (closeSidebar) closeSidebar.addEventListener("click", cerrarMenu);
-if (overlay) overlay.addEventListener("click", cerrarMenu);
-
-// Botón cerrar sesión desde sidebar
-if (btnCerrarSidebar) {
-  btnCerrarSidebar.addEventListener("click", cerrarSesion);
-}
 
 // ===== MODAL LOGIN =====
 document.addEventListener("DOMContentLoaded", function () {
@@ -220,24 +196,4 @@ if (forgotForm && !forgotForm.dataset.listenerAdded) {
   });
 }
 
-// ===== SIDEBAR ROLE-BASED NAVIGATION =====
-const negocioLink = document.getElementById("Negocio");
-const citasLink = document.getElementById("Citas");
 
-if (negocioLink && citasLink) {
-  if (role === "cliente") {
-    negocioLink.classList.add("hidden");
-    citasLink.classList.remove("hidden");
-  } else {
-    negocioLink.classList.remove("hidden");
-    citasLink.classList.add("hidden");
-  }
-
-  negocioLink.addEventListener("click", () => {
-    location.href = "MenuNegocio";
-  });
-
-  citasLink.addEventListener("click", () => {
-    location.href = "PrincipalCliente";
-  });
-}

@@ -43,6 +43,22 @@ function Movimiento({ children }) {
         }
     }
 
+    // Manejar clic en enlaces de anclaje (como los botones CTA)
+    function handleAnchorClick(e) {
+        // Verificar si es un enlace con href que empieza con #
+        const target = e.target.closest('a[href^="#"]');
+        if (target) {
+            e.preventDefault(); // Prevenir el scroll nativo del navegador
+            const href = target.getAttribute('href');
+            const sectionId = href.substring(1); // Remover el #
+            const index = parseInt(sectionId);
+            
+            if (!isNaN(index)) {
+                scrollASection(index);
+            }
+        }
+    }
+
     // Scroll rueda raton//
     function onMouseWheel(e) {
         if(isScrolling) return;
@@ -95,6 +111,7 @@ function Movimiento({ children }) {
     window.addEventListener('keydown', onKerDown);
     window.addEventListener('touchstart', onTochStart, { passive: true });
     window.addEventListener('touchend', onTochEnd, { passive: false });
+    document.addEventListener('click', handleAnchorClick);
 
     // Inicializar el menú activo
     updateActiveMenu(0);
@@ -108,6 +125,7 @@ function Movimiento({ children }) {
         window.removeEventListener('keydown', onKerDown);
         window.removeEventListener('touchstart', onTochStart);
         window.removeEventListener('touchend', onTochEnd);
+        document.removeEventListener('click', handleAnchorClick);
     };
     
   }, []);

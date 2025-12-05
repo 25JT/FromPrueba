@@ -1,5 +1,5 @@
 import { ruta } from "../utils/ruta.js";
-import { animarTitulo, animarParrafo, animarFormulario } from "../assets/Animaciones/animawelcome.js";
+import { animarTitulo, animarParrafo, animarFormulario, animarTitulo2 } from "../assets/Animaciones/animawelcome.js";
 import { alertaCheck2, alertaFallo, } from "../assets/Alertas/Alertas.js";
 
 // ============================================
@@ -18,6 +18,9 @@ function cargarAnimacionesProgresivamente() {
 	// PRIORIDAD BAJA: Cargar otras secciones de forma escalonada
 	// Usamos requestIdleCallback para no bloquear el hilo principal
 	const cargarSeccionesSecundarias = () => {
+
+
+		animarTitulo2()
 		// Aquí puedes agregar animaciones de otras secciones cuando las tengas
 		// Por ejemplo:
 		// - Sección 1: cargar después de 100ms
