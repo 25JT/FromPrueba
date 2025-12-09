@@ -1,5 +1,5 @@
 import { ruta } from "../utils/ruta.js";
-import { animarTitulo, animarParrafo, animarFormulario, animarTitulo2 } from "../assets/Animaciones/animawelcome.js";
+import { animarTitulo, animarParrafo, animarFormulario, animarTitulo2, animarParrafo2, animarControlCitas, animarTitulo3, animarParrafo3, miniTitulo, animarParrafo4, Rounded } from "../assets/Animaciones/animawelcome.js";
 import { alertaCheck2, alertaFallo, } from "../assets/Alertas/Alertas.js";
 
 // ============================================
@@ -18,27 +18,36 @@ function cargarAnimacionesProgresivamente() {
 	// PRIORIDAD BAJA: Cargar otras secciones de forma escalonada
 	// Usamos requestIdleCallback para no bloquear el hilo principal
 	const cargarSeccionesSecundarias = () => {
-
-
 		animarTitulo2()
+		animarParrafo2()
+		setTimeout(() => animarControlCitas(), 300)
 		// Aquí puedes agregar animaciones de otras secciones cuando las tengas
 		// Por ejemplo:
 		// - Sección 1: cargar después de 100ms
 		// - Sección 2: cargar después de 200ms
 		// - Sección 3: cargar después de 300ms
 		// etc.
-
-		// Ejemplo de carga escalonada:
-		// setTimeout(() => animarSeccion1(), 100);
-		// setTimeout(() => animarSeccion2(), 200);
-		// setTimeout(() => animarSeccion3(), 300);
 	};
+	const cargarSeccionesTercarias = () => {
+		animarTitulo3()
+		animarParrafo3()
+		miniTitulo()
+		Rounded()
+
+	}
+	const cargarSeccionesCuarta = () => {
+		animarParrafo4()
+	}
 
 	// Usar requestIdleCallback si está disponible, sino setTimeout
 	if ('requestIdleCallback' in window) {
 		requestIdleCallback(cargarSeccionesSecundarias, { timeout: 2000 });
+		requestIdleCallback(cargarSeccionesTercarias, { timeout: 4000 });
+		requestIdleCallback(cargarSeccionesCuarta, { timeout: 6000 });
 	} else {
 		setTimeout(cargarSeccionesSecundarias, 100);
+		setTimeout(cargarSeccionesTercarias, 200);
+		setTimeout(cargarSeccionesCuarta, 300);
 	}
 }
 
