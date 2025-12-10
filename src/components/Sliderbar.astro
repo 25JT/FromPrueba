@@ -15,15 +15,21 @@
         >
         </div>
         <div class="flex flex-col">
-          <h1 class="text-slate-900 text-base font-medium leading-normal">
+          <h1
+            id="nombreUser"
+            class="text-slate-900 text-base font-medium leading-normal"
+          >
             Dr. Alan Grant
           </h1>
-          <p class="text-slate-500 text-sm font-normal leading-normal">
+          <p
+            id="correoUser"
+            class="text-slate-500 text-sm font-normal leading-normal"
+          >
             dralan.grant@example.com
           </p>
         </div>
       </div>
-      <div class="border-b-2 border-gray-500"></div>
+      <div class="border-b-2 border-blue-500"></div>
       <nav class="flex flex-col gap-2">
         <a
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors"
@@ -39,21 +45,27 @@
           </p>
         </a>
         <a
-          class="flex items-center gap-3 px-3 py-2 rounded-lg bg-blue-500"
-          href="#"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors"
+          href="PrincipalCliente"
         >
-          <span class="material-symbols-outlined fill text-white"
+          <span class="material-symbols-outlined text-black hover:text-white"
             >calendar_month</span
           >
-          <p class="text-white text-sm font-medium leading-normal">Citas</p>
+          <p
+            class="text-black text-sm font-medium hover:text-white leading-normal"
+          >
+            Citas
+          </p>
         </a>
         <a
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors"
           href="#"
         >
-          <span class="material-symbols-outlined text-slate-800">groups</span>
+          <span class="material-symbols-outlined text-black hover:text-white"
+            >groups</span
+          >
           <p
-            class="text-black text-sm font-medium leading-normal hover:text-white"
+            class="text-black text-sm font-medium hover:text-white leading-normal"
           >
             Servicios
           </p>
@@ -62,9 +74,11 @@
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors"
           href="/"
         >
-          <span class="material-symbols-outlined text-black">list_alt</span>
+          <span class="material-symbols-outlined text-black hover:text-white"
+            >list_alt</span
+          >
           <p
-            class="text-black text-sm font-medium leading-normal hover:text-white"
+            class="text-black text-sm font-medium hover:text-white leading-normal"
           >
             Pagina Principal
           </p>
@@ -73,24 +87,29 @@
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors"
           href="#"
         >
-          <span class="material-symbols-outlined text-black">settings</span>
+          <span class="material-symbols-outlined text-black hover:text-white"
+            >settings</span
+          >
           <p
-            class="text-black text-sm font-medium leading-normal hover:text-white"
+            class="text-black text-sm font-medium hover:text-white leading-normal"
           >
             Settings
           </p>
         </a>
       </nav>
     </div>
-    <div class="flex flex-col gap-2">
+    <div
+      class="ml-1 mb-10 flex flex-col gap-2 cursor-pointer"
+      id="btnCerrarSidebar"
+    >
       <a
         class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500 transition-colors"
-        href="#"
       >
-        <span class="material-symbols-outlined text-black">logout</span>
+        <span class="material-symbols-outlined text-black hover:text-white"
+          >logout</span
+        >
         <p
-          id="btnCerrarSidebar"
-          class="text-black text-sm font-medium leading-normal hover:text-white"
+          class="text-black text-sm font-medium hover:text-white leading-normal"
         >
           Cerrar sesion
         </p>

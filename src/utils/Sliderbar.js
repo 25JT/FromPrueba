@@ -1,9 +1,14 @@
+
+import { ruta } from "../utils/ruta.js";
 // ===== SIDEBAR MANAGEMENT =====
 // Este archivo maneja toda la funcionalidad del sidebar (menú lateral)
 
 // ===== SESSION MANAGEMENT =====
 const userid = sessionStorage.getItem("Id");
 const role = sessionStorage.getItem("Role");
+
+
+
 
 // ===== DOM ELEMENTS =====
 const menuToggle = document.getElementById("menuToggle");
@@ -82,4 +87,33 @@ if (negocioLink && citasLink) {
     citasLink.addEventListener("click", () => {
         location.href = "PrincipalCliente";
     });
+}
+
+
+//funciones conexion server
+if (!userid) {
+
+} else {
+    window.onload = function () {
+        fetch(`${ruta}/nombreUser`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userid }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error en respuesta: " + response.statusText);
+                }
+                return response.json();
+            })
+            .then((data) => {
+
+                document.getElementById("nombreUser").textContent = data.nombre;
+                document.getElementById("correoUser").textContent = data.correo;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
 }

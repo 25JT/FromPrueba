@@ -1,49 +1,48 @@
 import gsap from "gsap";
-import Lenis from "@studio-freight/lenis";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/dist/ScrollSmoother";
+import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export function animar() {
-    // Scroll suave con Lenis
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
+
+  document.addEventListener("DOMContentLoaded", () => {
+    gsap.from("#registroNegocio", {
+      delay: 0.5,
+      opacity: 0,
+      y: -50,
+      duration: 1.5,
+      ease: "power2.out",
+
     });
-  
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-  
-    // Configuración de ScrollTrigger con Lenis
-    lenis.on("scroll", ScrollTrigger.update);
-  
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        return arguments.length ? lenis.scrollTo(value) : window.scrollY;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-      pinType: document.body.style.transform ? "transform" : "fixed",
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const splitText = new SplitText("#tituloNegocio", {
+      type: "chars",
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      gsap.from("#registroNegocio", {
-        opacity: 0,
-        y: -50,
-        duration: 0.5,
-        ease: "power2.out",
-       
-      });
+
+    const tl = gsap.timeline();
+    tl.from(splitText.chars, {
+      opacity: 0,
+      y: -50,
+      duration: 2,
+      ease: "power2.out",
+      stagger: {
+        each: 0.05,
+        from: "random",
+      },
     });
+    tl.to(splitText.chars, {
+      scale: 1.1,
+      duration: 2,
+      ease: "power2.out",
+      repeat: -1,
+      yoyo: true,
+
+    });
+
+  });
 }
