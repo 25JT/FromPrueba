@@ -1,12 +1,15 @@
 const userid = sessionStorage.getItem("Id");
 const role = sessionStorage.getItem("Role");
 
-if (role !== "profesional") {
-    location.href = "/";
+export function validarInicioProfesional() {
+    if (role !== "profesional" || !userid) {
+        location.href = "/";
+    }
 }
-if (!userid) {
-    location.href = "/";
+export function validarInicioCliente() {
+    if (role !== "cliente" || !userid) {
+        location.href = "/";
+    }
 }
 
-// console.log('Id: ', userid);
-// console.log('Role: ', role);
+

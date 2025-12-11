@@ -91,29 +91,40 @@ if (negocioLink && citasLink) {
 
 
 //funciones conexion server
-if (!userid) {
 
-} else {
-    window.onload = function () {
-        fetch(`${ruta}/nombreUser`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userid }),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Error en respuesta: " + response.statusText);
-                }
-                return response.json();
+if (userid) {
+    window.addEventListener("load", function () {
+        const cachedName = sessionStorage.getItem("userName");
+        const cachedEmail = sessionStorage.getItem("userEmail");
+
+        const nombreUserEl = document.getElementById("nombreUser");
+        const correoUserEl = document.getElementById("correoUser");
+
+        if (cachedName && cachedEmail) {
+            if (nombreUserEl) nombreUserEl.textContent = cachedName;
+            if (correoUserEl) correoUserEl.textContent = cachedEmail;
+        } else {
+            fetch(`${ruta}/nombreUser`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid }),
             })
-            .then((data) => {
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Error en respuesta: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    sessionStorage.setItem("userName", data.nombre);
+                    sessionStorage.setItem("userEmail", data.correo);
 
-                document.getElementById("nombreUser").textContent = data.nombre;
-                document.getElementById("correoUser").textContent = data.correo;
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
+                    if (nombreUserEl) nombreUserEl.textContent = data.nombre;
+                    if (correoUserEl) correoUserEl.textContent = data.correo;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    });
 }

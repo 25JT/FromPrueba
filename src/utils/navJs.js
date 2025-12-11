@@ -134,7 +134,7 @@ if (formData && !formData.dataset.listenerAdded) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+
 
         if (data.success) {
           sessionStorage.setItem("Id", data.id);
@@ -144,7 +144,7 @@ if (formData && !formData.dataset.listenerAdded) {
             if (data.negocio_creado === 1) location.href = "MenuNegocio";
             else location.href = "RegNegocio";
           } else if (data.role === "cliente") {
-            location.href = "PrincipalCliente";
+            location.href = "CitasAgendadas";
           }
         } else {
           alertaMal(data.message);
