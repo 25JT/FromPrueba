@@ -1,14 +1,17 @@
 import { ruta } from "../utils/ruta.js";
 import gsap from "gsap";
 import { alertaConfirm, alertaCheck, alertaFallo } from "../assets/Alertas/Alertas.js"
+import { validarInicioProfesional } from "./validarInicio.js";
 
 const userid = sessionStorage.getItem("Id");
+
+validarInicioProfesional();
 
 fetch(`${ruta}/api/Reservas`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userid }),
-}) 
+})
     .then((res) => res.json())
     .then((respuesta) => {
         const data = respuesta.data || [];

@@ -1,34 +1,11 @@
 ---
 import Nav from "../components/Nav.astro";
 import Layout from "../layouts/Layout.astro";
-import '../styles/global.css'
+import "../styles/global.css";
 import BodyPrinCliente from "../components/BodyPrinCliente.astro";
 ---
 
-<Layout title = "Cliente Principal">
-<Nav/>
-<br>
-<BodyPrinCliente/>
+<Layout title="Cliente Principal">
+  <Nav />
+  <BodyPrinCliente />
 </Layout>
-
-
-
-<script> 
-    
-
-const userid = sessionStorage.getItem("Id");
-const role = sessionStorage.getItem("Role");
-
-
-if (role !== "cliente") {
-    location.href = "/";
-}
-if (!userid) {
-    location.href = "/";
-}
-
-// console.log('Id: ', userid);
-// console.log('Role: ', role);
-
-
-</script>
