@@ -1,5 +1,8 @@
 import { ruta } from "../utils/ruta.js";
 import { validarInicioCliente } from "../utils/validarInicio.js";
+import flatpickr from "flatpickr";
+import { Spanish } from "flatpickr/dist/l10n/es.js";
+import "flatpickr/dist/flatpickr.min.css";
 validarInicioCliente();
 const userid = sessionStorage.getItem("Id");
 
@@ -8,6 +11,94 @@ let paginaActual = 1;
 const citasPorPagina = 5;
 let totalCitas = 0;
 let todasLasCitas = [];
+let citasFiltradas = [];
+
+// Variables de filtro
+let filtroFechaInicio = null;
+let filtroFechaFin = null;
+
+// Inicializar Flatpickr y eventos
+document.addEventListener("DOMContentLoaded", () => {
+    const dateRangeInput = document.getElementById("date-range");
+    if (dateRangeInput) {
+        flatpickr(dateRangeInput, {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            locale: Spanish,
+            minDate: "today",
+            onClose: function (selectedDates, dateStr, instance) {
+                if (selectedDates.length === 2) {
+                    filtroFechaInicio = selectedDates[0];
+                    filtroFechaFin = selectedDates[1];
+                    // Ajustar fin del día para la fecha final
+                    filtroFechaFin.setHours(23, 59, 59, 999);
+                } else {
+                    filtroFechaInicio = null;
+                    filtroFechaFin = null;
+                }
+            }
+        });
+    }
+
+    const btnAplicarFiltros = document.getElementById("btn-aplicar-filtros");
+    if (btnAplicarFiltros) {
+        btnAplicarFiltros.addEventListener("click", aplicarFiltros);
+    }
+
+    // Configurar event listeners para botones de paginación
+    const btnAnterior = document.getElementById("btn-anterior");
+    const btnSiguiente = document.getElementById("btn-siguiente");
+
+    if (btnAnterior) {
+        btnAnterior.addEventListener("click", () => cambiarPagina("anterior"));
+    }
+
+    if (btnSiguiente) {
+        btnSiguiente.addEventListener("click", () => cambiarPagina("siguiente"));
+    }
+});
+
+function aplicarFiltros() {
+    const estadoFiltro = document.getElementById("status-filter").value;
+    const busqueda = document.getElementById("search").value.toLowerCase().trim();
+
+    citasFiltradas = todasLasCitas.filter(cita => {
+        // Filtro por Fecha
+        if (filtroFechaInicio && filtroFechaFin) {
+            const fechaCita = new Date(cita.fecha);
+            // Tratamos fecha como local, comparamos timestamps del día
+            const fechaCitaTime = new Date(fechaCita.toDateString()).getTime();
+            const inicioTime = new Date(filtroFechaInicio.toDateString()).getTime();
+            const finTime = new Date(filtroFechaFin.toDateString()).getTime();
+
+            if (fechaCitaTime < inicioTime || fechaCitaTime > finTime) {
+                return false;
+            }
+        }
+
+        // Filtro por Estado
+        if (estadoFiltro !== "Todos") {
+            if (cita.estado.toLowerCase() !== estadoFiltro.toLowerCase()) {
+                return false;
+            }
+        }
+
+        // Filtro por Búsqueda (Servicio o Establecimiento)
+        if (busqueda) {
+            const servicio = (cita.servicio || "").toLowerCase();
+            const establecimiento = (cita.nombre_servicio || "").toLowerCase();
+            if (!servicio.includes(busqueda) && !establecimiento.includes(busqueda)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    paginaActual = 1;
+    totalCitas = citasFiltradas.length;
+    renderizarCitas();
+}
 
 // Función para formatear fecha
 function formatearFecha(fecha) {
@@ -94,8 +185,6 @@ function mostrarDetallesCita(agenda) {
 </div>
 </div>
 </div>
-
-
   `;
 
     document.body.insertAdjacentHTML("beforeend", modalHTML);
@@ -154,13 +243,13 @@ function renderizarCitas() {
         return;
     }
 
-    if (todasLasCitas.length === 0) {
+    if (citasFiltradas.length === 0) {
         tbody.innerHTML = `
         <tr>
           <td colspan="6" class="px-6 py-8 text-center text-gray-500">
             <div class="flex flex-col items-center gap-2">
               <span class="material-symbols-outlined text-5xl text-gray-300">event_busy</span>
-              <p class="text-lg">No hay citas agendadas</p>
+              <p class="text-lg">No hay citas encontradas</p>
             </div>
           </td>
         </tr>
@@ -172,7 +261,7 @@ function renderizarCitas() {
     // Calcular índices para la página actual
     const inicio = (paginaActual - 1) * citasPorPagina;
     const fin = inicio + citasPorPagina;
-    const citasPagina = todasLasCitas.slice(inicio, fin);
+    const citasPagina = citasFiltradas.slice(inicio, fin);
 
     tbody.innerHTML = ""; // Limpiar tabla
 
@@ -228,9 +317,6 @@ function actualizarControlesPaginacion() {
     const inicio = (paginaActual - 1) * citasPorPagina + 1;
     const fin = Math.min(paginaActual * citasPorPagina, totalCitas);
 
-    // Ocultar loader si existe
-
-
     // Actualizar información de paginación
     const infoPaginacion = document.getElementById("info-paginacion");
     if (infoPaginacion) {
@@ -246,7 +332,6 @@ function actualizarControlesPaginacion() {
             if (loader) {
                 loader.style.display = "none";
             }
-
         }
     }
 
@@ -294,22 +379,11 @@ fetch(`${ruta}/mostrarCitas`, {
         }
 
         todasLasCitas = data.data;
+        citasFiltradas = todasLasCitas; // Inicialmente todas
         totalCitas = todasLasCitas.length;
 
         // Renderizar primera página
         renderizarCitas();
-
-        // Configurar event listeners para botones de paginación
-        const btnAnterior = document.getElementById("btn-anterior");
-        const btnSiguiente = document.getElementById("btn-siguiente");
-
-        if (btnAnterior) {
-            btnAnterior.addEventListener("click", () => cambiarPagina("anterior"));
-        }
-
-        if (btnSiguiente) {
-            btnSiguiente.addEventListener("click", () => cambiarPagina("siguiente"));
-        }
     })
     .catch((error) => {
         console.error("Error al obtener datos:", error);
