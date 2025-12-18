@@ -8,8 +8,6 @@ const userid = sessionStorage.getItem("Id");
 const role = sessionStorage.getItem("Role");
 
 
-
-
 // ===== DOM ELEMENTS =====
 const menuToggle = document.getElementById("menuToggle");
 const sidebar = document.getElementById("sidebar");
@@ -20,7 +18,24 @@ const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
 // ===== UTILITY FUNCTIONS =====
 function cerrarSesion() {
     sessionStorage.clear();
-    location.href = "/";
+
+    fetch(`${ruta}/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error en respuesta: " + response.statusText);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            location.href = "/";
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 }
 
 function cerrarMenu() {
@@ -68,6 +83,8 @@ if (btnCerrarSidebar) {
 const negocioLink = document.getElementById("Negocio");
 const citasLink = document.getElementById("Citas");
 
+
+
 if (negocioLink && citasLink) {
     // Mostrar/ocultar links según el rol del usuario
     if (role === "cliente") {
@@ -89,6 +106,20 @@ if (negocioLink && citasLink) {
     });
 }
 
+
+//DEPNEIDNEOD EL ROL MOSTRARA UNA COSA O OTRA
+if (role === "cliente") {
+    document.getElementById("Negocio").classList.add("hidden");
+
+    document.getElementById("Settings").classList.add("hidden");
+
+}
+if (role === "profesional") {
+    document.getElementById("Servicios").classList.add("hidden");
+    document.getElementById("Citas").classList.add("hidden");
+
+
+}
 
 //funciones conexion server
 
