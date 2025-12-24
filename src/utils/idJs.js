@@ -1,6 +1,3 @@
-
-
-
 const idElement = document.getElementById("idservicio");
 const id = idElement ? idElement.dataset.id : null;
 
@@ -65,6 +62,8 @@ async function cargarHorasDisponibles() {
 
         if (data.success) {
             mostrarHorasDisponibles(data);
+            console.log(data);
+
         } else {
             // throw new Error(data.message || "Error al obtener horas disponibles");
             contenedor.innerHTML = `<div class="col-span-full text-center py-4 text-gray-500">${data.message || "No hay horas disponibles"}</div>`;
