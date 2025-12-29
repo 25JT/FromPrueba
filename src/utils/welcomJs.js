@@ -1,5 +1,5 @@
 import { ruta } from "../utils/ruta.js";
-import { animarTitulo, animarParrafo, animarFormulario, animarTitulo2, animarParrafo2, animarControlCitas, animarTitulo3, animarParrafo3, miniTitulo, animarParrafo4, Rounded } from "../assets/Animaciones/animawelcome.js";
+import { animarTitulo, animarParrafo, animarFormulario, animarTitulo2, animarParrafo2, animarControlCitas, animarTitulo3, animarParrafo3, miniTitulo, animarParrafo4, Rounded, prepareAnimations } from "../assets/Animaciones/animawelcome.js";
 import { alertaCheck2, alertaFallo, } from "../assets/Alertas/Alertas.js";
 
 // ============================================
@@ -9,6 +9,9 @@ import { alertaCheck2, alertaFallo, } from "../assets/Alertas/Alertas.js";
 // Secciones 1+: Carga diferida y escalonada (menor prioridad)
 
 function cargarAnimacionesProgresivamente() {
+	// Batched DOM writes para evitar forced reflows
+	prepareAnimations();
+
 	// PRIORIDAD ALTA: Cargar sección 0 inmediatamente
 	animarTitulo();
 

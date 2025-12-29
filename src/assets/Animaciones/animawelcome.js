@@ -6,11 +6,56 @@ import { SplitText } from "gsap/SplitText";
 // Registrar plugins una vez al inicio
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-export function animarTitulo() {
+// Cache para almacenar las instancias de SplitText y evitar crearlas múltiples veces
+// o intercalar lecturas/escrituras al DOM
+const splitCache = new Map();
 
-  const splitText = new SplitText("#titulo", {
-    type: "words",
-  })
+/**
+ * Obtiene una instancia de SplitText de la caché o crea una nueva si no existe.
+ * @param {Element|string} target - El elemento o selector
+ * @param {Object} vars - Opciones para SplitText
+ * @returns {SplitText}
+ */
+function getOrInitSplit(target, vars) {
+  const element = typeof target === 'string' ? document.querySelector(target) : target;
+  if (!element) return null;
+
+  if (splitCache.has(element)) {
+    return splitCache.get(element);
+  }
+
+  const split = new SplitText(element, vars);
+  splitCache.set(element, split);
+  return split;
+}
+
+/**
+ * Prepara todas las animaciones generando los SplitText de una sola vez.
+ * Esto se debe llamar ANTES de iniciar cualquier animación para evitar forced reflows.
+ */
+export function prepareAnimations() {
+  // Batch de "Writes" al DOM
+  getOrInitSplit("#titulo", { type: "words" });
+  getOrInitSplit("#parrafo", { type: "words" });
+  getOrInitSplit("#titulo2", { type: "chars" });
+  getOrInitSplit("#parrafo2", { type: "words" });
+  getOrInitSplit("#controlCitas", { type: "words" });
+  getOrInitSplit("#titulo3", { type: "chars" });
+  getOrInitSplit("#ctaFinal", { type: "words" });
+
+  // Elementos múltiples
+  document.querySelectorAll("#miniTitulo").forEach(el => {
+    getOrInitSplit(el, { type: "words" });
+  });
+
+  document.querySelectorAll("#parrafo3").forEach(el => {
+    getOrInitSplit(el, { type: "words" });
+  });
+}
+
+export function animarTitulo() {
+  const splitText = getOrInitSplit("#titulo", { type: "words" });
+  if (!splitText) return;
 
   const tl = gsap.timeline();
   tl.from(splitText.words, {
@@ -40,9 +85,7 @@ export function animarParrafo() {
 
   parrafo.style.willChange = "transform, opacity, filter";
 
-  const splitText2 = new SplitText("#parrafo", {
-    type: "words",
-  })
+  const splitText2 = getOrInitSplit(parrafo, { type: "words" });
 
   gsap.from(splitText2.words, {
     delay: 1.5,
@@ -99,9 +142,7 @@ export function animarTitulo2() {
       if (entry.isIntersecting && !animacionEjecutada) {
         animacionEjecutada = true;
 
-        const splitText = new SplitText("#titulo2", {
-          type: "chars",
-        });
+        const splitText = getOrInitSplit(elemento, { type: "chars" });
 
         const tl = gsap.timeline();
         tl.from(splitText.chars, {
@@ -150,9 +191,7 @@ export function animarParrafo2() {
 
         parrafo.style.willChange = "transform, opacity, filter";
 
-        const splitText2 = new SplitText("#parrafo2", {
-          type: "words",
-        })
+        const splitText2 = getOrInitSplit(parrafo, { type: "words" });
 
         gsap.from(splitText2.words, {
           delay: 0.3,
@@ -190,9 +229,7 @@ export function animarControlCitas() {
 
         controlCitas.style.willChange = "transform, opacity, filter";
 
-        const splitText2 = new SplitText("#controlCitas", {
-          type: "words",
-        })
+        const splitText2 = getOrInitSplit(controlCitas, { type: "words" });
 
         gsap.from(splitText2.words, {
           delay: 0.5,
@@ -230,9 +267,7 @@ export function animarTitulo3() {
       if (entry.isIntersecting && !animacionEjecutada) {
         animacionEjecutada = true;
 
-        const splitText = new SplitText("#titulo3", {
-          type: "chars",
-        });
+        const splitText = getOrInitSplit(titulo3, { type: "chars" });
 
         const tl = gsap.timeline();
         tl.from(splitText.chars, {
@@ -283,9 +318,7 @@ export function miniTitulo() {
 
           element.style.willChange = "transform, opacity, filter";
 
-          const splitText = new SplitText(element, {
-            type: "words",
-          });
+          const splitText = getOrInitSplit(element, { type: "words" });
 
           gsap.from(splitText.words, {
             delay: 1.5,
@@ -324,9 +357,7 @@ export function animarParrafo3() {
 
           element.style.willChange = "transform, opacity, filter";
 
-          const splitText = new SplitText(element, {
-            type: "words",
-          });
+          const splitText = getOrInitSplit(element, { type: "words" });
 
           gsap.from(splitText.words, {
             delay: 0.5,
@@ -427,9 +458,7 @@ export function animarParrafo4() {
 
         ctaFinal.style.willChange = "transform, opacity, filter";
 
-        const splitText = new SplitText("#ctaFinal", {
-          type: "words",
-        });
+        const splitText = getOrInitSplit(ctaFinal, { type: "words" });
 
         const tl = gsap.timeline();
         tl.from(splitText.words, {
