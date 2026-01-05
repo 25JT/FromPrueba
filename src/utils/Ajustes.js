@@ -13,6 +13,9 @@ let diasTrabajoNumeros = [];
 let diasExcepciones = {}; // Objeto para almacenar excepciones por fecha: "2025-11-25": boolean
 let mesActual = new Date().getMonth();
 let anioActual = new Date().getFullYear();
+
+// Variable global para el intervalo de citas
+let intervaloCitaSeleccionado = null;
 //calendario
 // Función para convertir nombres de días a números
 function convertirDiasANumeros(diasTexto) {
@@ -42,7 +45,7 @@ function convertirDiasANumeros(diasTexto) {
 }
 
 function cargarDatos() {
-    fetch(`${ruta}/api/ajustes`, {
+    fetch(`${ruta}/api/diasTrabajo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -57,7 +60,7 @@ function cargarDatos() {
                 const diasTrabajo = data.data[0].dias_trabajo || [];
                 diasTrabajoNumeros = convertirDiasANumeros(diasTrabajo);
                 renderizarCalendario();
-                const duracionCita = data.data[0].intervaloCitas;
+
 
             } else
                 console.log(data.message);
@@ -70,8 +73,6 @@ function cargarDatos() {
 function renderizarCalendario() {
     const calendarioDias = document.getElementById("calendario-dias");
     const mesAnioTexto = document.getElementById("mes-anio-texto");
-
-
 
     // Limpiar calendario
     calendarioDias.innerHTML = "";
@@ -256,7 +257,10 @@ function duracionCita() {
                 }
             }
 
-            console.log("Duración seleccionada:", input.value, "minutos");
+            intervaloCitaSeleccionado = input.value;
+            console.log("Intervalo seleccionado:", intervaloCitaSeleccionado, "minutos");
+
+
         });
     });
 }
@@ -285,4 +289,43 @@ function horarioJornada() {
 }
 
 horarioJornada();
+
+
+const btnGuardar = document.getElementById("btn-guardar");
+btnGuardar.addEventListener("click", async () => {
+    console.log("Guardando ajustes...");
+
+    // Validar que se haya seleccionado un intervalo
+    if (!intervaloCitaSeleccionado) {
+        console.error("No se ha seleccionado un intervalo de citas");
+        alert("Por favor selecciona un intervalo de citas");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${ruta}/api/duracionCita`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userid,
+                userRole,
+                intervaloCita: intervaloCitaSeleccionado,
+            }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success === true) {
+            console.log("Ajustes guardados correctamente");
+            alert("Ajustes guardados correctamente");
+        } else {
+            console.error("Error al guardar:", data.message);
+            alert("Error al guardar los ajustes");
+        }
+    } catch (error) {
+        console.error("Error en la petición:", error);
+        alert("Error al guardar los ajustes");
+    }
+});
 

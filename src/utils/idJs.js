@@ -15,8 +15,8 @@ import {
 } from "../assets/Alertas/Alertas.js";
 const userid = sessionStorage.getItem("Id");
 
-// State for working days
-let diasTrabajoPermitidos = []; // Array of day indices (0=Sun, 1=Mon, ..., 6=Sat)
+// estado de los dias que trabajara el establecimiento
+let diasTrabajoPermitidos = []; // los dias que estan permitidos se muestra con un numero  (0=dom, 1=lun, ..., 6=sab)
 
 async function cargarHorasDisponibles() {
     const idServicio = id;
@@ -25,17 +25,16 @@ async function cargarHorasDisponibles() {
     const contenedor = document.getElementById("horas");
 
     if (!idServicio || !fecha) {
-        // Silent return or handled by validation
         return;
     }
 
-    // Validate if the selected day is allowed
-    const selectedDate = new Date(fecha + "T00:00:00"); // Force local time parsing
+    // validamos si el dia esta permitido
+    const selectedDate = new Date(fecha + "T00:00:00");
     const dayIndex = selectedDate.getDay();
-    // Sunday is 0 in JS getDay(), but often people map Mon=1..Sun=7. 
-    // We will standardize on JS getDay() (0=Sun...6=Sat).
 
-    // Check if day is in allowed list
+
+
+    // revisamos si los dias estan permitidos
     if (diasTrabajoPermitidos.length > 0 && !diasTrabajoPermitidos.includes(dayIndex)) {
         alert("El establecimiento no atiende este día. Por favor seleccione otro.");
         document.getElementById("fecha").value = "";
@@ -65,7 +64,7 @@ async function cargarHorasDisponibles() {
             console.log(data);
 
         } else {
-            // throw new Error(data.message || "Error al obtener horas disponibles");
+
             contenedor.innerHTML = `<div class="col-span-full text-center py-4 text-gray-500">${data.message || "No hay horas disponibles"}</div>`;
         }
     } catch (error) {
@@ -78,9 +77,76 @@ async function cargarHorasDisponibles() {
 
 function mostrarHorasDisponibles(data) {
     const contenedor = document.getElementById("horas");
+    const intervaloCitas = data.rango.intervaloCitas || 60; // 60 min default en caso de que el intevalo citas este vacio
+    const horaInicio = data.rango.hora_inicio; // ejm., "06:00:00" o "6:00"
+    const horaFin = data.rango.hora_fin; // ejm., "19:00:00" o "7:00"
+
     contenedor.innerHTML = "";
 
-    if (!data.disponibles || data.disponibles.length === 0) {
+    if (!horaInicio || !horaFin) {
+        contenedor.innerHTML = `
+            <div class="col-span-full text-center py-4 text-gray-500">
+                No hay horario configurado para este establecimiento.
+            </div>
+        `;
+        return;
+    }
+
+    // parseamos las horas inicio y fin
+    const parseTime = (timeStr) => {
+        const parts = timeStr.split(':');
+        return {
+            hours: parseInt(parts[0]),
+            minutes: parseInt(parts[1] || 0)
+        };
+    };
+
+    const inicio = parseTime(horaInicio);
+    const fin = parseTime(horaFin);
+
+    // convertimos a minutos esto aplica por si el suario seleciono 120 min o 180 min
+    const inicioMinutos = inicio.hours * 60 + inicio.minutes;
+    const finMinutos = fin.hours * 60 + fin.minutes;
+
+    // Generamos todas las horas disponibles
+    const horasGeneradas = [];
+    let currentMinutos = inicioMinutos;
+
+    while (currentMinutos + intervaloCitas <= finMinutos) {
+        const hours = Math.floor(currentMinutos / 60);
+        const minutes = currentMinutos % 60;
+        const hora24 = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+        horasGeneradas.push(hora24);
+        currentMinutos += intervaloCitas;
+
+    }
+
+    // filtro para que no se muestren horas ocupadas
+    const ocupadasSet = new Set(data.ocupadas || []);
+    let horasDisponibles = horasGeneradas.filter(hora => !ocupadasSet.has(hora));
+
+
+    // filtro para que no se muestren horas pasadas y horas menos de 20 minutos en el futuro para hoy
+    const fechaSeleccionada = document.getElementById("fecha").value;
+    const hoy = new Date();
+    const fechaHoy = hoy.toISOString().split("T")[0];
+
+    if (fechaSeleccionada === fechaHoy) {
+
+        // obtenemos la hora actual y le sumamos 20 minutos
+        const ahora = new Date();
+        ahora.setMinutes(ahora.getMinutes() + 20);
+        const horaActualMinutos = ahora.getHours() * 60 + ahora.getMinutes();
+
+        horasDisponibles = horasDisponibles.filter(hora => {
+            const [h, m] = hora.split(':');
+            const horaSlotMinutos = parseInt(h) * 60 + parseInt(m);
+            return horaSlotMinutos >= horaActualMinutos;
+        });
+    }
+
+
+    if (horasDisponibles.length === 0) {
         contenedor.innerHTML = `
             <div class="col-span-full text-center py-4 text-gray-500">
                 No hay horas disponibles para esta fecha.
@@ -89,18 +155,18 @@ function mostrarHorasDisponibles(data) {
         return;
     }
 
-    // Crear botones para cada hora disponible
-    data.disponibles.forEach(hora24 => {
-        const [hora] = hora24.split(':');
+
+
+    // Creamos botones para cada hora disponible
+    horasDisponibles.forEach(hora24 => {
+        const [hora, minuto] = hora24.split(':');
         const horaNum = parseInt(hora);
+        const minutoNum = parseInt(minuto);
         const ampm = horaNum >= 12 ? 'PM' : 'AM';
-        const hora12 = horaNum % 12 === 0 ? 12 : horaNum % 12; // 0 hour is 12 AM
-        // Format to hh:mm
-        const minute = hora24.split(':')[1] || "00";
-        const labelTime = `${hora12}:${minute}`;
+        const hora12 = horaNum % 12 === 0 ? 12 : horaNum % 12;
+        const labelTime = `${hora12}:${String(minutoNum).padStart(2, '0')}`;
 
         const boton = document.createElement('button');
-        // New Style
         boton.className = 'hora flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 bg-background-light hover:bg-primary hover:text-white hover:border-primary transition-all group';
         boton.dataset.id = hora24;
         boton.type = 'button';
@@ -140,7 +206,7 @@ function mostrarError(mensaje) {
     `;
 }
 
-// Helper to parse working days string e.g. "Lunes a Viernes" or "Lunes, Miercoles"
+// Helper para parsear los dias de trabajo string e.g. "Lunes a Viernes" o "Lunes, Miercoles"
 function parsearDiasTrabajo(diasStr) {
     if (!diasStr) return [];
     const diasMap = {
@@ -150,10 +216,10 @@ function parsearDiasTrabajo(diasStr) {
 
     diasStr = diasStr.toLowerCase();
 
-    // Simple logic: check inclusion
+
     let allowed = [];
 
-    // Check ranges like "Lunes a Viernes"
+    // Check ranges like "lunes a viernes"
     if (diasStr.includes(' a ')) {
         const parts = diasStr.split(' a ');
         const start = diasMap[parts[0].trim()];
@@ -175,7 +241,7 @@ function parsearDiasTrabajo(diasStr) {
         });
     }
 
-    // If "Lunes - Viernes" syntax
+    // If "lunes - viernes" syntax
     if (diasStr.includes('-')) {
         // Fallback for hyphen
         const parts = diasStr.split('-');
