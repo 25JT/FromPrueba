@@ -14,8 +14,15 @@ let diasExcepciones = {}; // Objeto para almacenar excepciones por fecha: "2025-
 let mesActual = new Date().getMonth();
 let anioActual = new Date().getFullYear();
 
-// Variable global para el intervalo de citas
+// Variables de estado y ajustes
 let intervaloCitaSeleccionado = null;
+let horaInicio = "--";
+let horaFin = "--";
+
+// Variables para rastrear valores iniciales (evitar sobreescritura accidental)
+let initialIntervalo = null;
+let initialHoraInicio = "--";
+let initialHoraFin = "--";
 //calendario
 // Función para convertir nombres de días a números
 function convertirDiasANumeros(diasTexto) {
@@ -49,25 +56,47 @@ function cargarDatos() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: 'include',
-        body: JSON.stringify({
-            userid,
-            userRole,
-        }),
+        body: JSON.stringify({ userid, userRole }),
     })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (data.success && data.data[0]) {
+                const config = data.data[0];
 
-                const diasTrabajo = data.data[0].dias_trabajo || [];
-                diasTrabajoNumeros = convertirDiasANumeros(diasTrabajo);
+                // 1. Calendario (Días de trabajo)
+                diasTrabajoNumeros = convertirDiasANumeros(config.dias_trabajo || "");
                 renderizarCalendario();
 
+                // 2. Duración de cita
+                if (config.intervaloCita) {
+                    initialIntervalo = config.intervaloCita.toString();
+                    intervaloCitaSeleccionado = initialIntervalo;
+                    const input = document.querySelector(`input[name="duration"][value="${intervaloCitaSeleccionado}"]`);
+                    if (input) {
+                        input.checked = true;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                }
 
-            } else
-                console.log(data.message);
+                // 3. Horas laborales
+                if (config.hora_inicio) {
+                    initialHoraInicio = config.hora_inicio;
+                    horaInicio = initialHoraInicio;
+                    const el = document.getElementById("hora_inicio");
+                    if (el) el.value = config.hora_inicio;
+                }
+                if (config.hora_fin) {
+                    initialHoraFin = config.hora_fin;
+                    horaFin = initialHoraFin;
+                    const el = document.getElementById("hora_fin");
+                    if (el) el.value = config.hora_fin;
+                }
+            } else {
+                console.log(data.message || "No se encontraron datos de configuración");
+            }
         })
         .catch(error => {
-            console.error("Error cargando ajustes:", error);
+            console.error("Error al cargar ajustes:", error);
         });
 }
 
@@ -167,7 +196,7 @@ function renderizarCalendario() {
 
             console.log(`📅 Fecha ${dia}/${mesActual + 1}/${anioActual} (Día ${diaSemana})`);
             console.log(`   Estado cambiado a: ${nuevoEstado ? 'LABORABLE' : 'NO LABORABLE'}`);
-            console.log("   Excepciones actuales:", diasExcepciones);
+            // console.log("   Excepciones actuales:", diasExcepciones);
 
             // Re-renderizar el calendario
             renderizarCalendario();
@@ -191,7 +220,7 @@ function cambiarMes(direccion) {
     renderizarCalendario();
 }
 
-// Event listeners para navegación
+// cambiar el mes en el calendario
 document.addEventListener("DOMContentLoaded", () => {
     const btnAnterior = document.getElementById("btn-mes-anterior");
     const btnSiguiente = document.getElementById("btn-mes-siguiente");
@@ -270,89 +299,136 @@ duracionCita();
 //horario de jornada
 
 function horarioJornada() {
-    document.addEventListener("DOMContentLoaded", () => {
-        const btnInicio = document.getElementById("hora_inicio");
-        const btnFin = document.getElementById("hora_fin");
+    const btnInicio = document.getElementById("hora_inicio");
+    const btnFin = document.getElementById("hora_fin");
+
+    if (btnInicio) {
+        // Inicializar con el valor actual del DOM (por si ya está cargado o tiene un default)
+        if (btnInicio.value !== "--") horaInicio = btnInicio.value;
 
         btnInicio.addEventListener("change", () => {
-            const horaInicio = btnInicio.value;
-
+            horaInicio = btnInicio.value;
             console.log("Hora de inicio seleccionada:", horaInicio);
         });
-        btnFin.addEventListener("change", () => {
-            const horaFin = btnFin.value;
+    }
 
+    if (btnFin) {
+        // Inicializar con el valor actual del DOM
+        if (btnFin.value !== "--") horaFin = btnFin.value;
+
+        btnFin.addEventListener("change", () => {
+            horaFin = btnFin.value;
             console.log("Hora de fin seleccionada:", horaFin);
         });
-
-    });
-
+    }
 }
-
 horarioJornada();
 
+//guardar los ajustes
+// La función cargarDatos ya fue definida arriba
 
 const btnGuardar = document.getElementById("btn-guardar");
 btnGuardar.addEventListener("click", async () => {
-    console.log("Guardando ajustes...");
+    const updatePromises = [];
 
-    // Validar que se haya seleccionado un intervalo
-    if (!intervaloCitaSeleccionado) {
-        console.error("No se ha seleccionado un intervalo de citas");
-        alert("Por favor selecciona un intervalo de citas");
+    // Duración: Solo si cambió
+    if (intervaloCitaSeleccionado && intervaloCitaSeleccionado !== initialIntervalo) {
+        // Para evitar el error "Faltan las horas", enviamos también las horas actuales
+        const payload = {
+            userid,
+            userRole,
+            intervaloCita: intervaloCitaSeleccionado
+        };
+
+        // Solo enviamos las horas si no son "--"
+        if (horaInicio !== "--") payload.horaInicio = horaInicio;
+        if (horaFin !== "--") payload.horaFin = horaFin;
+
+        updatePromises.push(
+            fetch(`${ruta}/api/duracionCita`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: 'include',
+                body: JSON.stringify(payload),
+            })
+                .then(res => res.json())
+                .then(data => ({ type: 'Duración', ...data }))
+                .catch(err => ({ type: 'Duración', success: false, message: err.message }))
+        );
+    }
+
+    // Horas: Solo si no son '--' Y alguna cambió
+    if (horaInicio !== "--" && horaFin !== "--" && (horaInicio !== initialHoraInicio || horaFin !== initialHoraFin)) {
+        updatePromises.push(
+            fetch(`${ruta}/api/horasLaborales`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: 'include',
+                body: JSON.stringify({
+                    userid,
+                    userRole,
+                    horaInicio,
+                    horaFin,
+                    intervaloCita: intervaloCitaSeleccionado // También incluimos la duración por si acaso
+                }),
+            })
+                .then(res => res.json())
+                .then(data => ({ type: 'Horario', ...data }))
+                .catch(err => ({ type: 'Horario', success: false, message: err.message }))
+        );
+    }
+
+    // Excepciones: Siempre que haya alguna (o podrías rastrear cambios aquí también)
+    if (Object.keys(diasExcepciones).length > 0) {
+        updatePromises.push(
+            fetch(`${ruta}/api/fechasExcep`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: 'include',
+                body: JSON.stringify({ userid, userRole, diasExcepciones }),
+            })
+                .then(res => res.json())
+                .then(data => ({ type: 'Calendario', ...data }))
+                .catch(err => ({ type: 'Calendario', success: false, message: err.message }))
+        );
+    }
+
+    if (updatePromises.length === 0) {
+        alert("No se detectaron cambios para guardar.");
         return;
     }
 
+    btnGuardar.disabled = true;
+    const originalText = btnGuardar.textContent;
+    btnGuardar.textContent = "Guardando...";
+
     try {
-        const response = await fetch(`${ruta}/api/duracionCita`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include',
-            body: JSON.stringify({
-                userid,
-                userRole,
-                intervaloCita: intervaloCitaSeleccionado,
-            }),
+        const results = await Promise.all(updatePromises);
+        let msg = "";
+        let hasError = false;
+
+        results.forEach(r => {
+            if (r.success) msg += `✅ ${r.type} guardado.\n`;
+            else {
+                msg += `❌ ${r.type}: ${r.message || 'Error'}\n`;
+                hasError = true;
+            }
         });
 
-        const data = await response.json();
-        console.log(data);
+        alert(msg);
+        if (hasError && results.some(r => r.status === 401)) cerrarSesion();
+        else location.reload(); // Recargar para sincronizar estados iniciales
 
-        if (data.success === true) {
-            console.log("Ajustes guardados correctamente");
-            alert("Ajustes guardados correctamente");
-        } else {
-            console.error("Error al guardar:", data.message);
-            alert("Error al guardar los ajustes");
-
-            cerrarSesion();
-        }
     } catch (error) {
-        console.error("Error en la petición:", error);
-        alert("Error al guardar los ajustes");
+        alert("Error crítico al guardar.");
+    } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.textContent = originalText;
     }
 });
 
 function cerrarSesion() {
     sessionStorage.clear();
-
-    fetch(`${ruta}/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include',
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error en respuesta: " + response.statusText);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            window.location.reload();
-            location.href = "/";
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+    fetch(`${ruta}/logout`, { method: "POST", credentials: 'include' })
+        .finally(() => location.href = "/");
 }
-
