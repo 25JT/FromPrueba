@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!token) {
         mostrarMensaje("Token no encontrado en el enlace.", false);
     } else {
-        fetch(`${ruta}/verificar-email?id_token=${token}`)
+        fetch(`${ruta}/verificar-email?id_token=${token}`, { credentials: 'include' })
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {

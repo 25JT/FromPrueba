@@ -216,6 +216,7 @@ function cancelarCita(id, estado) {
     fetch(`${ruta}/cancelar-cita`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({ id }),
     })
         .then((response) => response.json())
@@ -370,6 +371,7 @@ fetch(`${ruta}/mostrarCitas`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userid }),
+    credentials: 'include',
 })
     .then((response) => response.json())
     .then((data) => {

@@ -49,6 +49,7 @@ async function cargarHorasDisponibles() {
         const response = await fetch(`${ruta}/validarHoras`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({
                 id: idServicio,
                 fecha: fecha
@@ -315,6 +316,7 @@ fetch(`${ruta}/datosUsuario`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userid, id }),
+    credentials: 'include',
 })
     .then((res) => {
         if (!res.ok) throw new Error("Error en la respuesta del servidor");
@@ -396,6 +398,7 @@ if (form) {
         const response = await fetch(`${ruta}/agendarcita`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({
                 userid,
                 id,

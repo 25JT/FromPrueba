@@ -48,6 +48,7 @@ function cargarDatos() {
     fetch(`${ruta}/api/diasTrabajo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({
             userid,
             userRole,
@@ -306,6 +307,7 @@ btnGuardar.addEventListener("click", async () => {
         const response = await fetch(`${ruta}/api/duracionCita`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({
                 userid,
                 userRole,
@@ -322,10 +324,35 @@ btnGuardar.addEventListener("click", async () => {
         } else {
             console.error("Error al guardar:", data.message);
             alert("Error al guardar los ajustes");
+
+            cerrarSesion();
         }
     } catch (error) {
         console.error("Error en la petición:", error);
         alert("Error al guardar los ajustes");
     }
 });
+
+function cerrarSesion() {
+    sessionStorage.clear();
+
+    fetch(`${ruta}/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error en respuesta: " + response.statusText);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            window.location.reload();
+            location.href = "/";
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
 

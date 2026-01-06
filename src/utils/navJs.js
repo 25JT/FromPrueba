@@ -17,7 +17,24 @@ const btnIniciarMobile = document.getElementById("btnIniciarMobile");
 // ===== UTILITY FUNCTIONS =====
 function cerrarSesion() {
   sessionStorage.clear();
-  location.href = "/";
+  fetch(`${ruta}/logout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: 'include',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error en respuesta: " + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      location.href = "/";
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 
@@ -131,6 +148,7 @@ if (formData && !formData.dataset.listenerAdded) {
         correo: correo.value,
         contrasena: contrasena.value,
       }),
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
@@ -178,6 +196,8 @@ if (forgotForm && !forgotForm.dataset.listenerAdded) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ correo: correo2.value }),
+
+
     })
       .then((res) => res.json())
       .then((data) => {

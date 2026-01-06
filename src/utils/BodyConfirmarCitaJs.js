@@ -24,6 +24,7 @@ async function actualizarCita(id, accion) {
         const res = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({
                 id,
                 estado: document.body.dataset.estado,
@@ -71,19 +72,20 @@ window.onload = () => {
     fetch(`${ruta}/datos-usuario`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({ id }),
     })
-    .then((res => res.json())) 
-    .then((data => {
-      
-        
-        document.getElementById("cliente").textContent = data[0].nombre_usuario;
-        document.getElementById("servicio").textContent = data[0].nombre_servicio;
-        document.getElementById("fechaHora").textContent = data[0].fecha + " / " + data[0].hora;
-        document.getElementById("precio").textContent = data[0].precio_servicio;
-    })) 
+        .then((res => res.json()))
+        .then((data => {
 
-   
+
+            document.getElementById("cliente").textContent = data[0].nombre_usuario;
+            document.getElementById("servicio").textContent = data[0].nombre_servicio;
+            document.getElementById("fechaHora").textContent = data[0].fecha + " / " + data[0].hora;
+            document.getElementById("precio").textContent = data[0].precio_servicio;
+        }))
+
+
 
     if (id) {
         document
@@ -99,7 +101,7 @@ window.onload = () => {
     } else {
         document.getElementById("mensaje").textContent = "⚠️ No se encontró el ID de la cita";
         document.getElementById("btnConfirmar").disabled = true;
-        document.getElementById ("cuerpo").classList.add("hidden")
+        document.getElementById("cuerpo").classList.add("hidden")
         document.getElementById("btnCancelar").disabled = true;
 
     }

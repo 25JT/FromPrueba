@@ -76,6 +76,7 @@ if (formData && !formData.dataset.listenerAdded) {
 			headers: {
 				"Content-Type": "application/json",
 			},
+			credentials: 'include',
 			body: JSON.stringify(
 				Object.fromEntries(new FormData(e.target)),
 			),
@@ -114,6 +115,7 @@ function TokenRegistro(correo, id) {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		credentials: 'include',
 		body: JSON.stringify({ correo, id }),
 	})
 		.then((res) => res.json())
@@ -134,7 +136,9 @@ let data = null;
 let error = null;
 
 try {
-	const res = await fetch(`${ruta}/`);
+	const res = await fetch(`${ruta}/`, {
+		credentials: 'include'
+	});
 	if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 	data = await res.json();
 } catch (err) {

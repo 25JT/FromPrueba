@@ -22,6 +22,7 @@ function cerrarSesion() {
     fetch(`${ruta}/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
     })
         .then((response) => {
             if (!response.ok) {
@@ -138,6 +139,7 @@ if (userid) {
             fetch(`${ruta}/nombreUser`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: 'include',
                 body: JSON.stringify({ userid }),
             })
                 .then((response) => {

@@ -201,7 +201,7 @@ if (btnSiguiente) {
 
 
 // Fetch inicial
-fetch(`${ruta}/serviciosDisponibles`)
+fetch(`${ruta}/serviciosDisponibles`, { credentials: 'include' })
   .then((response) => response.json())
   .then((data) => {
     if (loader) loader.style.display = "none";

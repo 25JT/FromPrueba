@@ -227,6 +227,7 @@ async function cancelarCita(Agid, Useid, estado) {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ Agid, Useid }),
+            credentials: 'include',
         });
 
         const respuesta = await res.json();
@@ -385,6 +386,7 @@ fetch(`${ruta}/api/Reservas`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userid }),
+    credentials: 'include',
 })
     .then((response) => response.json())
     .then((respuesta) => {
