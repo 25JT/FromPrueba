@@ -433,6 +433,59 @@ if (form) {
     });
 }
 
+//fechas-especiales
+window.onload = function () {
+    cargarFechasEspeciales()
+}
+
+function cargarFechasEspeciales() {
+    const fechasEspeciales = document.getElementById("fechas-especiales");
+    fetch(`${ruta}/fechas-especiales`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify({
+            id,
+        }),
+    })
+        .then((res) => {
+            if (!res.ok) throw new Error("Error en la respuesta del servidor");
+            return res.json();
+        })
+        .then((data) => {
+            //    console.log(data.data);
+            fechasEspeciales.innerHTML = "";
+            const table = document.createElement("table");
+            table.style.width = "100%";
+            data.data.forEach((item) => {
+                const tr = document.createElement("tr");
+                const date = new Date(item.fecha);
+                const d = String(date.getUTCDate()).padStart(2, '0');
+                const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+                const y = date.getUTCFullYear();
+
+                const tdFecha = document.createElement("td");
+                tdFecha.textContent = `${d}-${m}-${y}`;
+
+                const tdLaborable = document.createElement("td");
+                tdLaborable.textContent = item.es_laborable == 1 ? "✔" : "✘";
+                tdLaborable.style.textAlign = "right";
+
+                tr.appendChild(tdFecha);
+                tr.className = "flex justify-center  space-x-10 mt-2 items-center  border-b border-gray-200 border-2";
+                tr.appendChild(tdLaborable);
+                table.appendChild(tr);
+            });
+            fechasEspeciales.appendChild(table);
+
+
+
+        })
+        .catch((err) => {
+            console.error("Error al obtener datos:", err);
+        });
+}
+
 //volver
 const btnVolver = document.getElementById("volver");
 if (btnVolver) {

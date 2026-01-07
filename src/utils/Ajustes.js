@@ -341,7 +341,7 @@ function horarioJornada() {
 
         btnFin.addEventListener("change", () => {
             horaFin = btnFin.value;
-            console.log("Hora de fin seleccionada:", horaFin);
+          //  console.log("Hora de fin seleccionada:", horaFin);
         });
     }
 }
