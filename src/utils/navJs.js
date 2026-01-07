@@ -15,7 +15,7 @@ const btnIniciar = document.getElementById("btnIniciar");
 const btnIniciarMobile = document.getElementById("btnIniciarMobile");
 
 // ===== UTILITY FUNCTIONS =====
-function cerrarSesion() {
+export function cerrarSesion() {
   sessionStorage.clear();
   fetch(`${ruta}/logout`, {
     method: "POST",

@@ -1,5 +1,6 @@
 
 import { ruta } from "../utils/ruta.js";
+import { cerrarSesion } from "./navJs.js";
 // ===== SIDEBAR MANAGEMENT =====
 // Este archivo maneja toda la funcionalidad del sidebar (menú lateral)
 
@@ -15,29 +16,7 @@ const overlay = document.getElementById("overlay");
 const closeSidebar = document.getElementById("closeSidebar");
 const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
 
-// ===== UTILITY FUNCTIONS =====
-function cerrarSesion() {
-    sessionStorage.clear();
 
-    fetch(`${ruta}/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include',
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error en respuesta: " + response.statusText);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log(data);
-            location.href = "/";
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
 
 function cerrarMenu() {
     if (sidebar) sidebar.classList.add("-translate-x-full");

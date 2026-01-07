@@ -1,6 +1,6 @@
 import { validarInicioProfesional } from "./validarInicio.js";
 import { ruta } from "./ruta.js";
-
+import { cerrarSesion } from "./navJs.js";
 
 validarInicioProfesional();
 
@@ -60,37 +60,60 @@ function cargarDatos() {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.success && data.data[0]) {
-                const config = data.data[0];
+            if (data.success && data.data) {
+                // Limpiar excepciones previas antes de cargar nuevas
+                diasExcepciones = {};
 
-                // 1. Calendario (Días de trabajo)
-                diasTrabajoNumeros = convertirDiasANumeros(config.dias_trabajo || "");
-                renderizarCalendario();
-
-                // 2. Duración de cita
-                if (config.intervaloCita) {
-                    initialIntervalo = config.intervaloCita.toString();
-                    intervaloCitaSeleccionado = initialIntervalo;
-                    const input = document.querySelector(`input[name="duration"][value="${intervaloCitaSeleccionado}"]`);
-                    if (input) {
-                        input.checked = true;
-                        input.dispatchEvent(new Event('change'));
+                data.data.forEach((config, index) => {
+                    // 1. Calendario: Configuración general de días de trabajo
+                    // La tomamos del primer registro que la tenga
+                    if (config.dias_trabajo && diasTrabajoNumeros.length === 0) {
+                        diasTrabajoNumeros = convertirDiasANumeros(config.dias_trabajo);
                     }
-                }
 
-                // 3. Horas laborales
-                if (config.hora_inicio) {
-                    initialHoraInicio = config.hora_inicio;
-                    horaInicio = initialHoraInicio;
-                    const el = document.getElementById("hora_inicio");
-                    if (el) el.value = config.hora_inicio;
-                }
-                if (config.hora_fin) {
-                    initialHoraFin = config.hora_fin;
-                    horaFin = initialHoraFin;
-                    const el = document.getElementById("hora_fin");
-                    if (el) el.value = config.hora_fin;
-                }
+                    // 2. Otros ajustes (solo del primer registro principal)
+                    if (index === 0) {
+                        // Duración de cita
+                        if (config.intervaloCita) {
+                            initialIntervalo = config.intervaloCita.toString();
+                            intervaloCitaSeleccionado = initialIntervalo;
+                            const input = document.querySelector(`input[name="duration"][value="${intervaloCitaSeleccionado}"]`);
+                            if (input) {
+                                input.checked = true;
+                                input.dispatchEvent(new Event('change'));
+                            }
+                        }
+
+                        // Horas laborales
+                        if (config.hora_inicio) {
+                            initialHoraInicio = config.hora_inicio;
+                            horaInicio = initialHoraInicio;
+                            const el = document.getElementById("hora_inicio");
+                            if (el) el.value = config.hora_inicio;
+                        }
+                        if (config.hora_fin) {
+                            initialHoraFin = config.hora_fin;
+                            horaFin = initialHoraFin;
+                            const el = document.getElementById("hora_fin");
+                            if (el) el.value = config.hora_fin;
+                        }
+                    }
+
+                    // 3. Cargar excepciones (fecha y es_laborable)
+                    if (config.fecha && config.es_laborable !== undefined) {
+                        const d = new Date(config.fecha);
+                        // Usamos UTC para evitar desajustes por zona horaria en la medianoche
+                        const year = d.getUTCFullYear();
+                        const month = d.getUTCMonth();
+                        const day = d.getUTCDate();
+                        const key = `${year}-${month}-${day}`;
+
+                        diasExcepciones[key] = (config.es_laborable === 1);
+                        console.log(`Excepción cargada: ${key} -> ${config.es_laborable === 1 ? 'Laborable' : 'No Laborable'}`);
+                    }
+                });
+
+                renderizarCalendario();
             } else {
                 console.log(data.message || "No se encontraron datos de configuración");
             }
@@ -427,8 +450,3 @@ btnGuardar.addEventListener("click", async () => {
     }
 });
 
-function cerrarSesion() {
-    sessionStorage.clear();
-    fetch(`${ruta}/logout`, { method: "POST", credentials: 'include' })
-        .finally(() => location.href = "/");
-}
