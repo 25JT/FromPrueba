@@ -76,13 +76,15 @@ if (negocioLink && citasLink) {
     }
 
     // Navegación a MenuNegocio
-    negocioLink.addEventListener("click", () => {
-        location.href = "MenuNegocio";
+    negocioLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        location.href = "/MenuNegocio";
     });
 
     // Navegación a PrincipalCliente
-    citasLink.addEventListener("click", () => {
-        location.href = "PrincipalCliente";
+    citasLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        location.href = "/CitasAgendadas"; // Mantenemos la coherencia con el href del HTML
     });
 }
 

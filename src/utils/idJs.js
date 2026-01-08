@@ -17,6 +17,7 @@ const userid = sessionStorage.getItem("Id");
 
 // estado de los dias que trabajara el establecimiento
 let diasTrabajoPermitidos = []; // los dias que estan permitidos se muestra con un numero  (0=dom, 1=lun, ..., 6=sab)
+let listaFechasEspeciales = []; // almacen de fechas especiales fetched de la db
 
 async function cargarHorasDisponibles() {
     const idServicio = id;
@@ -32,14 +33,33 @@ async function cargarHorasDisponibles() {
     const selectedDate = new Date(fecha + "T00:00:00");
     const dayIndex = selectedDate.getDay();
 
+    // Validamos fechas especiales primero (tienen prioridad)
+    // fecha viene como YYYY-MM-DD, convertimos la fecha especial a ese formato para comparar
+    const fechaEspecialEncontrada = listaFechasEspeciales.find(item => {
+        const itemDate = new Date(item.fecha);
+        const y = itemDate.getUTCFullYear();
+        const m = String(itemDate.getUTCMonth() + 1).padStart(2, '0');
+        const d = String(itemDate.getUTCDate()).padStart(2, '0');
+        const itemFechaStr = `${y}-${m}-${d}`;
+        return itemFechaStr === fecha;
+    });
 
-
-    // revisamos si los dias estan permitidos
-    if (diasTrabajoPermitidos.length > 0 && !diasTrabajoPermitidos.includes(dayIndex)) {
-        alert("El establecimiento no atiende este día. Por favor seleccione otro.");
-        document.getElementById("fecha").value = "";
-        contenedor.innerHTML = "";
-        return;
+    if (fechaEspecialEncontrada) {
+        if (fechaEspecialEncontrada.es_laborable == 0) {
+            alert("El establecimiento no atiende en esta fecha especial.");
+            document.getElementById("fecha").value = "";
+            contenedor.innerHTML = "";
+            return;
+        }
+        // Si es laborable == 1, saltamos la validacion de diasTrabajoPermitidos
+    } else {
+        // revisamos si los dias estan permitidos por el calendario general
+        if (diasTrabajoPermitidos.length > 0 && !diasTrabajoPermitidos.includes(dayIndex)) {
+            alert("El establecimiento no atiende este día. Por favor seleccione otro.");
+            document.getElementById("fecha").value = "";
+            contenedor.innerHTML = "";
+            return;
+        }
     }
 
     if (loader) loader.classList.remove("hidden");
@@ -60,9 +80,10 @@ async function cargarHorasDisponibles() {
 
         const data = await response.json();
 
+
         if (data.success) {
             mostrarHorasDisponibles(data);
-            console.log(data);
+
 
         } else {
 
@@ -173,7 +194,7 @@ function mostrarHorasDisponibles(data) {
         boton.type = 'button';
 
         boton.innerHTML = `
-             <span class="text-lg font-bold pointer-events-none">${labelTime}</span>
+             <span class="text-lg font-bold pointer-events-none ">${labelTime}</span>
              <span class="text-xs uppercase font-medium text-slate-500 group-hover:text-blue-100 pointer-events-none">${ampm}</span>
         `;
 
@@ -452,8 +473,19 @@ function cargarFechasEspeciales() {
             if (!res.ok) throw new Error("Error en la respuesta del servidor");
             return res.json();
         })
+
         .then((data) => {
+
+            if (data.data === null || data.data.length === 0) {
+                fechasEspeciales.innerHTML = "";
+                const div = document.createElement("div");
+                div.textContent = "No hay fechas especiales";
+                div.className = "text-center text-gray-500";
+                fechasEspeciales.appendChild(div);
+                return;
+            }
             //    console.log(data.data);
+            listaFechasEspeciales = data.data; // Guardamos para validar al cambiar fecha
             fechasEspeciales.innerHTML = "";
             const table = document.createElement("table");
             table.style.width = "100%";
@@ -472,7 +504,7 @@ function cargarFechasEspeciales() {
                 tdLaborable.style.textAlign = "right";
 
                 tr.appendChild(tdFecha);
-                tr.className = "flex justify-center  space-x-10 mt-2 items-center  border-b border-gray-200 border-2";
+                tr.className = "flex justify-center text-lg font-bold  space-x-10 mt-2 items-center  border-b border-gray-200 border-2";
                 tr.appendChild(tdLaborable);
                 table.appendChild(tr);
             });

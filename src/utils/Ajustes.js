@@ -52,6 +52,8 @@ function convertirDiasANumeros(diasTexto) {
 }
 
 function cargarDatos() {
+    console.log(userid);
+
     fetch(`${ruta}/api/diasTrabajo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -60,6 +62,8 @@ function cargarDatos() {
     })
         .then(response => response.json())
         .then(data => {
+
+
             if (data.success && data.data) {
                 // Limpiar excepciones previas antes de cargar nuevas
                 diasExcepciones = {};
@@ -124,6 +128,8 @@ function cargarDatos() {
 }
 
 function renderizarCalendario() {
+    console.log("diasTrabajoNumeros", diasTrabajoNumeros);
+
     const calendarioDias = document.getElementById("calendario-dias");
     const mesAnioTexto = document.getElementById("mes-anio-texto");
 
@@ -341,7 +347,7 @@ function horarioJornada() {
 
         btnFin.addEventListener("change", () => {
             horaFin = btnFin.value;
-          //  console.log("Hora de fin seleccionada:", horaFin);
+            //  console.log("Hora de fin seleccionada:", horaFin);
         });
     }
 }
