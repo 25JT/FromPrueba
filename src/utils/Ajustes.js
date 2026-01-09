@@ -41,12 +41,21 @@ function convertirDiasANumeros(diasTexto) {
 
     // Si diasTexto es un string separado por comas
     if (typeof diasTexto === 'string') {
-        return diasTexto.split(',').map(dia => mapaDias[dia.trim()]).filter(num => num !== undefined);
+        return diasTexto.split(',').map(dia => {
+            const nombreLimpio = dia.trim();
+            // Convertir a Capitalizado (Primera letra mayúscula, resto minúscula) para que coincida con mapaDias
+            const nombreNormalizado = nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1).toLowerCase();
+            return mapaDias[nombreNormalizado];
+        }).filter(num => num !== undefined);
     }
 
     // Si es un array de strings
     if (Array.isArray(diasTexto)) {
-        return diasTexto.map(dia => mapaDias[dia.trim()]).filter(num => num !== undefined);
+        return diasTexto.map(dia => {
+            const nombreLimpio = dia.trim();
+            const nombreNormalizado = nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1).toLowerCase();
+            return mapaDias[nombreNormalizado];
+        }).filter(num => num !== undefined);
     }
 
     return [];
@@ -68,6 +77,8 @@ function cargarDatos() {
             if (data.success && data.data) {
                 // Limpiar excepciones previas antes de cargar nuevas
                 diasExcepciones = {};
+                console.log(data.data);
+
 
                 data.data.forEach((config, index) => {
                     // 1. Calendario: Configuración general de días de trabajo
@@ -129,7 +140,7 @@ function cargarDatos() {
 }
 
 function renderizarCalendario() {
-    // console.log("diasTrabajoNumeros", diasTrabajoNumeros);
+    console.log("diasTrabajoNumeros", diasTrabajoNumeros);
 
     const calendarioDias = document.getElementById("calendario-dias");
     const mesAnioTexto = document.getElementById("mes-anio-texto");

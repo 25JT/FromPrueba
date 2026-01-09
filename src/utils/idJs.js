@@ -35,13 +35,10 @@ async function cargarHorasDisponibles() {
     const dayIndex = selectedDate.getDay();
 
     // Validamos fechas especiales primero (tienen prioridad)
-    // fecha viene como YYYY-MM-DD, convertimos la fecha especial a ese formato para comparar
+    // Usamos comparación de strings directa (YYYY-MM-DD) para evitar problemas de zona horaria
     const fechaEspecialEncontrada = listaFechasEspeciales.find(item => {
-        const itemDate = new Date(item.fecha);
-        const y = itemDate.getUTCFullYear();
-        const m = String(itemDate.getUTCMonth() + 1).padStart(2, '0');
-        const d = String(itemDate.getUTCDate()).padStart(2, '0');
-        const itemFechaStr = `${y}-${m}-${d}`;
+        // item.fecha usualmente viene como ISO string "2026-01-20T00:00:00.000Z" o similar
+        const itemFechaStr = item.fecha.split('T')[0];
         return itemFechaStr === fecha;
     });
 
@@ -424,6 +421,11 @@ if (form) {
             return;
         }
 
+        const fechaEspecialObj = listaFechasEspeciales.find(item => item.fecha.split('T')[0] === fecha);
+        const esFechaEspecial = fechaEspecialObj ? (fechaEspecialObj.es_laborable == 1 ? 1 : 0) : null;
+
+        console.log("esFechaEspecial", esFechaEspecial);
+
         const response = await fetch(`${ruta}/agendarcita`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -440,6 +442,7 @@ if (form) {
                 nombre,
                 apellido,
                 direccion,
+                esFechaEspecial
             }),
         })
             .finally(() => {
