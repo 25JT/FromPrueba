@@ -32,7 +32,7 @@ document.getElementById('hora_fin').addEventListener('change', function () {
     const horaFin = this.value;
 
     if (horaInicio && horaFin && horaFin <= horaInicio) {
-        alert('La hora final debe ser posterior a la hora de inicio');
+        alertaMal('La hora final debe ser posterior a la hora de inicio');
         this.value = '';
     }
 });

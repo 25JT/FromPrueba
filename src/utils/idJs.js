@@ -46,7 +46,7 @@ async function cargarHorasDisponibles() {
 
     if (fechaEspecialEncontrada) {
         if (fechaEspecialEncontrada.es_laborable == 0) {
-            alert("El establecimiento no atiende en esta fecha especial.");
+            alertaMal("El establecimiento no atiende en esta fecha especial.");
             document.getElementById("fecha").value = "";
             contenedor.innerHTML = "";
             return;
@@ -55,7 +55,7 @@ async function cargarHorasDisponibles() {
     } else {
         // revisamos si los dias estan permitidos por el calendario general
         if (diasTrabajoPermitidos.length > 0 && !diasTrabajoPermitidos.includes(dayIndex)) {
-            alert("El establecimiento no atiende este día. Por favor seleccione otro.");
+            alertaMal("El establecimiento no atiende este día. Por favor seleccione otro.");
             document.getElementById("fecha").value = "";
             contenedor.innerHTML = "";
             return;

@@ -1,5 +1,6 @@
 import { ruta } from "../utils/ruta.js";
 import { validarInicioCliente } from "../utils/validarInicio.js";
+import { alertaCheck, alertaFallo, alertaMal, alertaConfirm } from "../assets/Alertas/Alertas.js";
 import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
@@ -203,13 +204,14 @@ function cerrarModal() {
 }
 
 // Función para cancelar cita
-function cancelarCita(id, estado) {
+async function cancelarCita(id, estado) {
     if (estado.toLowerCase() === "cancelada") {
-        alert("Esta cita ya está cancelada");
+        alertaMal("Esta cita ya está cancelada");
         return;
     }
 
-    if (!confirm("¿Estás seguro de que deseas cancelar esta cita?")) {
+    const confirmado = await alertaConfirm("¿Estás seguro de que deseas cancelar esta cita?");
+    if (!confirmado) {
         return;
     }
 
@@ -223,14 +225,17 @@ function cancelarCita(id, estado) {
         .then((data) => {
             if (!data.success) {
                 console.error("Error en respuesta:", data.message);
-                alert("Error al cancelar la cita");
+                alertaFallo("Error al cancelar la cita");
                 return;
             }
-            location.reload();
+            alertaCheck("Cita cancelada correctamente");
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         })
         .catch((error) => {
             console.error("Error al cancelar cita:", error);
-            alert("Error al cancelar la cita");
+            alertaFallo("Error al cancelar la cita");
         });
 }
 
@@ -389,5 +394,5 @@ fetch(`${ruta}/mostrarCitas`, {
     })
     .catch((error) => {
         console.error("Error al obtener datos:", error);
-        alert("Error al cargar las citas");
+        alertaFallo("Error al cargar las citas");
     });

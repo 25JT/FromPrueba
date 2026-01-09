@@ -1,6 +1,7 @@
 import { validarInicioProfesional } from "./validarInicio.js";
 import { ruta } from "./ruta.js";
 import { cerrarSesion } from "./navJs.js";
+import { alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
 
 validarInicioProfesional();
 
@@ -423,7 +424,7 @@ btnGuardar.addEventListener("click", async () => {
     }
 
     if (updatePromises.length === 0) {
-        alert("No se detectaron cambios para guardar.");
+        alertaMal("No se detectaron cambios para guardar.");
         return;
     }
 
@@ -444,12 +445,22 @@ btnGuardar.addEventListener("click", async () => {
             }
         });
 
-        alert(msg);
+        if (hasError) {
+            alertaFallo(msg);
+        } else {
+            alertaCheck(msg);
+        }
+
         if (hasError && results.some(r => r.status === 401)) cerrarSesion();
-        else location.reload(); // Recargar para sincronizar estados iniciales
+        else {
+            // Recargar después de un breve delay para que se vea la alerta
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
 
     } catch (error) {
-        alert("Error crítico al guardar.");
+        alertaFallo("Error crítico al guardar.");
     } finally {
         btnGuardar.disabled = false;
         btnGuardar.textContent = originalText;
