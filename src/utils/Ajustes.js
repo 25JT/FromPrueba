@@ -52,7 +52,7 @@ function convertirDiasANumeros(diasTexto) {
 }
 
 function cargarDatos() {
-    console.log(userid);
+
 
     fetch(`${ruta}/api/diasTrabajo`, {
         method: "POST",
@@ -113,7 +113,7 @@ function cargarDatos() {
                         const key = `${year}-${month}-${day}`;
 
                         diasExcepciones[key] = (config.es_laborable === 1);
-                        console.log(`Excepción cargada: ${key} -> ${config.es_laborable === 1 ? 'Laborable' : 'No Laborable'}`);
+                        //           console.log(`Excepción cargada: ${key} -> ${config.es_laborable === 1 ? 'Laborable' : 'No Laborable'}`);
                     }
                 });
 
@@ -128,7 +128,7 @@ function cargarDatos() {
 }
 
 function renderizarCalendario() {
-    console.log("diasTrabajoNumeros", diasTrabajoNumeros);
+    // console.log("diasTrabajoNumeros", diasTrabajoNumeros);
 
     const calendarioDias = document.getElementById("calendario-dias");
     const mesAnioTexto = document.getElementById("mes-anio-texto");
@@ -223,8 +223,8 @@ function renderizarCalendario() {
             // Guardar en excepciones
             diasExcepciones[fechaClaveClick] = nuevoEstado;
 
-            console.log(`📅 Fecha ${dia}/${mesActual + 1}/${anioActual} (Día ${diaSemana})`);
-            console.log(`   Estado cambiado a: ${nuevoEstado ? 'LABORABLE' : 'NO LABORABLE'}`);
+            // console.log(`📅 Fecha ${dia}/${mesActual + 1}/${anioActual} (Día ${diaSemana})`);
+            // console.log(`   Estado cambiado a: ${nuevoEstado ? 'LABORABLE' : 'NO LABORABLE'}`);
             // console.log("   Excepciones actuales:", diasExcepciones);
 
             // Re-renderizar el calendario
@@ -455,4 +455,14 @@ btnGuardar.addEventListener("click", async () => {
         btnGuardar.textContent = originalText;
     }
 });
+
+//volver
+const btnVolver = document.getElementById("btn-volver");
+if (btnVolver) {
+
+    btnVolver.addEventListener("click", function () {
+        history.back();
+    });
+}
+
 
