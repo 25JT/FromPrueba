@@ -184,6 +184,13 @@ if (formData && !formData.dataset.listenerAdded) {
           sessionStorage.setItem("Id", data.id);
           sessionStorage.setItem("Role", data.role);
           sessionStorage.setItem("StatusNegocio", data.negocio_creado);
+
+          // Si el usuario está en una ruta de agendar, simplemente recargamos
+          if (window.location.pathname.toLowerCase().includes("/agendar/")) {
+            location.reload();
+            return;
+          }
+
           if (data.role === "profesional") {
             if (data.negocio_creado === 1) location.href = "MenuNegocio";
             else location.href = "RegNegocio";

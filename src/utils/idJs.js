@@ -1,3 +1,4 @@
+
 const idElement = document.getElementById("idservicio");
 const id = idElement ? idElement.dataset.id : null;
 
@@ -339,13 +340,20 @@ fetch(`${ruta}/datosUsuario`, {
     body: JSON.stringify({ userid, id }),
     credentials: 'include',
 })
+
     .then((res) => {
+        if (res.statusText === "Unauthorized") {
+            alertaFallo("No autorizado Por favor inicia sesión");
+
+            return;
+        }
+
         if (!res.ok) throw new Error("Error en la respuesta del servidor");
         return res.json();
     })
 
     .then((data) => {
-        //  console.log(data);
+        //console.log(data);
         const usuario = data.data[0];
         const Establecimiento = data.rows2[0];
 
