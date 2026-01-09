@@ -70,7 +70,7 @@ export function alertaCheck4(mensaje) {
     text: mensaje,
     confirmButtonColor: "#3085d6",
   }).then(() => {
-    location.href = "/PrincipalCliente";
+    location.href = "/CitasAgendadas";
   });
 }
 
@@ -86,5 +86,5 @@ export async function alertaConfirm(mensaje) {
     cancelButtonText: "No"
   });
 
-  return result.isConfirmed; 
+  return result.isConfirmed;
 }
