@@ -131,6 +131,32 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  // ===== OPTIMIZACIÓN PARA MÓVILES (TECLADO) =====
+  const inputs = document.querySelectorAll('#loginDropdown input');
+  const modalContent = document.querySelector('#loginDropdown > div');
+
+  function handleFocus() {
+    if (window.innerWidth < 768) {
+      if (modalContent) {
+        modalContent.style.transition = "transform 0.3s ease";
+        modalContent.style.transform = "translateY(-80px)";
+      }
+    }
+  }
+
+  function handleBlur() {
+    if (window.innerWidth < 768) {
+      if (modalContent) {
+        modalContent.style.transform = "translateY(0)";
+      }
+    }
+  }
+
+  inputs.forEach(input => {
+    input.addEventListener('focus', handleFocus);
+    input.addEventListener('blur', handleBlur);
+  });
 });
 
 // Login BD original
