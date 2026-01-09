@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 function Movimiento({ children }) {
   useEffect(() => {
+    document.body.classList.add("no-overscroll");
     const container = document.getElementById("pagina-Container");
     const sections = Array.from(container.getElementsByClassName("section"));
     let currentSection = 0;
@@ -126,6 +127,7 @@ function Movimiento({ children }) {
         window.removeEventListener('touchstart', onTochStart);
         window.removeEventListener('touchend', onTochEnd);
         document.removeEventListener('click', handleAnchorClick);
+        document.body.classList.remove("no-overscroll");
     };
     
   }, []);

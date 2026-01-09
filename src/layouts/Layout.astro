@@ -71,8 +71,10 @@ const { title } = Astro.props;
       body {
         margin: 0;
         padding: 0;
-        overscroll-behavior-y: none;
         font-family: sans-serif; /* Fallback */
+      }
+      .no-overscroll {
+        overscroll-behavior-y: none;
       }
       #pagina-Container {
         height: 100vh;
