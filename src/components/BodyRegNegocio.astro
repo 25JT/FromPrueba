@@ -118,22 +118,6 @@
                     Estilista Femenina
                   </p>
                 </label>
-                <!-- 
-                <label
-                  for="estilista_masculino"
-                  class="flex items-center gap-4 rounded-lg border border-solid border-[#cfd7e7] p-[15px] cursor-pointer transition-colors hover:border-primary/70 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
-                >
-                  <input
-                    id="estilista_masculino"
-                    type="radio"
-                    name="tipo_servicio"
-                    value="estilista_masculino"
-                    class="h-5 w-5 border-2 border-gray-400 bg-transparent text-transparent checked:border-primary checked:bg-primary focus:outline-none focus:ring-0 focus:ring-offset-0"
-                  />
-                  <p class="text-[#0d121b] text-sm font-medium leading-normal">
-                    Estilista Masculino
-                  </p>
-                </label> -->
 
                 <label
                   for="barbero"
@@ -372,6 +356,88 @@
                 >
               </div>
             </label>
+
+            <div class="flex flex-col gap-2">
+              <p class="text-sm sm:text-base font-medium leading-normal">
+                Intervalo entre citas
+              </p>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <label
+                  for="30min"
+                  class="flex items-center gap-2 rounded-lg border border-solid border-[#cfd7e7] p-3 cursor-pointer transition-colors hover:border-primary/70 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+                >
+                  <input
+                    id="30min"
+                    type="radio"
+                    name="intervaloCitas"
+                    value="30"
+                    class="h-5 w-5 border-2 border-gray-400 bg-transparent text-transparent checked:border-primary checked:bg-primary focus:outline-none focus:ring-0 focus:ring-offset-0"
+                    required
+                  />
+                  <p
+                    class="text-[#0d121b] md:text-sm font-medium leading-normal"
+                  >
+                    30 minutos
+                  </p>
+                </label>
+
+                <label
+                  for="60min"
+                  class="flex items-center gap-2 rounded-lg border border-solid border-[#cfd7e7] p-3 cursor-pointer transition-colors hover:border-primary/70 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+                >
+                  <input
+                    id="60min"
+                    type="radio"
+                    name="intervaloCitas"
+                    value="60"
+                    class="h-5 w-5 border-2 border-gray-400 bg-transparent text-transparent checked:border-primary checked:bg-primary focus:outline-none focus:ring-0 focus:ring-offset-0"
+                  />
+                  <p
+                    class="text-[#0d121b] md:text-sm font-medium leading-normal"
+                  >
+                    1 hora
+                  </p>
+                </label>
+                <label
+                  for="120min"
+                  class="flex items-center gap-2 rounded-lg border border-solid border-[#cfd7e7] p-3 cursor-pointer transition-colors hover:border-primary/70 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+                >
+                  <input
+                    id="120min"
+                    type="radio"
+                    name="intervaloCitas"
+                    value="120"
+                    class="h-5 w-5 border-2 border-gray-400 bg-transparent text-transparent checked:border-primary checked:bg-primary focus:outline-none focus:ring-0 focus:ring-offset-0"
+                  />
+                  <p
+                    class="text-[#0d121b] md:text-sm font-medium leading-normal"
+                  >
+                    2 horas
+                  </p>
+                </label>
+
+                <label
+                  for="180min"
+                  class="flex items-center gap-2 rounded-lg border border-solid border-[#cfd7e7] p-3 cursor-pointer transition-colors hover:border-primary/70 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+                >
+                  <input
+                    id="180min"
+                    type="radio"
+                    name="intervaloCitas"
+                    value="180"
+                    class="h-5 w-5 border-2 border-gray-400 bg-transparent text-transparent checked:border-primary checked:bg-primary focus:outline-none focus:ring-0 focus:ring-offset-0"
+                  />
+                  <p
+                    class="text-[#0d121b] md:text-sm font-medium leading-normal"
+                  >
+                    3 horas
+                  </p>
+                </label>
+              </div>
+              <p class="text-[#0d121b] md:text-sm font-medium leading-normal">
+                Predeterminado: 1 hora
+              </p>
+            </div>
           </div>
         </div>
 

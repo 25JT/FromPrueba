@@ -104,10 +104,11 @@ document
             dias_trabajo: diasSeleccionados, // ya es un array
             tipo_servicio: formData.get("tipo_servicio"),
             precio: formData.get("precio"),
+            duracion: formData.get("intervaloCitas"),
 
         };
 
-        //console.log(data);
+        console.log(data);
 
         fetch(`${ruta}/registroNegocio`, {
 
