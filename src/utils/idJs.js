@@ -498,28 +498,58 @@ function cargarFechasEspeciales() {
             //    console.log(data.data);
             listaFechasEspeciales = data.data; // Guardamos para validar al cambiar fecha
             fechasEspeciales.innerHTML = "";
-            const table = document.createElement("table");
-            table.style.width = "100%";
+
+            const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
             data.data.forEach((item) => {
-                const tr = document.createElement("tr");
                 const date = new Date(item.fecha);
                 const d = String(date.getUTCDate()).padStart(2, '0');
-                const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+                const mIndex = date.getUTCMonth();
+                const mName = meses[mIndex];
                 const y = date.getUTCFullYear();
+                const fechaCompleta = `${d}-${String(mIndex + 1).padStart(2, '0')}-${y}`;
 
-                const tdFecha = document.createElement("td");
-                tdFecha.textContent = `${d}-${m}-${y}`;
+                const card = document.createElement("div");
 
-                const tdLaborable = document.createElement("td");
-                tdLaborable.textContent = item.es_laborable == 1 ? "✔" : "✘";
-                tdLaborable.style.textAlign = "right";
-
-                tr.appendChild(tdFecha);
-                tr.className = "flex justify-center text-lg font-bold  space-x-10 mt-2 items-center  border-b border-gray-200 border-2";
-                tr.appendChild(tdLaborable);
-                table.appendChild(tr);
+                if (item.es_laborable == 0) {
+                    // Diseño NO LABORABLE (Rojo)
+                    card.className = "date-card group relative flex items-center justify-between  bg-white border border-slate-300 rounded-xl transition-all hover:shadow-md hover:border-red-200 ";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-red-50 text-red-500">
+                                <span class="text-xs font-bold uppercase">${mName}</span>
+                                <span class="text-lg font-bold leading-none">${d}</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-semibold text-slate-700">${fechaCompleta}</span>
+                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-600 rounded-full flex items-center gap-1">
+                                    No Laborable
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Diseño LABORABLE (Azul/Verde)
+                    card.className = "date-card group relative flex items-center justify-between  bg-white border border-slate-300 rounded-xl transition-all hover:shadow-md hover:border-primary/30";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <div class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-blue-500 text-white">
+                                <span class="text-xs font-bold uppercase">${mName}</span>
+                                <span class="text-lg font-bold leading-none">${d}</span>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-4">
+                                    <span class="font-semibold text-slate-700">${fechaCompleta}</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-emerald-100 text-emerald-700 rounded-full flex items-center gap-1">
+                                        Laborable
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                fechasEspeciales.appendChild(card);
             });
-            fechasEspeciales.appendChild(table);
 
 
 

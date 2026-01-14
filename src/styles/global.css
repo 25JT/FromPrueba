@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+@view-transition {
+    navigation:auto;
+}
+
+::view-transition-old(page) {
+  animation: fade 0.5s linear forwards;
+}
+
+::view-transition-new(page) {
+  animation: fade 0.5s linear reverse;
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+
+  }
+
+}
+
 /* Estilos para el scroll seccional */
 
 html,

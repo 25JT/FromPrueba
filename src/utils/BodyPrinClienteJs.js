@@ -1,9 +1,10 @@
 import { ruta } from "../utils/ruta.js";
 import { alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
 import { validarInicioCliente } from "./validarInicio.js";
+import { animacionPrinCliente } from "../assets/Animaciones/animacionPrinCliente.js";
 
 validarInicioCliente();
-
+animacionPrinCliente();
 // Variables de estado
 let paginaActual = 1;
 const serviciosPorPagina = 6;
@@ -15,6 +16,8 @@ const loader = document.getElementById("loader-servicios");
 const btnAnterior = document.getElementById("btn-anterior");
 const btnSiguiente = document.getElementById("btn-siguiente");
 const infoPaginacion = document.getElementById("info-paginacion");
+
+
 
 // Función para convertir a formato 12h AM/PM
 function to12HourFormat(timeStr) {

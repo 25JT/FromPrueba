@@ -2,9 +2,10 @@ import { validarInicioProfesional } from "./validarInicio.js";
 import { ruta } from "./ruta.js";
 import { cerrarSesion } from "./navJs.js";
 import { alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
+import { animacionPrinCliente } from "../assets/Animaciones/animacionPrinCliente.js";
 
 validarInicioProfesional();
-
+animacionPrinCliente();
 const userid = sessionStorage.getItem("Id");
 const userRole = sessionStorage.getItem("Role");
 
