@@ -28,7 +28,7 @@
                 <span class="material-symbols-outlined text-primary"
                   >schedule</span
                 >
-                <h3 class="font-bold text-base">Duración de cada Cita</h3>
+                <h3 class="font-bold text-base">Duración de cada cita</h3>
               </div>
               <div class="space-y-3">
                 <label
@@ -208,7 +208,7 @@
                 <span class="material-symbols-outlined text-primary"
                   >access_time</span
                 >
-                <h3 class="font-bold text-base">Horario de Jornada</h3>
+                <h3 class="font-bold text-base">Horario de jornada</h3>
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -289,8 +289,9 @@
                 >
                 <div class="text-sm text-slate-600">
                   <p class="font-medium text-slate-900 mb-1">Nota importante</p>
-                  Los cambios en la duración solo afectarán a las futuras citas, no
-                  a las ya agendadas.
+                  Los cambios solo afectarán a las futuras citas, no a las ya agendadas
+                  si tienes una cita agendada con un horario que no coincide con el
+                  nuevo horario cancelala manualmente.
                 </div>
               </div>
             </div>
@@ -307,7 +308,7 @@
                     >calendar_today</span
                   >
                   <h3 class="font-bold text-base text-slate-900">
-                    Calendario Laboral
+                    Calendario laboral Y fechas especiales
                   </h3>
                 </div>
                 <div class="flex items-center gap-4">
@@ -401,6 +402,144 @@
                   >
                   </div>
                   <span>Dia Actual</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="mt-6 bg-white rounded-xl shadow-sm border border-slate-100 p-5"
+            >
+              <div class="flex flex-col gap-2 border-b border-slate-200">
+                <h3 class="font-bold text-base text-slate-900">
+                  Actualizar dias de trabajo
+                </h3>
+              </div>
+              <div class="flex flex-wrap sm:grid sm:grid-cols-7 gap-2 mt-4">
+                <!-- Lunes -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="lunes"
+                    name="dias_trabajo"
+                    value="Lunes"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-gray-700 transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    LU
+                  </div>
+                </label>
+
+                <!-- Martes -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="martes"
+                    name="dias_trabajo"
+                    value="Martes"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-gray-700 transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    MA
+                  </div>
+                </label>
+
+                <!-- Miércoles -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="miercoles"
+                    name="dias_trabajo"
+                    value="Miércoles"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-gray-700 transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    MI
+                  </div>
+                </label>
+
+                <!-- Jueves -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="jueves"
+                    name="dias_trabajo"
+                    value="Jueves"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-gray-700 transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    JU
+                  </div>
+                </label>
+
+                <!-- Viernes -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="viernes"
+                    name="dias_trabajo"
+                    value="Viernes"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-gray-700 transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    VI
+                  </div>
+                </label>
+
+                <!-- Sábado -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="sabado"
+                    name="dias_trabajo"
+                    value="Sábado"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-gray-700 transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    SA
+                  </div>
+                </label>
+
+                <!-- Domingo -->
+                <label class="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="domingo"
+                    name="dias_trabajo"
+                    value="Domingo"
+                    class="peer sr-only"
+                  />
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-background-light font-medium text-black transition-colors hover:bg-gray-200 peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-primary"
+                  >
+                    DO
+                  </div>
+                </label>
+                <div
+                  class="px-5 py-3 border-t border-slate-100 bg-slate-50/50 rounded-b-xl flex gap-6 text-xs font-medium text-slate-600"
+                >
+                  <div class="flex items-center gap-2">
+                    <div class="size-3 rounded-full bg-blue-500"></div>
+                    <span>Laborable</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="size-3 rounded-full bg-white border border-slate-300"
+                    >
+                    </div>
+                    <span>No laborable</span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -25,6 +25,7 @@ let horaFin = "--";
 let initialIntervalo = null;
 let initialHoraInicio = "--";
 let initialHoraFin = "--";
+let initialDiasTrabajo = [];
 //calendario
 // Función para convertir nombres de días a números
 function convertirDiasANumeros(diasTexto) {
@@ -75,16 +76,22 @@ function cargarDatos() {
         .then(data => {
 
 
+
+
             if (data.success && data.data) {
                 // Limpiar excepciones previas antes de cargar nuevas
                 diasExcepciones = {};
-                console.log(data.data);
+
 
 
                 data.data.forEach((config, index) => {
                     // 1. Calendario: Configuración general de días de trabajo
                     // La tomamos del primer registro que la tenga
                     if (config.dias_trabajo && diasTrabajoNumeros.length === 0) {
+                        initialDiasTrabajo = config.dias_trabajo.split(',').map(d => {
+                            const nombreLimpio = d.trim();
+                            return nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1).toLowerCase();
+                        });
                         diasTrabajoNumeros = convertirDiasANumeros(config.dias_trabajo);
                     }
 
@@ -131,6 +138,7 @@ function cargarDatos() {
                 });
 
                 renderizarCalendario();
+                renderizarActualizarTrabajo();
             } else {
                 console.log(data.message || "No se encontraron datos de configuración");
             }
@@ -140,8 +148,18 @@ function cargarDatos() {
         });
 }
 
+function renderizarActualizarTrabajo() {
+    const checkboxes = document.querySelectorAll('input[name="dias_trabajo"]');
+    checkboxes.forEach(checkbox => {
+        if (initialDiasTrabajo.includes(checkbox.value)) {
+            checkbox.checked = true;
+        } else {
+            checkbox.checked = false;
+        }
+    });
+}
+
 function renderizarCalendario() {
-    console.log("diasTrabajoNumeros", diasTrabajoNumeros);
 
     const calendarioDias = document.getElementById("calendario-dias");
     const mesAnioTexto = document.getElementById("mes-anio-texto");
@@ -242,6 +260,7 @@ function renderizarCalendario() {
 
             // Re-renderizar el calendario
             renderizarCalendario();
+
         });
 
         calendarioDias.appendChild(botonDia);
@@ -367,10 +386,13 @@ function horarioJornada() {
 horarioJornada();
 
 //guardar los ajustes
-// La función cargarDatos ya fue definida arriba
+
 
 const btnGuardar = document.getElementById("btn-guardar");
 btnGuardar.addEventListener("click", async () => {
+
+
+
     const updatePromises = [];
 
     // Duración: Solo si cambió
@@ -435,6 +457,54 @@ btnGuardar.addEventListener("click", async () => {
         );
     }
 
+    // Días de Trabajo: Comparar y loguear(Segun solicitud del usuario)
+    const currentCheckboxes = document.querySelectorAll('input[name="dias_trabajo"]');
+    const currentDiasTrabajo = Array.from(currentCheckboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+    // Identificar cambios
+    const diasAgregados = currentDiasTrabajo.filter(d => !initialDiasTrabajo.includes(d));
+    const diasRemovidos = initialDiasTrabajo.filter(d => !currentDiasTrabajo.includes(d));
+
+    if (diasAgregados.length > 0 || diasRemovidos.length > 0) {
+        updatePromises.push(
+            fetch(`${ruta}/api/diasTrabajoActualizar`, { // Mantengo la ruta por ahora, pero la integro en el flujo
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: 'include',
+                body: JSON.stringify({ currentDiasTrabajo }),
+            })
+                .then(async res => {
+                    const contentType = res.headers.get("content-type");
+                    if (!res.ok) {
+                        // Intentar obtener mensaje de error del servidor si es JSON, si no, usar texto plano
+                        let errorMsg = `Error ${res.status}`;
+                        try {
+                            if (contentType && contentType.includes("application/json")) {
+                                const errData = await res.json();
+                                errorMsg += `: ${errData.message || res.statusText}`;
+                            } else {
+                                errorMsg += `: ${res.statusText || 'Ruta no encontrada'}`;
+                            }
+                        } catch (e) {
+                            errorMsg += `: No se pudo conectar con el servidor`;
+                        }
+                        throw new Error(errorMsg);
+                    }
+
+                    if (!contentType || !contentType.includes("application/json")) {
+                        throw new Error("El servidor no devolvió una respuesta válida (JSON esperado)");
+                    }
+                    return res.json();
+                })
+                .then(data => ({ type: 'Días Trabajo', ...data, message: data.message }))
+
+
+                .catch(err => ({ type: 'Días Trabajo', success: false, message: err.message }))
+        );
+    }
+
     if (updatePromises.length === 0) {
         alertaMal("No se detectaron cambios para guardar.");
         return;
@@ -477,6 +547,8 @@ btnGuardar.addEventListener("click", async () => {
         btnGuardar.disabled = false;
         btnGuardar.textContent = originalText;
     }
+
+    // Actualizar dia de trabajo
 });
 
 //volver
