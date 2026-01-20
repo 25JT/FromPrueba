@@ -78,7 +78,7 @@ async function validarVinculado() {
             // Opcional: Limpiar el QR de la pantalla
             const imgQr = document.getElementById("imgQr");
             if (imgQr) {
-                // Podemos poner una imagen de éxito o simplemente limpiar el src
+                // imagen de éxito 
                 imgQr.src = "https://lh3.googleusercontent.com/aida-public/AB6AXuDXvCLSvDgaJp60xH9618XP5K3x4zvFddTCAEt9kgaZwVwhn3KUKWGP9MxkEMH_LNb6lJzF0Uqei4e8hoLWKQGFwJrm1sIiX2W7jJBtOMf6ZXMc4fi4qinnAYvxPJaAtH0rU8tcdPKTN5bKBjjXTRDmNM_YIe001lZ_O-hlcjXsKlcDSmRL4ePi7qtbu2lDl0iaFsmlAnuQqAyVyQMlVBXr12bGJMmlFnUeTdrWQDxF747WRrsack8rzCaEj981_qoJBsDKFxtlBg";
             }
         }
