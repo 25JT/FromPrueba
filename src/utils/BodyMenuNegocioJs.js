@@ -4,7 +4,9 @@ import { alertaConfirm, alertaCheck, alertaFallo } from "../assets/Alertas/Alert
 import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
+import estadoWhatsApp from "./navJs.js";
 
+estadoWhatsApp();
 validarInicioProfesional();
 const userid = sessionStorage.getItem("Id");
 

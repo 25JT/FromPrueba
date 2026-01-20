@@ -74,6 +74,17 @@ export function alertaCheck4(mensaje) {
   });
 }
 
+export function alertaCheck5(mensaje) {
+  Swal.fire({
+    icon: "success",
+    title: "¡Correcto!",
+    text: mensaje,
+    confirmButtonColor: "#3085d6",
+  }).then(() => {
+    location.href = "/VincularWhatsApp";
+  });
+}
+
 export async function alertaConfirm(mensaje) {
   const result = await Swal.fire({
     title: "¿Estás seguro?",

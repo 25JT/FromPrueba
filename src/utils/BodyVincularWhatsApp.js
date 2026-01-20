@@ -1,5 +1,5 @@
 import { ruta } from "./ruta";
-import { alertaCheck, alertaFallo } from "../assets/Alertas/Alertas.js";
+import { alertaCheck3, alertaFallo } from "../assets/Alertas/Alertas.js";
 
 let intervaloValidar = null;
 
@@ -65,7 +65,7 @@ async function validarVinculado() {
         console.log("Polling estado:", data);
 
         if (data.connected === true || data.vinculado === true) {
-            alertaCheck("¡WhatsApp Vinculado con éxito!");
+            alertaCheck3("¡WhatsApp Vinculado con éxito!");
 
 
             // 4. Detener el reloj

@@ -1,4 +1,4 @@
-import { alertaCheck, alertaCheck3, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
+import { alertaCheck5, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
 import { animar } from "../assets/Animaciones/animaRegSecion.js";
 import { ruta } from "../utils/ruta.js";
 import { validarInicioProfesional } from "./validarInicio.js";
@@ -123,7 +123,7 @@ document
             .then((data) => {
                 if (data.success) {
 
-                    alertaCheck3("Registro exitoso");
+                    alertaCheck5("Registro exitoso");
 
                 } else {
                     alertaFallo(data.message);

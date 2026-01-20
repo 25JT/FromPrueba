@@ -192,11 +192,16 @@ if (formData && !formData.dataset.listenerAdded) {
           }
 
           if (data.role === "profesional") {
-            if (data.negocio_creado === 1) location.href = "MenuNegocio";
-            else location.href = "RegNegocio";
+            if (data.negocio_creado === 1) {
+
+              location.href = "MenuNegocio";
+            } else location.href = "RegNegocio";
+
           } else if (data.role === "cliente") {
             location.href = "CitasAgendadas";
+
           }
+
         } else {
           alertaMal(data.message);
         }
@@ -249,4 +254,31 @@ if (forgotForm && !forgotForm.dataset.listenerAdded) {
   });
 }
 
+//validar vinculacion de wpp
+
+export default async function estadoWhatsApp() {
+
+  fetch(`${ruta}/estadoWhatsApp`, {
+    method: "GET",
+    credentials: 'include',
+  })
+    .then(res => res.json())
+    .then(data => {
+      let estado = data.connected;
+      if (estado === true) {
+
+        console.log("status 200");
+
+      } else {
+        // 2. Si no está vinculado, obtener el QR e iniciar el "reloj"
+        console.log("status 400");
+        alertaFallo("WhatsApp no vinculado");
+      }
+    })
+    .catch(err => {
+      console.error("Error al verificar estado inicial:", err);
+      // Intentamos iniciar el proceso de todos modos por si es error de red temporal
+
+    });
+}
 
