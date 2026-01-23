@@ -391,6 +391,15 @@ const horaInput = document.getElementById("hora");
 const form = document.getElementById("citaForm");
 const mensaje2 = document.getElementById("mensaje");
 
+// Abrir el selector de fecha al hacer clic en el input
+if (fechaInput) {
+    fechaInput.addEventListener("click", () => {
+        if (typeof fechaInput.showPicker === 'function') {
+            fechaInput.showPicker();
+        }
+    });
+}
+
 // Bloquear fechas pasadas
 document.addEventListener("DOMContentLoaded", () => {
     const today = new Date();

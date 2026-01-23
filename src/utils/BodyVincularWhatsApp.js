@@ -68,6 +68,7 @@ async function validarVinculado() {
             alertaCheck3("¡WhatsApp Vinculado con éxito!");
 
 
+
             // 4. Detener el reloj
             if (intervaloValidar) {
                 clearInterval(intervaloValidar);
