@@ -321,7 +321,9 @@ function actualizarCirculosDias(diasStr) {
         if (diasTrabajoPermitidos.includes(map[dayNameLower])) {
             const div = circleContainer.querySelector('div');
             if (div) {
-                div.className = 'w-8 h-8 rounded-full bg-primary text-black flex items-center justify-center text-xs font-bold shadow-sm';
+
+                //diseño de los botones de los dias permitidos
+                div.className = 'w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold shadow-sm';
             }
         }
     });
@@ -525,13 +527,13 @@ function cargarFechasEspeciales() {
                     card.className = "date-card group relative flex items-center justify-between  bg-white border border-slate-300 rounded-xl transition-all hover:shadow-md hover:border-red-200 ";
                     card.innerHTML = `
                         <div class="flex items-center gap-4">
-                            <div class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-red-50 text-red-500">
+                            <div class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-red-50 ">
                                 <span class="text-xs font-bold uppercase">${mName}</span>
                                 <span class="text-lg font-bold leading-none">${d}</span>
                             </div>
                             <div class="flex items-center gap-4">
                                 <span class="font-semibold text-slate-700">${fechaCompleta}</span>
-                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-600 rounded-full flex items-center gap-1">
+                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-red-100  rounded-full flex items-center gap-1">
                                     No Laborable
                                 </span>
                             </div>

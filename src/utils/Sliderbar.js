@@ -95,6 +95,9 @@ if (role === "cliente") {
 
     document.getElementById("Settings").classList.add("hidden");
 
+    document.getElementById("VincularWhatsApp").classList.add("hidden");
+
+
 }
 if (role === "profesional") {
     document.getElementById("Servicios").classList.add("hidden");
