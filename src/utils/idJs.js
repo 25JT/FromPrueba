@@ -80,6 +80,8 @@ async function cargarHorasDisponibles() {
 
 
         if (data.success) {
+            console.log(data);
+
             mostrarHorasDisponibles(data);
 
 
@@ -132,7 +134,7 @@ function mostrarHorasDisponibles(data) {
     const horasGeneradas = [];
     let currentMinutos = inicioMinutos;
 
-    while (currentMinutos + intervaloCitas <= finMinutos) {
+    while (currentMinutos <= finMinutos) {
         const hours = Math.floor(currentMinutos / 60);
         const minutes = currentMinutos % 60;
         const hora24 = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
@@ -140,6 +142,8 @@ function mostrarHorasDisponibles(data) {
         currentMinutos += intervaloCitas;
 
     }
+
+    console.log(horasGeneradas);
 
     // filtro para que no se muestren horas ocupadas
     const ocupadasSet = new Set(data.ocupadas || []);
