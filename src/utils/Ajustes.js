@@ -349,7 +349,7 @@ function duracionCita() {
             }
 
             intervaloCitaSeleccionado = input.value;
-            console.log("Intervalo seleccionado:", intervaloCitaSeleccionado, "minutos");
+            //  console.log("Intervalo seleccionado:", intervaloCitaSeleccionado, "minutos");
 
 
         });
@@ -369,7 +369,7 @@ function horarioJornada() {
 
         btnInicio.addEventListener("change", () => {
             horaInicio = btnInicio.value;
-            console.log("Hora de inicio seleccionada:", horaInicio);
+            //   console.log("Hora de inicio seleccionada:", horaInicio);
         });
     }
 

@@ -175,11 +175,11 @@ function mostrarDetallesCita(agenda) {
 </div>
 </div>
 <div class="p-6 border-t border-gray-200  flex flex-col sm:flex-row-reverse gap-3">
-<button class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500  hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<button id="editar-cita" class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500  hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
 <span class="material-symbols-outlined text-base">edit</span>
 <span>Modificar</span>
 </button>
-<button id="cerrar-modal" id="cerrar-modal-btn"   class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500  hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<button id="cerrar-modal" class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500  hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
 <span class="material-symbols-outlined text-base">cancel</span>
 <span>Cerrar</span>
 </button>
@@ -192,9 +192,19 @@ function mostrarDetallesCita(agenda) {
 
     // Event listeners para cerrar modal
     document.getElementById("cerrar-modal").addEventListener("click", cerrarModal);
-    document.getElementById("cerrar-modal-btn").addEventListener("click", cerrarModal);
     document.getElementById("modal-detalles").addEventListener("click", (e) => {
         if (e.target.id === "modal-detalles") cerrarModal();
+    });
+
+    // Event listener para editar cita
+    document.getElementById("editar-cita").addEventListener("click", () => {
+        if (agenda.id_pservicio && agenda.id) {
+            sessionStorage.setItem("editCitaId", agenda.id);
+            window.location.href = `/Agendar/${agenda.id_pservicio}`;
+        } else {
+            console.error("No se encontró el ID del servicio o de la cita", agenda);
+            alertaMal("Error al intentar editar la cita");
+        }
     });
 }
 
@@ -370,7 +380,6 @@ function cambiarPagina(direccion) {
         }
     }
 }
-
 // Cargar citas desde el servidor
 fetch(`${ruta}/mostrarCitas`, {
     method: "POST",
@@ -380,6 +389,8 @@ fetch(`${ruta}/mostrarCitas`, {
 })
     .then((response) => response.json())
     .then((data) => {
+
+
         if (!data.success) {
             console.error("Error en respuesta:", data.message);
             return;

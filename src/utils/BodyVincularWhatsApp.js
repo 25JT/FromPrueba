@@ -15,7 +15,7 @@ async function verificarEstadoInicial() {
             credentials: 'include',
         });
         const data = await res.json();
-        console.log("Estado inicial:", data);
+        // console.log("Estado inicial:", data);
 
         if (data.connected === true || data.vinculado === true) {
             alertaCheck("WhatsApp ya está vinculado");
@@ -43,7 +43,7 @@ async function iniciarProcesoVinculacion() {
             qrRender(data.qr);
             // 3. Iniciar el "reloj" para preguntar por el estado cada 3 segundos
             if (!intervaloValidar) {
-                console.log("Iniciando polling de estado...");
+                // console.log("Iniciando polling de estado...");
                 intervaloValidar = setInterval(validarVinculado, 3000);
             }
         } else {
@@ -62,7 +62,7 @@ async function validarVinculado() {
             credentials: 'include',
         });
         const data = await res.json();
-        console.log("Polling estado:", data);
+        //   console.log("Polling estado:", data);
 
         if (data.connected === true || data.vinculado === true) {
             alertaCheck3("¡WhatsApp Vinculado con éxito!");
@@ -73,7 +73,7 @@ async function validarVinculado() {
             if (intervaloValidar) {
                 clearInterval(intervaloValidar);
                 intervaloValidar = null;
-                console.log("Polling detenido.");
+                //     console.log("Polling detenido.");
             }
 
             // Opcional: Limpiar el QR de la pantalla

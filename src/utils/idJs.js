@@ -2,6 +2,9 @@
 const idElement = document.getElementById("idservicio");
 const id = idElement ? idElement.dataset.id : null;
 
+// Obtener citaId de sessionStorage si existe (modo edición)
+const citaId = sessionStorage.getItem("editCitaId");
+
 // Ensure ID exists
 if (idElement && id) {
     idElement.textContent = "ID Establecimiento: " + id;
@@ -10,11 +13,13 @@ if (idElement && id) {
 import { ruta } from "../utils/ruta.js";
 import gsap from "gsap";
 import {
+    alertaCheck3,
     alertaCheck4,
     alertaFallo,
     alertaMal,
 } from "../assets/Alertas/Alertas.js";
 const userid = sessionStorage.getItem("Id");
+const userRole = sessionStorage.getItem("Role");
 
 // estado de los dias que trabajara el establecimiento
 let diasTrabajoPermitidos = []; // los dias que estan permitidos se muestra con un numero  (0=dom, 1=lun, ..., 6=sab)
@@ -376,10 +381,69 @@ fetch(`${ruta}/datosUsuario`, {
         if (tituloNegocio) tituloNegocio.textContent = "Agendar en " + Establecimiento.nombre_establecimiento;
 
         actualizarCirculosDias(Establecimiento.dias_trabajo || "");
+
+        // Si estamos en modo edición, cargar los datos de la cita
+        if (citaId) {
+            cargarDatosCitaEdicion();
+        }
     })
     .catch((err) => {
         console.error("Error al obtener datos:", err);
     });
+
+// Función para cargar datos de la cita en modo edición
+async function cargarDatosCitaEdicion() {
+    try {
+        const res = await fetch(`${ruta}/obtenerCita`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: citaId }),
+            credentials: 'include',
+        });
+        const data = await res.json();
+        if (data.success && data.data) {
+            const cita = data.data;
+            // Pre-llenar campos
+            if (document.getElementById("fecha")) {
+                const fechaLimpia = cita.fecha.split('T')[0];
+                document.getElementById("fecha").value = fechaLimpia;
+                // Disparar cambio para cargar horas
+                await cargarHorasDisponibles();
+
+                // Marcar la hora actual de la cita
+                if (document.getElementById("hora")) {
+                    document.getElementById("hora").value = cita.hora;
+                    // Intentar seleccionar el botón de hora correspondiente
+                    setTimeout(() => {
+                        const botonesHora = document.querySelectorAll('.hora');
+                        botonesHora.forEach(btn => {
+                            if (btn.dataset.id === cita.hora) {
+                                btn.click();
+                            }
+                        });
+                    }, 500);
+                }
+            }
+            if (document.getElementById("mensaje")) {
+                document.getElementById("mensaje").value = cita.mensaje || "";
+            }
+
+            // Cambiar texto del botón
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.innerHTML = '<span>Actualizar Cita</span>';
+            }
+
+            // Cambiar título si existe
+            const tituloNegocio = document.getElementById("nombre-negocio-titulo");
+            if (tituloNegocio) {
+                tituloNegocio.textContent = "Modificar Cita";
+            }
+        }
+    } catch (error) {
+        console.error("Error al cargar datos de la cita:", error);
+    }
+}
 
 // --- CONTADOR DE CARACTERES MENSAJE ---
 const mensajeInput = document.getElementById("mensaje");
@@ -441,13 +505,14 @@ if (form) {
 
         console.log("esFechaEspecial", esFechaEspecial);
 
-        const response = await fetch(`${ruta}/agendarcita`, {
+        const response = await fetch(`${ruta}/${citaId ? 'actCita' : 'agendarcita'}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: 'include',
             body: JSON.stringify({
                 userid,
                 id,
+                citaId, // Enviamos el ID de la cita si estamos editando
                 fecha,
                 hora,
                 mensaje,
@@ -476,7 +541,17 @@ if (form) {
             alertaMal(data.message);
             return;
         }
-        alertaCheck4("Cita agendada correctamente");
+
+        // Limpiar citaId de sessionStorage después de un éxito si estábamos editando
+        if (citaId) {
+            sessionStorage.removeItem("editCitaId");
+        }
+
+        if (userRole === "profesional") {
+            alertaCheck3(citaId ? "Cita actualizada correctamente" : "Cita agendada correctamente");
+        } else {
+            alertaCheck4(citaId ? "Cita actualizada correctamente" : "Cita agendada correctamente");
+        }
     });
 }
 

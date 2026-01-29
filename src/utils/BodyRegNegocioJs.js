@@ -108,7 +108,7 @@ document
 
         };
 
-        console.log(data);
+        //console.log(data);
 
         fetch(`${ruta}/registroNegocio`, {
 

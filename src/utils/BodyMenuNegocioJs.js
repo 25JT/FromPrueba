@@ -5,6 +5,7 @@ import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
 import estadoWhatsApp from "./navJs.js";
+import { alertaMal } from "../assets/Alertas/Alertas.js";
 
 estadoWhatsApp();
 validarInicioProfesional();
@@ -16,6 +17,7 @@ const citasPorPagina = 5;
 let totalCitas = 0;
 let todasLasCitas = [];
 let citasFiltradas = [];
+let globalIdPservicio = null; // Variable global para el ID del servicio
 
 // Variables de filtro
 let filtroFechaInicio = null;
@@ -144,7 +146,7 @@ function capitalizar(texto) {
 }
 
 // Función para mostrar modal con detalles de la cita
-function mostrarDetallesCita(agenda) {
+function mostrarDetallesCita(agenda, idPservicio) {
     const fechaFormateada = new Date(agenda.fecha).toLocaleDateString("es-CO", {
         weekday: "long",
         year: "numeric",
@@ -186,7 +188,10 @@ function mostrarDetallesCita(agenda) {
 </div>
 </div>
 <div class="p-6 border-t border-gray-200 flex flex-col sm:flex-row-reverse gap-3">
-<!-- Botón Modificar podría ir aquí si se implementa -->
+<button id="editar-cita" class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500  hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined text-base">edit</span>
+<span>Modificar</span>
+</button>
 <button id="cerrar-modal" id="cerrar-modal-btn" class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
 <span class="material-symbols-outlined text-base">cancel</span>
 <span>Cerrar</span>
@@ -206,6 +211,17 @@ function mostrarDetallesCita(agenda) {
 
     document.getElementById("modal-detalles").addEventListener("click", (e) => {
         if (e.target.id === "modal-detalles") cerrarModal();
+    });
+
+    // Event listener para editar cita
+    document.getElementById("editar-cita").addEventListener("click", () => {
+        if (idPservicio && agenda.agenda_id) {
+            sessionStorage.setItem("editCitaId", agenda.agenda_id);
+            window.location.href = `/Agendar/${idPservicio}`;
+        } else {
+            console.error("No se encontró el ID del servicio o de la cita", agenda);
+            alertaMal("Error al intentar editar la cita");
+        }
     });
 }
 
@@ -319,7 +335,7 @@ function renderizarCitas() {
 
         // Event listener para botón "Ver detalles"
         fila.querySelector(".btn-ver").addEventListener("click", () => {
-            mostrarDetallesCita(agenda);
+            mostrarDetallesCita(agenda, agenda.idPservicio || globalIdPservicio);
         });
 
         // Event listener para botón "Cancelar"
@@ -392,9 +408,13 @@ fetch(`${ruta}/api/Reservas`, {
 })
     .then((response) => response.json())
     .then((respuesta) => {
+        console.log(respuesta);
+
         const data = respuesta.data || [];
 
         const nombreEstablecimiento = respuesta.NombreEstablecimiento;
+        globalIdPservicio = respuesta.idPservicio || (data.length > 0 ? data[0].idPservicio : null); // Capturamos el ID
+
         todasLasCitas = data;
         citasFiltradas = todasLasCitas; // Inicialmente todas
         totalCitas = todasLasCitas.length;

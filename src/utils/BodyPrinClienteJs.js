@@ -151,6 +151,7 @@ function renderizarServicios() {
     const btnReservar = document.getElementById(`btn-reservar-${servicio.id}`);
     if (btnReservar) {
       btnReservar.addEventListener("click", () => {
+        sessionStorage.removeItem("editCitaId");
         window.location.href = `/Agendar/${servicio.id}`;
       });
     }
