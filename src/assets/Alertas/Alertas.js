@@ -10,6 +10,17 @@ export function alertaCheck(mensaje) {
   });
 }
 
+export function alertaCheckReload(mensaje) {
+  Swal.fire({
+    icon: "success",
+    title: "¡Correcto!",
+    text: mensaje,
+    confirmButtonColor: "#3085d6",
+  }).then(() => {
+    window.location.reload();
+  });
+}
+
 export function alertaFallo(mensaje) {
   Swal.fire({
     icon: "error",

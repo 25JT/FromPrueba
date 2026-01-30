@@ -1,5 +1,5 @@
 <body
-  class="!mt-20 overflow-x-hidden w-full h-screen bg-blue-50 font-display bg-background-light text-slate-900 antialiased transition-colors duration-200"
+  class="mt-20! overflow-x-hidden w-full h-screen bg-blue-50 font-display bg-background-light text-slate-900 antialiased transition-colors duration-200"
 >
   <div
     id="BodyPrinCliente"
@@ -32,7 +32,7 @@
               </div>
               <div class="space-y-3">
                 <label
-                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
+                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-checked:border-primary has-checked:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
                 >
                   <input
                     class="sr-only peer"
@@ -66,7 +66,7 @@
                   </span>
                 </label>
                 <label
-                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
+                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-checked:border-primary has-checked:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
                 >
                   <input
                     class="sr-only peer"
@@ -100,7 +100,7 @@
                   </span>
                 </label>
                 <label
-                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
+                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-checked:border-primary has-checked:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
                 >
                   <input
                     class="sr-only peer"
@@ -134,7 +134,7 @@
                   </span>
                 </label>
                 <label
-                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
+                  class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all has-checked:border-primary has-checked:bg-primary/5 border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50"
                 >
                   <input
                     class="sr-only peer"
@@ -540,6 +540,95 @@
                     >
                     </div>
                     <span>No laborable</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="mt-6 bg-white rounded-xl shadow-sm border border-slate-100 p-5 hidden transition-all duration-300 transform scale-95 opacity-0"
+              id="seccion-capacidad"
+            >
+              <div
+                class="flex flex-col gap-2 border-b border-slate-200 pb-3 font-display"
+              >
+                <h3 class="font-bold text-base text-slate-900">
+                  Ajustes de Capacidad por Día
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Días seleccionados: <span
+                    id="dias-seleccionados-texto"
+                    class="font-semibold text-primary">Ninguno</span
+                  >
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <!-- Selección de Franja -->
+                <div>
+                  <label class="block text-xs font-medium text-slate-500 mb-1.5"
+                    >Seleccionar Franja</label
+                  >
+                  <div class="relative">
+                    <select
+                      id="select-franja"
+                      class="w-full rounded-lg border-slate-200 bg-slate-50 text-slate-900 text-sm focus:ring-primary focus:border-primary py-2.5 pl-3 pr-8 appearance-none transition-shadow"
+                    >
+                      <option value="manana">Mañana (08:00 - 12:00)</option>
+                      <option value="tarde">Tarde (14:00 - 18:00)</option>
+                      <option value="noche">Noche (18:00 - 22:00)</option>
+                      <option value="personalizada">Personalizada</option>
+                    </select>
+                    <div
+                      class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500"
+                    >
+                      <span class="material-symbols-outlined text-[20px]"
+                        >expand_more</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cantidad de Citas -->
+                <div>
+                  <label class="block text-xs font-medium text-slate-500 mb-1.5"
+                    >Cantidad de Citas</label
+                  >
+                  <input
+                    type="number"
+                    id="cantidad-citas"
+                    min="1"
+                    value="1"
+                    class="w-full rounded-lg border-slate-200 bg-slate-50 text-slate-900 text-sm focus:ring-primary focus:border-primary py-2 px-3 transition-shadow"
+                  />
+                </div>
+
+                <!-- Horarios Personalizados (ocultos por defecto) -->
+                <div
+                  id="horarios-personalizados"
+                  class="md:col-span-2 grid-cols-2 gap-4 hidden"
+                >
+                  <div>
+                    <label
+                      class="block text-xs font-medium text-slate-500 mb-1.5"
+                      >Hora Inicio</label
+                    >
+                    <input
+                      type="time"
+                      id="capacidad-hora-inicio"
+                      class="w-full rounded-lg border-slate-200 bg-slate-50 text-slate-900 text-sm focus:ring-primary focus:border-primary py-2 px-3 transition-shadow"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs font-medium text-slate-500 mb-1.5"
+                      >Hora Fin</label
+                    >
+                    <input
+                      type="time"
+                      id="capacidad-hora-fin"
+                      class="w-full rounded-lg border-slate-200 bg-slate-50 text-slate-900 text-sm focus:ring-primary focus:border-primary py-2 px-3 transition-shadow"
+                    />
                   </div>
                 </div>
               </div>

@@ -135,17 +135,50 @@ function mostrarHorasDisponibles(data) {
     const inicioMinutos = inicio.hours * 60 + inicio.minutes;
     const finMinutos = fin.hours * 60 + fin.minutes;
 
-    // Generamos todas las horas disponibles
-    const horasGeneradas = [];
-    let currentMinutos = inicioMinutos;
+    // --- LÓGICA DE CAPACIDAD ESPECIAL ---
+    // la capacidadEspecial viene en la raíz de data, no en data.rango
+    const esp = data.capacidadEspecial;
+    let horasGeneradas = [];
 
-    while (currentMinutos <= finMinutos) {
-        const hours = Math.floor(currentMinutos / 60);
-        const minutes = currentMinutos % 60;
-        const hora24 = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
-        horasGeneradas.push(hora24);
-        currentMinutos += intervaloCitas;
+    if (esp && esp.total_citas > 0) {
+        // Usamos los límites de hora específicos de la capacidad especial
+        const espInicio = parseTime(esp.hora_inicio);
+        const espFin = parseTime(esp.hora_fin);
+        const espInicioMin = espInicio.hours * 60 + espInicio.minutes;
+        const espFinMin = espFin.hours * 60 + espFin.minutes;
+        const tiempoTotal = espFinMin - espInicioMin;
 
+        // Calculamos el intervalo dinámico, pero aseguramos que no sea menor
+        // al intervalo base (intervaloCitas) para que las citas sean realistas.
+        let calculado = esp.total_citas > 1
+            ? Math.floor(tiempoTotal / (esp.total_citas - 1))
+            : tiempoTotal;
+
+        // El intervalo final será el mayor entre el calculado y el base
+        let intervaloEsp = Math.max(calculado, intervaloCitas);
+
+        // Evitar división por cero o intervalos inválidos
+        if (intervaloEsp <= 0) intervaloEsp = intervaloCitas || 1;
+
+        let curMin = espInicioMin;
+        let count = 0;
+        // Generamos citas respetando el intervalo y sin pasarnos de la hora_fin ni de la cantidad
+        while (curMin <= espFinMin && count < esp.total_citas) {
+            const h = Math.floor(curMin / 60);
+            const m = curMin % 60;
+            horasGeneradas.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`);
+            curMin += intervaloEsp;
+            count++;
+        }
+    } else {
+        // Comportamiento normal (basado en intervalo fijo y rango general)
+        let curMin = inicioMinutos;
+        while (curMin <= finMinutos) {
+            const h = Math.floor(curMin / 60);
+            const m = curMin % 60;
+            horasGeneradas.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`);
+            curMin += intervaloCitas;
+        }
     }
 
     console.log(horasGeneradas);

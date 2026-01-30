@@ -1,7 +1,7 @@
 import { validarInicioProfesional } from "./validarInicio.js";
 import { ruta } from "./ruta.js";
 import { cerrarSesion } from "./navJs.js";
-import { alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
+import { alertaCheck, alertaFallo, alertaMal, alertaCheckReload } from "../assets/Alertas/Alertas.js";
 import { animacionPrinCliente } from "../assets/Animaciones/animacionPrinCliente.js";
 
 validarInicioProfesional();
@@ -261,6 +261,11 @@ function renderizarCalendario() {
             // Re-renderizar el calendario
             renderizarCalendario();
 
+            // Notificar a otros scripts (AjustesCapacidadDia.js)
+            if (typeof window.onDayClick === 'function') {
+                window.onDayClick(dia, mesActual, anioActual, nuevoEstado);
+            }
+
         });
 
         calendarioDias.appendChild(botonDia);
@@ -505,6 +510,12 @@ btnGuardar.addEventListener("click", async () => {
         );
     }
 
+    // Capacidad por Día: Integrar promesas si existen
+    if (typeof window.obtenerPromesasCapacidad === 'function') {
+        const promesasCapacidad = window.obtenerPromesasCapacidad();
+        updatePromises.push(...promesasCapacidad);
+    }
+
     if (updatePromises.length === 0) {
         alertaMal("No se detectaron cambios para guardar.");
         return;
@@ -530,16 +541,10 @@ btnGuardar.addEventListener("click", async () => {
         if (hasError) {
             alertaFallo(msg);
         } else {
-            alertaCheck(msg);
+            alertaCheckReload(msg);
         }
 
         if (hasError && results.some(r => r.status === 401)) cerrarSesion();
-        else {
-            // Recargar después de un breve delay para que se vea la alerta
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-        }
 
     } catch (error) {
         alertaFallo("Error crítico al guardar.");
