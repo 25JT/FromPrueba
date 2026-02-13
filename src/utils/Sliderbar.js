@@ -70,9 +70,11 @@ if (negocioLink && citasLink) {
     if (role === "cliente") {
         negocioLink.classList.add("hidden");
         citasLink.classList.remove("hidden");
+        document.getElementById("TuPagina").classList.add("hidden");
     } else {
         negocioLink.classList.remove("hidden");
         citasLink.classList.add("hidden");
+        document.getElementById("TuPagina").classList.remove("hidden");
     }
 
     // Navegación a MenuNegocio

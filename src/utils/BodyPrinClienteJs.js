@@ -1,5 +1,5 @@
 import { ruta } from "../utils/ruta.js";
-import { alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
+import { alertaFallo } from "../assets/Alertas/Alertas.js";
 import { validarInicioCliente } from "./validarInicio.js";
 import { animacionPrinCliente } from "../assets/Animaciones/animacionPrinCliente.js";
 

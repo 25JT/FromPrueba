@@ -408,7 +408,7 @@ fetch(`${ruta}/api/Reservas`, {
 })
     .then((response) => response.json())
     .then((respuesta) => {
-        console.log(respuesta);
+
 
         const data = respuesta.data || [];
 
