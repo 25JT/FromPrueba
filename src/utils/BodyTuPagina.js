@@ -4,6 +4,10 @@ import { alertaMal } from "../assets/Alertas/Alertas";
 const tituloTienda = document.getElementById("shop-name");
 const direccionTienda = document.getElementById("shop-address");
 const descripcionTienda = document.getElementById("shop-desc");
+const logoTienda = document.getElementById("logo");
+const bannerTienda = document.getElementById("banner");
+
+
 //cargar la pagina si la persona tiene negocio como veria la pespectiva si no cargara los default
 window.onload = () => {
     fetch(`${ruta}/api/tienda/identidad`, {
@@ -37,7 +41,7 @@ window.onload = () => {
 }
 
 //actualizacion en tiempo real 
-let timer, timer1, timer2
+let timer, timer1, timer2, timer3, timer4
 tituloTienda.addEventListener("input", () => {
     clearTimeout(timer)
     timer = setTimeout(() => {
@@ -77,6 +81,39 @@ descripcionTienda.addEventListener("input", () => {
     }, 1000);
 });
 
+//logoTienda
+logoTienda.addEventListener("change", () => {
+    clearTimeout(timer3)
+        ;
+
+    if (!logoTienda.files[0]) {
+        document.getElementById("logo-preview").src = "https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ";
+        return;
+    }
+
+    document.getElementById("logo-preview").src = URL.createObjectURL(logoTienda.files[0]);
+
+    console.log({ logoTienda, preview: URL.createObjectURL(logoTienda.files[0]) });
+
+
+});
+//Banner de la tienda
+
+bannerTienda.addEventListener("change", () => {
+    clearTimeout(timer4)
+
+    const file = bannerTienda.files[0];
+
+    if (!file) {
+        document.getElementById("banner-preview").src = "https://lh3.googleusercontent.com/aida-public/AB6AXuBP-IMlDIqaNWrsjUTT4z4uoMdE5j4mSuNVCrwrmBGp4iuilA40aDI97VJb2XwPk0IsZst4sBxWFUjQolVaudL1hdsnSBEl0yD4j0jo_ncrOeA0ZqPtI8uFu0PIV4iIbgwhq45pprUMBAYIAg7vJ9bb1Oy1zQ9cL5HNu9xSPvMVOOCnHKg7oHGV8CxWBBTGsdPhq-s8-RE6ZayXx674YgXAx9B8kH7rhwAN84ymtVrsmZBQZUO2IpOgJc8-4EcJp3anG4_cg6RJTw";
+        return;
+    }
+
+    document.getElementById("banner-preview").src = URL.createObjectURL(file);
+
+    console.log({ file, preview: URL.createObjectURL(file) });
+
+});
 
 //Guardar cambio 
 
@@ -87,21 +124,22 @@ document.getElementById("btn-guardar-cambios").addEventListener("click", () => {
         return;
     }
 
-    console.log({ idfront: sessionStorage.getItem("Id"), tituloTienda: tituloTienda.value, direccionTienda: direccionTienda.value, descripcionTienda: descripcionTienda.value });
-    fetch(`${ruta}/api/tienda/identidad`, {
+    console.log({ logo: URL.createObjectURL(logoTienda.files[0]), banner: URL.createObjectURL(bannerTienda.files[0]), userid: sessionStorage.getItem("Id"), tituloTienda: tituloTienda.value, direccionTienda: direccionTienda.value, descripcionTienda: descripcionTienda.value });
+    fetch(`${ruta}/api/tienda/identidad/guardar`, {
         method: "POST",
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            idfront: sessionStorage.getItem("Id"),
-            nombre: tituloTienda.value,
-            direccion: direccionTienda.value,
-            descripcion: descripcionTienda.value
+            userid: sessionStorage.getItem("Id"),
+            tituloTienda: tituloTienda.value,
+            direccionTienda: direccionTienda.value,
+            descripcionTienda: descripcionTienda.value
         })
     })
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error(error));
 });
+

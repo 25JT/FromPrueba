@@ -65,9 +65,12 @@
                 <p class="mb-3 text-sm font-semibold text-slate-700">
                   Logotipo
                 </p>
-                <div
+
+                <label
                   class="group flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 transition-all hover:border-primary/50 hover:bg-primary/5"
                 >
+                  <input type="file" id="logo" class="hidden" />
+
                   <div
                     class="flex size-10 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm group-hover:text-primary"
                   >
@@ -80,13 +83,14 @@
                   >
                     Subir Logo
                   </p>
-                </div>
+                </label>
               </div>
               <div>
                 <p class="mb-3 text-sm font-semibold text-slate-700">Banner</p>
-                <div
+                <label
                   class="group relative flex h-[104px] sm:h-[104px] cursor-pointer flex-col items-center justify-center gap-1 overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 transition-all hover:border-primary/50"
                 >
+                  <input type="file" id="banner" class="hidden" />
                   <div
                     class="z-10 flex items-center justify-center rounded-full bg-white/90 p-2 text-slate-500 shadow-sm group-hover:text-primary"
                   >
@@ -97,7 +101,7 @@
                     class="absolute inset-0 size-full object-cover opacity-20"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP-IMlDIqaNWrsjUTT4z4uoMdE5j4mSuNVCrwrmBGp4iuilA40aDI97VJb2XwPk0IsZst4sBxWFUjQolVaudL1hdsnSBEl0yD4j0jo_ncrOeA0ZqPtI8uFu0PIV4iIbgwhq45pprUMBAYIAg7vJ9bb1Oy1zQ9cL5HNu9xSPvMVOOCnHKg7oHGV8CxWBBTGsdPhq-s8-RE6ZayXx674YgXAx9B8kH7rhwAN84ymtVrsmZBQZUO2IpOgJc8-4EcJp3anG4_cg6RJTw"
                   />
-                </div>
+                </label>
               </div>
             </div>
           </div>
@@ -205,7 +209,7 @@
           >Descartar</button
         >
         <button
-        id="btn-guardar-cambios"
+          id="btn-guardar-cambios"
           class="w-full sm:flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-black shadow-lg shadow-primary/20 hover:bg-blue-700 transition-all"
           >Guardar Cambios</button
         >
@@ -242,6 +246,7 @@
           <img
             alt="Business Banner"
             class="size-full object-cover"
+            id="banner-preview"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP-IMlDIqaNWrsjUTT4z4uoMdE5j4mSuNVCrwrmBGp4iuilA40aDI97VJb2XwPk0IsZst4sBxWFUjQolVaudL1hdsnSBEl0yD4j0jo_ncrOeA0ZqPtI8uFu0PIV4iIbgwhq45pprUMBAYIAg7vJ9bb1Oy1zQ9cL5HNu9xSPvMVOOCnHKg7oHGV8CxWBBTGsdPhq-s8-RE6ZayXx674YgXAx9B8kH7rhwAN84ymtVrsmZBQZUO2IpOgJc8-4EcJp3anG4_cg6RJTw"
           />
           <div
@@ -253,6 +258,7 @@
           >
             <img
               alt="Business Logo"
+              id="logo-preview"
               class="size-full object-cover"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ"
             />
