@@ -1,26 +1,6 @@
 import { ruta } from "../utils/ruta.js"
 import { alertaMal } from "../assets/Alertas/Alertas";
 
-window.onload = () => {
-
-    fetch(`${ruta}/api/tienda/catalogo/obtener`, {
-        method: "GET",
-        credentials: "include"
-    })
-        .then(response => {
-            if (response.status === 200 || response.status === 500) {
-                return response.json();
-            }
-            throw new Error("Respuesta inesperada");
-        })
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-
-}
 
 const foto1 = document.getElementById("foto1")
 const foto2 = document.getElementById("foto2")
@@ -170,7 +150,7 @@ document.getElementById("guardarServicio").addEventListener("click", () => {
         })
         .then(data => {
             if (data.success || data.status === "ok") {
-                window.location.reload();
+                window.location.href = "/TuPagina";
             } else {
                 loadingOverlay.classList.add("hidden");
                 loadingOverlay.classList.remove("flex");
