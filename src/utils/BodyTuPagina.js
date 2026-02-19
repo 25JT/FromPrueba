@@ -19,29 +19,42 @@ window.onload = () => {
         .then(response => response.json())
         .then(data => {
             if (data.rows[0] === null) {
+
+
                 tituloTienda.value = "";
                 direccionTienda.value = "";
                 descripcionTienda.value = "";
+
             } else {
-                tituloTienda.value = data.rows[0].nombre_establecimiento;
-                direccionTienda.value = data.rows[0].direccion;
-                descripcionTienda.value = data.rows[0].descripcion;
+                if (data.rows[0].logo === null) {
+                    document.getElementById("logo-preview").src = "https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ";
+                } else {
+                    document.getElementById("logo-preview").src = data.rows[0].logo;
+                }
+                if (data.rows[0].banner === null) {
+                    document.getElementById("banner-preview").src = "https://lh3.googleusercontent.com/aida-public/AB6AXuBP-IMlDIqaNWrsjUTT4z4uoMdE5j4mSuNVCrwrmBGp4iuilA40aDI97VJb2XwPk0IsZst4sBxWFUjQolVaudL1hdsnSBEl0yD4j0jo_ncrOeA0ZqPtI8uFu0PIV4iIbgwhq45pprUMBAYIAg7vJ9bb1Oy1zQ9cL5HNu9xSPvMVOOCnHKg7oHGV8CxWBBTGsdPhq-s8-RE6ZayXx674YgXAx9B8kH7rhwAN84ymtVrsmZBQZUO2IpOgJc8-4EcJp3anG4_cg6RJTw";
+                } else {
+                    document.getElementById("banner-preview").src = data.rows[0].banner;
+                }
+
                 document.getElementById("shop-name").value = data.rows[0].nombre_establecimiento;
                 document.getElementById("shop-address").value = data.rows[0].direccion;
                 document.getElementById("shop-desc").value = data.rows[0].descripcion;
-
                 document.getElementById("shop-name-preview").innerHTML = data.rows[0].nombre_establecimiento;
                 document.getElementById("location-preview").innerHTML = data.rows[0].direccion;
                 document.getElementById("description-preview").innerHTML = data.rows[0].descripcion;
 
+
+
             }
         })
 
-        .catch(error => console.error(error));
+        .catch(error => console.error("Error al cargar la pagina", error));
 }
 
 //actualizacion en tiempo real 
 let timer, timer1, timer2, timer3, timer4
+//titulo tienda
 tituloTienda.addEventListener("input", () => {
     clearTimeout(timer)
     timer = setTimeout(() => {
@@ -54,7 +67,7 @@ tituloTienda.addEventListener("input", () => {
         }
     }, 1000);
 });
-
+//direccion de la tienda
 direccionTienda.addEventListener("input", () => {
     clearTimeout(timer1)
     timer1 = setTimeout(() => {
@@ -68,6 +81,7 @@ direccionTienda.addEventListener("input", () => {
     }, 1000);
 });
 
+//descripcion de la tienda
 descripcionTienda.addEventListener("input", () => {
     clearTimeout(timer2)
     timer2 = setTimeout(() => {
@@ -81,7 +95,7 @@ descripcionTienda.addEventListener("input", () => {
     }, 1000);
 });
 
-//logoTienda
+//logoTienda Img
 logoTienda.addEventListener("change", () => {
     clearTimeout(timer3)
         ;
@@ -97,7 +111,7 @@ logoTienda.addEventListener("change", () => {
 
 
 });
-//Banner de la tienda
+//Banner de la tienda Img
 
 bannerTienda.addEventListener("change", () => {
     clearTimeout(timer4)
@@ -123,23 +137,52 @@ document.getElementById("btn-guardar-cambios").addEventListener("click", () => {
         alertaMal("Todos los campos son obligatorios");
         return;
     }
+    const logo = logoTienda.files[0] ? URL.createObjectURL(logoTienda.files[0]) : null;
+    const banner = bannerTienda.files[0] ? URL.createObjectURL(bannerTienda.files[0]) : null;
+    // Preparamos el FormData
+    const formData = new FormData();
+    formData.append("userid", sessionStorage.getItem("Id"));
+    formData.append("tituloTienda", tituloTienda.value);
+    formData.append("direccionTienda", direccionTienda.value);
+    formData.append("descripcionTienda", descripcionTienda.value);
 
-    console.log({ logo: URL.createObjectURL(logoTienda.files[0]), banner: URL.createObjectURL(bannerTienda.files[0]), userid: sessionStorage.getItem("Id"), tituloTienda: tituloTienda.value, direccionTienda: direccionTienda.value, descripcionTienda: descripcionTienda.value });
+    // Añadimos los archivos reales (logoTienda.files[0]), no el blob URL
+    if (logoTienda.files[0]) {
+        formData.append("logo", logoTienda.files[0]);
+    }
+    if (bannerTienda.files[0]) {
+        formData.append("banner", bannerTienda.files[0]);
+    }
+
+    const loadingOverlay = document.getElementById("loading-overlay");
+    loadingOverlay.classList.remove("hidden");
+    loadingOverlay.classList.add("flex");
+
     fetch(`${ruta}/api/tienda/identidad/guardar`, {
         method: "POST",
         credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            userid: sessionStorage.getItem("Id"),
-            tituloTienda: tituloTienda.value,
-            direccionTienda: direccionTienda.value,
-            descripcionTienda: descripcionTienda.value
-        })
+        body: formData
     })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
-});
+        .then(response => {
+            if (response.status === 200 || response.status === 500) {
+                return response.json();
+            }
+            throw new Error("Respuesta inesperada");
+        })
+        .then(data => {
+            if (data.success || data.status === "ok") {
+                window.location.reload();
+            } else {
+                loadingOverlay.classList.add("hidden");
+                loadingOverlay.classList.remove("flex");
+                alertaMal(data.message || "Error al guardar");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            loadingOverlay.classList.add("hidden");
+            loadingOverlay.classList.remove("flex");
+            window.location.reload();
+        });
 
+})

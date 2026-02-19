@@ -118,12 +118,14 @@
                 Gestión de Catálogo
               </h2>
             </div>
-            <button
-              class="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-all hover:bg-blue-700 w-full sm:w-auto"
-            >
-              <span class="material-symbols-outlined text-lg">add</span>
-              Añadir Servicio
-            </button>
+            <a href="/agregar-servicio">
+              <button
+                class="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-all hover:bg-blue-700 w-full sm:w-auto"
+              >
+                <span class="material-symbols-outlined text-lg">add</span>
+                Añadir Servicio
+              </button>
+            </a>
           </div>
           <div class="space-y-4">
             <!-- Tarjestas de servicios -->
@@ -343,6 +345,28 @@
       </div>
       <!--fin Preview -->
     </main>
+  </div>
+
+  <div
+    id="loading-overlay"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm transition-all"
+  >
+    <div
+      class="flex flex-col items-center gap-4 rounded-2xl bg-white p-8 shadow-2xl"
+    >
+      <div class="relative flex h-16 w-16">
+        <div class="absolute inset-0 rounded-full border-4 border-slate-100">
+        </div>
+        <div
+          class="absolute inset-0 animate-spin rounded-full border-4 border-primary border-t-transparent text-blue-500"
+        >
+        </div>
+      </div>
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-slate-900">Guardando cambios</h3>
+        <p class="text-sm text-slate-500">Por favor, espera un momento...</p>
+      </div>
+    </div>
   </div>
 
   <script src="../utils/BodyTuPagina.js"></script>
