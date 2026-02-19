@@ -60,6 +60,7 @@
                   class="input-style !pl-10 w-full rounded-3xl border border-slate-200"
                   id="service-price"
                   placeholder="0.00"
+                  type="number"
                 />
               </div>
             </div>
@@ -95,9 +96,7 @@
                 id="service-desc"
                 placeholder="¿Qué incluye este servicio?"
                 rows="3"
-                >Incluye lavado, masaje capilar, corte con tijera o máquina y
-                peinado profesional con productos premium.</textarea
-              >
+                maxlength="125"></textarea>
             </div>
           </div>
         </section>
@@ -189,14 +188,16 @@
         </section>
         <div class="pt-6">
           <button
+            id="guardarServicio"
             class="w-full bg-accent hover:bg-blue-700 text-black font-bold py-5 px-8 rounded-2xl shadow-xl shadow-accent/20 transition-all flex items-center justify-center gap-3 hover:-translate-y-0.5 active:translate-y-0"
           >
             <span class="material-symbols-outlined">publish</span>
-            Publicar Servicio
+            Guardar Servicio
           </button>
         </div>
       </div>
     </main>
+    <!---Previwe del servicio -->
     <aside
       class="flex w-full lg:w-[480px] bg-slate-50 border-t lg:border-t-0 lg:border-l border-slate-200 flex-col items-center justify-center p-8 lg:sticky lg:top-0 lg:h-screen"
     >
@@ -216,6 +217,7 @@
           <div class="relative aspect-[4/3] overflow-hidden">
             <img
               alt="Service main"
+              id="foto1-preview"
               class="w-full h-full object-cover"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ"
             />
@@ -233,6 +235,7 @@
             <div class="flex justify-between items-start gap-4 mb-6">
               <div class="flex-1">
                 <h4
+                  id="service-name-preview"
                   class="text-2xl font-bold text-slate-900 tracking-tight leading-tight mb-2"
                 >
                   Corte de Cabello Premium
@@ -244,7 +247,9 @@
                     <span class="material-symbols-outlined text-lg"
                       >schedule</span
                     >
-                    <span class="text-sm">45 min</span>
+                    <span id="service-duration-preview" class="text-sm"
+                      >45 min</span
+                    >
                   </div>
                   <div
                     class="flex items-center gap-1.5 text-amber-500 font-bold"
@@ -263,11 +268,17 @@
                   class="block text-xs font-bold text-accent uppercase tracking-wider mb-0.5"
                   >Precio</span
                 >
-                <span class="text-2xl font-black text-accent">$35</span>
+                <span
+                  id="service-price-preview"
+                  class="text-2xl font-black text-accent">$0.000</span
+                >
               </div>
             </div>
             <div class="space-y-6">
-              <p class="text-slate-500 leading-relaxed">
+              <p
+                id="service-description-preview"
+                class="text-slate-500 leading-relaxed"
+              >
                 Incluye lavado, masaje capilar, corte con tijera o máquina y
                 peinado profesional con productos premium.
               </p>
@@ -280,18 +291,29 @@
                 <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                   <img
                     alt="Work 1"
+                    id="foto11-preview"
                     class="size-20 rounded-xl object-cover flex-shrink-0 border border-slate-100"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ"
                   />
                   <div
                     class="size-20 rounded-xl bg-slate-50 border-2 border-slate-100 border-dashed flex items-center justify-center text-slate-300 flex-shrink-0"
                   >
-                    <span class="material-symbols-outlined text-xl">add</span>
+                    <img
+                      alt="Work 1"
+                      id="foto2-preview"
+                      class="size-20 rounded-xl object-cover flex-shrink-0 border border-slate-100"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ"
+                    />
                   </div>
                   <div
                     class="size-20 rounded-xl bg-slate-50 border-2 border-slate-100 border-dashed flex items-center justify-center text-slate-300 flex-shrink-0"
                   >
-                    <span class="material-symbols-outlined text-xl">add</span>
+                    <img
+                      alt="Work 1"
+                      id="foto3-preview"
+                      class="size-20 rounded-xl object-cover flex-shrink-0 border border-slate-100"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkUfUP1gFVo3HZO5Frp1_KHZCoUTa0GZqumL379y7Fl-ZQLq3_7ZMPoGiwAZaJHcNTxII_oEbBMscWjUr-A_J81RixbTjh5x6XHmhUht4JDo7N9jUyTb0clRF_2YmIYhEDd9i_lQxFREN8UhJ4A1125mKNQ3mLZRUoQbCih6KPMgQy8PhU6slk3-11Aap6VGhYYnmOl4WoHg4fGX5snW8eGU8GMWvL0BOUeOGGwDwZzWxEfmYP8yWZKsVo5L10EcKW3xnU5iltzQ"
+                    />
                   </div>
                 </div>
               </div>
@@ -306,12 +328,31 @@
             </div>
           </div>
         </div>
-        <p
-          class="mt-12 text-center text-xs text-slate-400 font-medium tracking-wide"
-        >
-          © 2024 Catálogo Inteligente · Diseño Premium
-        </p>
       </div>
     </aside>
   </div>
 </body>
+
+<div
+  id="loading-overlay"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm transition-all"
+>
+  <div
+    class="flex flex-col items-center gap-4 rounded-2xl bg-white p-8 shadow-2xl"
+  >
+    <div class="relative flex h-16 w-16">
+      <div class="absolute inset-0 rounded-full border-4 border-slate-100">
+      </div>
+      <div
+        class="absolute inset-0 animate-spin rounded-full border-4 border-primary border-t-transparent text-blue-500"
+      >
+      </div>
+    </div>
+    <div class="text-center">
+      <h3 class="text-lg font-bold text-slate-900">Guardando cambios</h3>
+      <p class="text-sm text-slate-500">Por favor, espera un momento...</p>
+    </div>
+  </div>
+</div>
+
+<script src="../utils/BodyAgregarServicio.js"></script>

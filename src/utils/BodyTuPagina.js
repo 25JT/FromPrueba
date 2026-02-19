@@ -154,6 +154,8 @@ document.getElementById("btn-guardar-cambios").addEventListener("click", () => {
         formData.append("banner", bannerTienda.files[0]);
     }
 
+    console.log(formData);
+
     const loadingOverlay = document.getElementById("loading-overlay");
     loadingOverlay.classList.remove("hidden");
     loadingOverlay.classList.add("flex");
