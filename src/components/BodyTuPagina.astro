@@ -118,14 +118,14 @@
                 Gestión de Catálogo
               </h2>
             </div>
-            <a href="/AgregarServicio">
-              <button
-                class="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-all hover:bg-blue-700 w-full sm:w-auto"
-              >
-                <span class="material-symbols-outlined text-lg">add</span>
-                Añadir Servicio
-              </button>
-            </a>
+
+            <button
+              id="AñadirCita"
+              class="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-all hover:bg-blue-700 w-full sm:w-auto"
+            >
+              <span class="material-symbols-outlined text-lg">add</span>
+              Añadir Servicio
+            </button>
           </div>
           <!--generar tarjetas de servicios-->
           <div class="space-y-4" id="catalogo-container"></div>
@@ -134,10 +134,12 @@
       <div
         class="mt-auto border-t border-slate-100 p-6 bg-slate-50/50 flex flex-col sm:flex-row gap-3"
       >
-        <button
-          class="w-full sm:flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
-          >Descartar</button
-        >
+        <a href="MenuNegocio">
+          <button
+            class="w-full sm:flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+            >Descartar</button
+          >
+        </a>
         <button
           id="btn-guardar-cambios"
           class="w-full sm:flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-black shadow-lg shadow-primary/20 hover:bg-blue-700 transition-all"

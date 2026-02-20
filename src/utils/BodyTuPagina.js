@@ -1,12 +1,11 @@
 import { ruta } from "../utils/ruta.js"
-import { alertaMal } from "../assets/Alertas/Alertas";
+import { alertaMal, alertaCheckReload } from "../assets/Alertas/Alertas";
 
 const tituloTienda = document.getElementById("shop-name");
 const direccionTienda = document.getElementById("shop-address");
 const descripcionTienda = document.getElementById("shop-desc");
 const logoTienda = document.getElementById("logo");
 const bannerTienda = document.getElementById("banner");
-
 
 //cargar la pagina si la persona tiene negocio como veria la pespectiva si no cargara los default
 window.onload = () => {
@@ -53,13 +52,6 @@ window.onload = () => {
 
     ObtenerServicio();
 }
-
-
-
-
-
-
-
 
 //actualizacion en tiempo real 
 let timer, timer1, timer2, timer3, timer4
@@ -139,7 +131,6 @@ bannerTienda.addEventListener("change", () => {
 });
 
 //Guardar cambio 
-
 document.getElementById("btn-guardar-cambios").addEventListener("click", () => {
 
     if (tituloTienda.value === "" || direccionTienda.value === "" || descripcionTienda.value === "") {
@@ -195,14 +186,12 @@ document.getElementById("btn-guardar-cambios").addEventListener("click", () => {
             loadingOverlay.classList.remove("flex");
             window.location.reload();
         });
-
 })
 
 //Crea Servicio
 
 function ObtenerServicio() {
     const container = document.getElementById("catalogo-container");
-
     fetch(`${ruta}/api/tienda/catalogo/obtener`, {
         method: "GET",
         credentials: "include"
@@ -214,7 +203,6 @@ function ObtenerServicio() {
             throw new Error("Respuesta inesperada");
         })
         .then(data => {
-            console.log(data);
             if (data.success && data.catalogo && data.catalogo.length > 0) {
                 container.innerHTML = ""; // Limpiar contenedor
 
@@ -275,7 +263,6 @@ function ObtenerServicio() {
                 data.catalogo.forEach(servicio => {
 
                     //eliminar servicio
-
                     const deleteButton = document.getElementById(`delete-servicio-${servicio.id}`);
                     deleteButton.addEventListener("click", () => {
                         fetch(`${ruta}/api/tienda/catalogo/eliminar`, {
@@ -298,9 +285,9 @@ function ObtenerServicio() {
                             .then(data => {
                                 console.log(data);
                                 if (data.success) {
-                                    alertaBien(data.message);
 
-                                    window.location.reload();
+
+                                    alertaCheckReload(data.message)
 
 
                                 } else {
@@ -311,10 +298,12 @@ function ObtenerServicio() {
                                 console.error(error);
                             });
                     });
+
+
                     //editar 
                     const editButton = document.getElementById(`edit-servicio-${servicio.id}`);
                     editButton.addEventListener("click", () => {
-                        console.log("Editar servicio", servicio.id);
+                        window.location.href = `/AgregarServicio?id=${servicio.id}`;
                     });
                 });
             } else {
@@ -325,3 +314,41 @@ function ObtenerServicio() {
             console.error(error);
         });
 }
+
+document.getElementById("AñadirCita").addEventListener("click", validarCantidadCitas);
+
+//Validar cantidad de servicios
+function validarCantidadCitas() {
+
+    fetch(`${ruta}/api/tienda/catalogo/validarCantalogos`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            if (response.status === 200 || response.status === 500) {
+                return response.json();
+            }
+            throw new Error("Respuesta inesperada");
+        })
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+
+
+                if (data.cantidadServicios >= 5) {
+                    alertaMal("No puedes agregar más de 5 servicios");
+                } else {
+                    window.location.href = "/AgregarServicio";
+                }
+            } else {
+                alertaMal(data.message || "Error al guardar");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
