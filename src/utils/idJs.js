@@ -482,6 +482,15 @@ async function cargarDatosCitaEdicion() {
 const mensajeInput = document.getElementById("mensaje");
 const contadorMensaje = document.getElementById("contador-mensaje");
 if (mensajeInput && contadorMensaje) {
+    // Poblar con el nombre del servicio desde sessionStorage si no es edición
+    if (!citaId) {
+        const nombreServicio = sessionStorage.getItem("nombre_servicio");
+        if (nombreServicio) {
+            mensajeInput.value = nombreServicio;
+            contadorMensaje.textContent = 100 - mensajeInput.value.length;
+        }
+    }
+
     mensajeInput.addEventListener("input", function () {
         const restante = 100 - mensajeInput.value.length;
         contadorMensaje.textContent = restante;
@@ -686,7 +695,7 @@ function cargarFechasEspeciales() {
 const btnVolver = document.getElementById("volver");
 if (btnVolver) {
     btnVolver.addEventListener("click", function () {
-        history.back();
+        window.location.href = "/PrincipalCliente";
     });
 }
 

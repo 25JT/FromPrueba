@@ -338,8 +338,8 @@ function validarCantidadCitas() {
             if (data.success) {
 
 
-                if (data.cantidadServicios >= 5) {
-                    alertaMal("No puedes agregar más de 5 servicios");
+                if (data.cantidadServicios >= 6) {
+                    alertaMal("No puedes agregar más de 6 servicios");
                 } else {
                     window.location.href = "/AgregarServicio";
                 }

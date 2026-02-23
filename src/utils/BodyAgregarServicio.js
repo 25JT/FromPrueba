@@ -19,7 +19,7 @@ window.onload = () => {
             .then(data => {
                 if (data.success) {
                     const servicio = data.catalogo.find(servicio => servicio.id == id);
-                    console.log(servicio);
+
                     if (servicio) {
                         document.getElementById("service-name").value = servicio.nombre_servicio;
                         document.getElementById("service-price").value = servicio.precio;

@@ -51,24 +51,7 @@ function renderizarServicios() {
     const textoCompleto = `${servicioNombre}`;
 
 
-    // URLs de imagenes
-    const imgBarbero = "https://lh3.googleusercontent.com/aida-public/AB6AXuCvK3FPK6x-N6cBsbOdJJF8KmLo8qx84gCT9Fp-wetzw4n-gCkFEv8vAVSZbaAjHjxkNGH-PI7CGIl-Q6BkE8X7OCOiLZHz08687nPlu-M2E3U3VT_GE_hwh6mDBleRRO1xnwWmvtZdSNfaSbBw3zzwVyJyAgE4W0zy455fZ-pCayLdjr3g_LBO3-Jobc7pigyosoyvv13svSXZDZ768ob-App6NEL97xPHFuMBR2_wvDNApaomzt4DKMas02KMakHu4ybuGZ-atg";
-    const imgSpa = "https://lh3.googleusercontent.com/aida-public/AB6AXuDEyEWN66gTYF2r24xJEpe3oJP14fc6yXVbCxUIs7Z6rVyQwTZK4Gqqz8dZ80dDaFU7h-bgxYehENqIaBWh9gzMkvq4A_5T3AOwD49MCv15ZTfBAjHzbyM4EZRI62yOXo5Zzqtwp0EmastJyXSahPWjDT100_XSi9umXBS5UzwX05vrvk4VQx175c-bGeCJ7yeP7RU5fCEYDsxG3Eiw-C4rLE2zVQAG9vCpx6q5iew_ELzdowbSObHDB9e_D57u_PYHPFYazTn2UQ";
-    const imgEstilista = "https://lh3.googleusercontent.com/aida-public/AB6AXuCqz0F6fkT1XYtX4RgB1c2uzJUvdYSpmvsLg71LJVvg7rDfPk1hfBBKq9aHKflspfk52EmhrCWl1baeU6eoS__X8lBpgEnewLsdeEOqMw7yFlsBk2P92TItVEbLgRh0oVii_1SlyPa7x2ZProqBBD-N0gZSf8qSxLpjUpaKAIgmDYazuMGR2WrtVNSgsQEV4gO_-qdPIC7esMiZJnstZL9Q4yY772zPgwfmieGHmWcbfru3snoV7VevlmiE4Pwaiwy-50OtbAD7dg";
 
-    let imagenFondo = imgEstilista; // Default
-    let etiqueta = "Servicio";
-
-    if (textoCompleto.includes("barber")) {
-      imagenFondo = imgBarbero;
-      etiqueta = "Barbería";
-    } else if (textoCompleto.includes("spa")) {
-      imagenFondo = imgSpa;
-      etiqueta = "Spa";
-    } else if (textoCompleto.includes("estilista")) {
-      imagenFondo = imgEstilista;
-      etiqueta = "estilista";
-    }
 
 
 
@@ -76,70 +59,102 @@ function renderizarServicios() {
     tarjeta.className = "group flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn";
 
     tarjeta.innerHTML = `
-        <div class="relative h-48 overflow-hidden">
+     <div
+        class="shadow- w-full max-w-[420px] bg-white rounded-[2.5rem] shadow-xl-soft overflow-hidden border-[8px] border-white"
+      >
+        <div class="relative h-48 w-full bg-slate-200">
+          <img
+            alt="Business Banner"
+            class="size-full object-cover"
+            id="banner-preview"
+            src="${servicio.banner}"
+          />
           <div
-            class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-            style='background-image: url("${imagenFondo}");'
+            class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
           >
           </div>
           <div
-            class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"
+            class="absolute -bottom-10 left-6 size-24 rounded-2xl border-4 border-white bg-white shadow-xl overflow-hidden"
           >
-          </div>
-          <div
-            class="absolute bottom-3 left-3 right-3 flex justify-between items-end"
-          >
-            <span
-              class="inline-block px-2 py-1 bg-white/20 backdrop-blur-md rounded-md text-xs uppercase italic font-semibold text-white border border-white/30"
-            >
-              ${etiqueta}
-            </span>
+            <img
+              alt="Business Logo"
+              id="logo-preview"
+              class="size-full object-cover"
+              src="${servicio.logo}"
+            />
           </div>
         </div>
-        <div class="p-6 flex flex-col flex-grow">
-          <div class="mb-1">
-            <p
-              class="text-xs font-bold text-primary uppercase tracking-wider mb-1"
-            >
-              ${servicio.nombre_establecimiento || "Negocio"}
-            </p>
+        <div class="px-6 pt-14 pb-8">
+          <div class="flex flex-col gap-2">
             <h3
-              class="uppercase italic text-xl font-bold text-gray-900 group-hover:text-primary transition-colors"
+              id="shop-name-preview"
+              class="text-2xl font-black text-slate-900 tracking-tight leading-tight"
             >
-              ${servicio.Servicio || "Servicio General"}
+              ${servicio.nombre_establecimiento}
             </h3>
-          </div>
-          <div class="flex items-start gap-2 mt-3 text-sm text-gray-500">
-            <span class="material-symbols-outlined text-[18px] mt-0.5 shrink-0"
-              >schedule</span
-            >
-            <p>${servicio.dias_trabajo ? servicio.dias_trabajo.replace(/Domin/g, "Domingo") : "Consultar Horario"}</p>
-          </div>
-          <div class="flex items-start gap-2 mt-1 text-sm text-gray-500">
-             <span class="material-symbols-outlined text-[18px] mt-0.5 shrink-0"
-              >schedule</span
-            >
-             <p>${to12HourFormat(servicio.hora_inicio)} - ${to12HourFormat(servicio.hora_fin)}</p>
-          </div>
-           <div class="flex items-start gap-2 mt-1 text-sm text-gray-500">
-             <span class="material-symbols-outlined text-[18px] mt-0.5 shrink-0"
-              >location_on</span
-            >
-             <p>${servicio.direccion || "Dirección no disponible"}</p>
-          </div>
-          
-          <div
-            class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between"
-          >
-            <div class="flex flex-col">
-              <span class="text-xs font-medium text-gray-400">Precio</span>
-              <span class="text-2xl font-bold text-gray-900">${servicio.precio || "N/A"}</span>
+            <div class="flex flex-wrap items-center gap-3">
+              <div
+                class="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-full"
+              >
+                <span
+                  class="material-symbols-outlined text-amber-500 text-sm fill-1"
+                  >star</span
+                >
+                <span class="text-xs font-bold text-amber-700">4.9</span>
+                <span class="text-[10px] text-amber-600 font-medium"
+                  >(128 reseñas)</span
+                >
+              </div>
+              <span
+                class="text-xs font-bold text-green-600 flex items-center gap-1"
+              >
+                <span class="size-1.5 rounded-full bg-green-500"></span>
+                Abierto ahora
+              </span>
             </div>
-            <button
-              id="btn-reservar-${servicio.id}"
-              class="text-black border-2 border-blue-500 hover:bg-blue-500 hover:text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+          </div>
+          <div class="mt-6 space-y-5">
+            <p
+              id="description-preview"
+              class="text-sm text-slate-600 leading-relaxed line-clamp-3"
             >
+              ${servicio.descripcion}
+            </p>
+            <div
+              class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100"
+            >
+              <span class="material-symbols-outlined text-primary text-xl"
+                >location_on</span
+              >
+              <div class="flex flex-col">
+                <span
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                  >Ubicación</span
+                >
+                <span
+                  id="location-preview"
+                  class="text-xs font-medium text-slate-700"
+                  >${servicio.direccion}</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 grid grid-cols-2 gap-3">
+            <button
+            id="btn-reservar-${servicio.id}"
+              class="flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition-all active:scale-95"
+            >
+              <span class="material-symbols-outlined text-lg"
+                >calendar_month</span
+              >
               Reservar
+            </button>
+            <button
+            id="btn-servicios-${servicio.id}"
+              class="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm font-bold text-slate-700 transition-all active:scale-95"
+            >
+              <span class="material-symbols-outlined text-lg">info</span>
+              Servicios
             </button>
           </div>
         </div>
@@ -155,8 +170,19 @@ function renderizarServicios() {
         window.location.href = `/Agendar/${servicio.id}`;
       });
     }
-
+    // Event listener para servicios
+    const btnServicios = document.getElementById(`btn-servicios-${servicio.id}`);
+    if (btnServicios) {
+      btnServicios.addEventListener("click", () => {
+        console.log("recibido", servicio.id);
+        sessionStorage.removeItem("editCitaId");
+        window.location.href = `/Catalogo/${servicio.id}`;
+      });
+    }
   });
+
+
+
 
   actualizarControles();
 }
@@ -215,6 +241,8 @@ fetch(`${ruta}/serviciosDisponibles`, { credentials: 'include' })
       alertaFallo("No se pudieron cargar los servicios");
       return;
     }
+
+    console.log(data);
 
     todosLosServicios = data.data;
     renderizarServicios();
