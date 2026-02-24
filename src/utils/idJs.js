@@ -2,6 +2,10 @@
 const idElement = document.getElementById("idservicio");
 const id = idElement ? idElement.dataset.id : null;
 
+// Obtener el ID del servicio del catálogo desde la URL (parámetro 's')
+const urlParams = new URLSearchParams(window.location.search);
+const idCatalogo = urlParams.get("s");
+
 // Obtener citaId de sessionStorage si existe (modo edición)
 const citaId = sessionStorage.getItem("editCitaId");
 
@@ -75,7 +79,8 @@ async function cargarHorasDisponibles() {
             credentials: 'include',
             body: JSON.stringify({
                 id: idServicio,
-                fecha: fecha
+                fecha: fecha,
+                id_catalogo: idCatalogo
             }),
         });
 
@@ -86,6 +91,17 @@ async function cargarHorasDisponibles() {
 
         if (data.success) {
             console.log(data);
+
+            // Actualizar el nombre del servicio en el campo de mensaje/notas dinámicamente
+            // Solo si no estamos en modo edición (donde las notas ya vienen de la cita)
+            const mensajeInput = document.getElementById("mensaje");
+            const contadorMensaje = document.getElementById("contador-mensaje");
+            if (mensajeInput && !citaId) {
+                mensajeInput.value = data.nombreServicio || "";
+                if (contadorMensaje) {
+                    contadorMensaje.textContent = 100 - mensajeInput.value.length;
+                }
+            }
 
             mostrarHorasDisponibles(data);
 
@@ -104,98 +120,19 @@ async function cargarHorasDisponibles() {
 
 function mostrarHorasDisponibles(data) {
     const contenedor = document.getElementById("horas");
-    const intervaloCitas = data.rango.intervaloCitas || 60; // 60 min default en caso de que el intevalo citas este vacio
-    const horaInicio = data.rango.hora_inicio; // ejm., "06:00:00" o "6:00"
-    const horaFin = data.rango.hora_fin; // ejm., "19:00:00" o "7:00"
-
     contenedor.innerHTML = "";
 
-    if (!horaInicio || !horaFin) {
-        contenedor.innerHTML = `
-            <div class="col-span-full text-center py-4 text-gray-500">
-                No hay horario configurado para este establecimiento.
-            </div>
-        `;
-        return;
-    }
+    // Usamos directamente las horas que el backend ya validó y filtró por nosotros
+    let horasDisponibles = data.disponibles || [];
 
-    // parseamos las horas inicio y fin
-    const parseTime = (timeStr) => {
-        const parts = timeStr.split(':');
-        return {
-            hours: parseInt(parts[0]),
-            minutes: parseInt(parts[1] || 0)
-        };
-    };
-
-    const inicio = parseTime(horaInicio);
-    const fin = parseTime(horaFin);
-
-    // convertimos a minutos esto aplica por si el suario seleciono 120 min o 180 min
-    const inicioMinutos = inicio.hours * 60 + inicio.minutes;
-    const finMinutos = fin.hours * 60 + fin.minutes;
-
-    // --- LÓGICA DE CAPACIDAD ESPECIAL ---
-    // la capacidadEspecial viene en la raíz de data, no en data.rango
-    const esp = data.capacidadEspecial;
-    let horasGeneradas = [];
-
-    if (esp && esp.total_citas > 0) {
-        // Usamos los límites de hora específicos de la capacidad especial
-        const espInicio = parseTime(esp.hora_inicio);
-        const espFin = parseTime(esp.hora_fin);
-        const espInicioMin = espInicio.hours * 60 + espInicio.minutes;
-        const espFinMin = espFin.hours * 60 + espFin.minutes;
-        const tiempoTotal = espFinMin - espInicioMin;
-
-        // Calculamos el intervalo dinámico, pero aseguramos que no sea menor
-        // al intervalo base (intervaloCitas) para que las citas sean realistas.
-        let calculado = esp.total_citas > 1
-            ? Math.floor(tiempoTotal / (esp.total_citas - 1))
-            : tiempoTotal;
-
-        // El intervalo final será el mayor entre el calculado y el base
-        let intervaloEsp = Math.max(calculado, intervaloCitas);
-
-        // Evitar división por cero o intervalos inválidos
-        if (intervaloEsp <= 0) intervaloEsp = intervaloCitas || 1;
-
-        let curMin = espInicioMin;
-        let count = 0;
-        // Generamos citas respetando el intervalo y sin pasarnos de la hora_fin ni de la cantidad
-        while (curMin <= espFinMin && count < esp.total_citas) {
-            const h = Math.floor(curMin / 60);
-            const m = curMin % 60;
-            horasGeneradas.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`);
-            curMin += intervaloEsp;
-            count++;
-        }
-    } else {
-        // Comportamiento normal (basado en intervalo fijo y rango general)
-        let curMin = inicioMinutos;
-        while (curMin <= finMinutos) {
-            const h = Math.floor(curMin / 60);
-            const m = curMin % 60;
-            horasGeneradas.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`);
-            curMin += intervaloCitas;
-        }
-    }
-
-    console.log(horasGeneradas);
-
-    // filtro para que no se muestren horas ocupadas
-    const ocupadasSet = new Set(data.ocupadas || []);
-    let horasDisponibles = horasGeneradas.filter(hora => !ocupadasSet.has(hora));
-
-
-    // filtro para que no se muestren horas pasadas y horas menos de 20 minutos en el futuro para hoy
+    // --- FILTRO DE TIEMPO REAL (SOLO PARA HOY) ---
+    // Mantenemos este filtro en el frontend porque depende del reloj del usuario
     const fechaSeleccionada = document.getElementById("fecha").value;
     const hoy = new Date();
     const fechaHoy = hoy.toISOString().split("T")[0];
 
     if (fechaSeleccionada === fechaHoy) {
-
-        // obtenemos la hora actual y le sumamos 20 minutos
+        // Obtenemos la hora actual y le sumamos 20 minutos de margen
         const ahora = new Date();
         ahora.setMinutes(ahora.getMinutes() + 20);
         const horaActualMinutos = ahora.getHours() * 60 + ahora.getMinutes();
@@ -206,6 +143,7 @@ function mostrarHorasDisponibles(data) {
             return horaSlotMinutos >= horaActualMinutos;
         });
     }
+
 
 
     if (horasDisponibles.length === 0) {
@@ -482,14 +420,8 @@ async function cargarDatosCitaEdicion() {
 const mensajeInput = document.getElementById("mensaje");
 const contadorMensaje = document.getElementById("contador-mensaje");
 if (mensajeInput && contadorMensaje) {
-    // Poblar con el nombre del servicio desde sessionStorage si no es edición
-    if (!citaId) {
-        const nombreServicio = sessionStorage.getItem("nombre_servicio");
-        if (nombreServicio) {
-            mensajeInput.value = nombreServicio;
-            contadorMensaje.textContent = 100 - mensajeInput.value.length;
-        }
-    }
+    // Ya no poblamos desde sessionStorage para evitar datos "pegajosos".
+    // Ahora se puebla dinámicamente en cargarHorasDisponibles() desde la base de datos via el backend.
 
     mensajeInput.addEventListener("input", function () {
         const restante = 100 - mensajeInput.value.length;
@@ -554,6 +486,7 @@ if (form) {
             body: JSON.stringify({
                 userid,
                 id,
+                id_catalogo: idCatalogo, // Enviamos el ID del servicio del catálogo desde la URL
                 citaId, // Enviamos el ID de la cita si estamos editando
                 fecha,
                 hora,

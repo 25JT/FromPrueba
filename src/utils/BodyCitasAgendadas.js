@@ -87,7 +87,7 @@ function aplicarFiltros() {
         // Filtro por Búsqueda (Servicio o Establecimiento)
         if (busqueda) {
             const servicio = (cita.servicio || "").toLowerCase();
-            const establecimiento = (cita.nombre_servicio || "").toLowerCase();
+            const establecimiento = (cita.nombre_establecimiento || "").toLowerCase();
             if (!servicio.includes(busqueda) && !establecimiento.includes(busqueda)) {
                 return false;
             }
@@ -162,11 +162,11 @@ function mostrarDetallesCita(agenda) {
 </div>
 <div>
 <p class="text-sm font-medium text-gray-500 ">Establecimiento</p>
-<p class="text-base font-semibold text-gray-800 ">${agenda.nombre_servicio || "N/A"}</p>
+<p class="text-base font-semibold text-gray-800 ">${agenda.nombre_establecimiento || "N/A"}</p>
 </div>
 <div>
 <p class="text-sm font-medium text-gray-500 ">Servicio</p>
-<p class="text-base font-semibold text-gray-800 ">${agenda.servicio || "Estilista"}</p>
+<p class="text-base font-semibold text-gray-800 ">${agenda.servicio || "Servicio General"}</p>
 </div>
 
 <div>
@@ -290,8 +290,8 @@ function renderizarCitas() {
         fila.innerHTML = `
         <td class="px-6 py-4 whitespace-nowrap text-gray-800">${formatearFecha(agenda.fecha)}</td>
         <td class="px-6 py-4 whitespace-nowrap text-gray-800">${formatearHora(agenda.hora)}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-gray-800">${agenda.nombre_servicio || "N/A"}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-gray-800">${agenda.servicio || "Estilista"}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-gray-800">${agenda.nombre_establecimiento || "N/A"}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-gray-800">${agenda.servicio || "Servicio General"}</td>
         <td class="px-6 py-4 whitespace-nowrap">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${obtenerClaseEstado(agenda.estado)}">
             ${capitalizar(agenda.estado)}

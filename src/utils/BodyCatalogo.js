@@ -137,10 +137,10 @@ function renderizarServicios(data) {
     if (btnReservar) {
       btnReservar.addEventListener("click", () => {
         sessionStorage.removeItem("editCitaId");
-        sessionStorage.setItem("id_pservicio", servicio.id_pservicio);
-        sessionStorage.setItem("id", servicio.id);
-        sessionStorage.setItem("nombre_servicio", servicio.nombre_servicio);
-        window.location.href = `/Agendar/${servicio.id_pservicio}`;
+        // sessionStorage.setItem("id_pservicio", servicio.id_pservicio); // No longer strictly needed for timing
+        // sessionStorage.setItem("id", servicio.id); // Replaced by URL param
+        // sessionStorage.setItem("nombre_servicio", servicio.nombre_servicio); // Eliminado para no tener datos pegajosos
+        window.location.href = `/Agendar/${servicio.id_pservicio}?s=${servicio.id}`;
       });
     }
   });

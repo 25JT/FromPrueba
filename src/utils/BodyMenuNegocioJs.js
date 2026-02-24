@@ -178,6 +178,10 @@ function mostrarDetallesCita(agenda, idPservicio) {
 <p class="text-base font-semibold text-gray-800">${agenda.nombre || "N/A"}</p>
 </div>
 <div>
+<p class="text-sm font-medium text-gray-500">Servicio</p>
+<p class="text-base font-semibold text-gray-800">${agenda.servicio || "Servicio General"}</p>
+</div>
+<div>
 <p class="text-sm font-medium text-gray-500">Mensaje/Notas</p>
 <p class="text-base font-semibold text-gray-800">${agenda.notas || "Sin notas"}</p>
 </div>
@@ -314,6 +318,7 @@ function renderizarCitas() {
         <td class="px-6 py-4 whitespace-nowrap text-gray-800">${fechaStr}</td>
         <td class="px-6 py-4 whitespace-nowrap text-gray-800">${horaStr}</td>
         <td class="px-6 py-4 whitespace-nowrap text-gray-800">${clienteStr}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-gray-800">${agenda.servicio || "Servicio General"}</td>
         <td class="px-6 py-4 whitespace-nowrap text-gray-800">${mensajeStr}</td>
         <td class="px-6 py-4 whitespace-nowrap">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${obtenerClaseEstado(agenda.estado)}">
