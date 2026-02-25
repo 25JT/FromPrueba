@@ -174,7 +174,7 @@ function renderizarServicios() {
     const btnServicios = document.getElementById(`btn-servicios-${servicio.id}`);
     if (btnServicios) {
       btnServicios.addEventListener("click", () => {
-        console.log("recibido", servicio.id);
+
         sessionStorage.removeItem("editCitaId");
         window.location.href = `/Catalogo/${servicio.id}`;
       });
@@ -242,7 +242,7 @@ fetch(`${ruta}/serviciosDisponibles`, { credentials: 'include' })
       return;
     }
 
-    console.log(data);
+
 
     todosLosServicios = data.data;
     renderizarServicios();

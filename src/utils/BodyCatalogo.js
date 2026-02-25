@@ -52,20 +52,29 @@ function renderizarServicios(data) {
     card.className = "bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all group";
     card.innerHTML = `
         <!-- Carrusel -->
-        <div class="relative h-48 overflow-hidden">
-          <div class="carousel-images flex transition-transform duration-500">
-            <img
-              src="${servicio.foto1}"
-              class="w-full h-48 object-cover flex-shrink-0"
-            />
-            <img
-              src="${servicio.foto2}"
-              class="w-full h-48 object-cover flex-shrink-0"
-            />
-            <img
-              src="${servicio.foto3}"
-              class="w-full h-48 object-cover flex-shrink-0"
-            />
+        <div class="relative h-64 overflow-hidden cursor-pointer group/img">
+          <div class="carousel-images flex transition-transform duration-500 h-full">
+            <div class="w-full h-full flex-shrink-0 overflow-hidden">
+              <img
+                src="${servicio.foto1}"
+                class="w-full h-full  transition-transform duration-500 group-hover/img:scale-110"
+                onclick="window.abrirLightbox('${servicio.foto1}')"
+              />
+            </div>
+            <div class="w-full h-full flex-shrink-0 overflow-hidden">
+              <img
+                src="${servicio.foto2}"
+                class="w-full h-full  transition-transform duration-500 group-hover/img:scale-110"
+                onclick="window.abrirLightbox('${servicio.foto2}')"
+              />
+            </div>
+            <div class="w-full h-full flex-shrink-0 overflow-hidden">
+              <img
+                src="${servicio.foto3}"
+                class="w-full h-full  transition-transform duration-500 group-hover/img:scale-110"
+                onclick="window.abrirLightbox('${servicio.foto3}')"
+              />
+            </div>
           </div>
 
           <!-- Botones -->
@@ -91,9 +100,9 @@ function renderizarServicios(data) {
             ${servicio.descripcion}
           </p>
 
-          <div class="flex items-center justify-between">
-            <div class="flex flex-col">
-              <span class="text-2xl font-black text-slate-900"> $ ${servicio.precio}</span>
+          <div class="flex items-center justify-between border-t border-gray-200" >
+            <div class="flex flex-col  ">
+              <span class="text-lg font-black text-slate-900"> $ ${servicio.precio}</span>
               <div class="flex items-center text-xs text-slate-400 font-medium">
               <span class="material-symbols-outlined text-sm mr-1">schedule</span>
                 ${servicio.duracion} min
@@ -146,6 +155,30 @@ function renderizarServicios(data) {
   });
 
 }
+
+// --- Lógica del Lightbox ---
+window.abrirLightbox = (src) => {
+  const lightboxHTML = `
+    <div id="lightbox" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-fade-in" onclick="window.cerrarLightbox()">
+      <div class="relative max-w-5xl w-full h-full flex items-center justify-center">
+        <button class="absolute top-4 right-4 text-white hover:text-primary transition-colors z-[110]">
+          <span class="material-symbols-outlined text-4xl">close</span>
+        </button>
+        <img src="${src}" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" onclick="event.stopPropagation()" />
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML("beforeend", lightboxHTML);
+  document.body.style.overflow = "hidden"; // Prevenir scroll
+};
+
+window.cerrarLightbox = () => {
+  const lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    lightbox.remove();
+    document.body.style.overflow = "auto";
+  }
+};
 
 //boton regresar
 const btnRegresar = document.getElementById("btn-regresar");
