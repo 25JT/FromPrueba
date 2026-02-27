@@ -57,21 +57,21 @@ function renderizarServicios(data) {
             <div class="w-full h-full flex-shrink-0 overflow-hidden">
               <img
                 src="${servicio.foto1}"
-                class="w-full h-full  transition-transform duration-500 group-hover/img:scale-110"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                 onclick="window.abrirLightbox('${servicio.foto1}')"
               />
             </div>
             <div class="w-full h-full flex-shrink-0 overflow-hidden">
               <img
                 src="${servicio.foto2}"
-                class="w-full h-full  transition-transform duration-500 group-hover/img:scale-110"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                 onclick="window.abrirLightbox('${servicio.foto2}')"
               />
             </div>
             <div class="w-full h-full flex-shrink-0 overflow-hidden">
               <img
                 src="${servicio.foto3}"
-                class="w-full h-full  transition-transform duration-500 group-hover/img:scale-110"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                 onclick="window.abrirLightbox('${servicio.foto3}')"
               />
             </div>
