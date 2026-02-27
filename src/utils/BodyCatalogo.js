@@ -91,7 +91,7 @@ function renderizarServicios(data) {
         <!-- Contenido -->
         <div class="p-6">
           <h3
-            class="text-xl font-bold mb-2 group-hover:text-primary transition-colors"
+            class="italic text-xl font-bold mb-2 group-hover:text-primary transition-colors"
           >
             ${servicio.nombre_servicio}
           </h3>
@@ -102,7 +102,7 @@ function renderizarServicios(data) {
 
           <div class="flex items-center justify-between border-t border-gray-200" >
             <div class="flex flex-col  ">
-              <span class="text-lg font-black text-slate-900"> $ ${servicio.precio}</span>
+              <span class="text-lg font-bold text-slate-900 italic "> $ ${servicio.precio}</span>
               <div class="flex items-center text-xs text-slate-400 font-medium">
               <span class="material-symbols-outlined text-sm mr-1">schedule</span>
                 ${servicio.duracion} min

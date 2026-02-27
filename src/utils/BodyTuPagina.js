@@ -6,6 +6,7 @@ const direccionTienda = document.getElementById("shop-address");
 const descripcionTienda = document.getElementById("shop-desc");
 const logoTienda = document.getElementById("logo");
 const bannerTienda = document.getElementById("banner");
+const telefonoTienda = document.getElementById("shop-phone");
 
 //cargar la pagina si la persona tiene negocio como veria la pespectiva si no cargara los default
 window.onload = () => {
@@ -39,9 +40,11 @@ window.onload = () => {
                 document.getElementById("shop-name").value = data.rows[0].nombre_establecimiento;
                 document.getElementById("shop-address").value = data.rows[0].direccion;
                 document.getElementById("shop-desc").value = data.rows[0].descripcion;
+                document.getElementById("shop-phone").value = data.rows[0].telefono_establecimiento || "";
                 document.getElementById("shop-name-preview").innerHTML = data.rows[0].nombre_establecimiento;
                 document.getElementById("location-preview").innerHTML = data.rows[0].direccion;
                 document.getElementById("description-preview").innerHTML = data.rows[0].descripcion;
+                document.getElementById("phone-preview").innerHTML = data.rows[0].telefono_establecimiento || "+57 000 000 0000";
 
 
 
@@ -54,7 +57,7 @@ window.onload = () => {
 }
 
 //actualizacion en tiempo real 
-let timer, timer1, timer2, timer3, timer4
+let timer, timer1, timer2, timer3, timer4, timer5
 //titulo tienda
 tituloTienda.addEventListener("input", () => {
     clearTimeout(timer)
@@ -92,6 +95,20 @@ descripcionTienda.addEventListener("input", () => {
             document.getElementById("description-preview").innerHTML = descripcionTienda.value;
 
             console.log({ descripcionTienda, preview: descripcionTienda.value });
+        }
+    }, 1000);
+});
+
+//telefono de la tienda
+telefonoTienda.addEventListener("input", () => {
+    clearTimeout(timer5)
+    timer5 = setTimeout(() => {
+        if (telefonoTienda.value === "") {
+            document.getElementById("phone-preview").innerHTML = "+57 000 000 0000";
+        } else {
+            document.getElementById("phone-preview").innerHTML = telefonoTienda.value;
+
+            console.log({ telefonoTienda, preview: telefonoTienda.value });
         }
     }, 1000);
 });
@@ -145,6 +162,7 @@ document.getElementById("btn-guardar-cambios").addEventListener("click", () => {
     formData.append("tituloTienda", tituloTienda.value);
     formData.append("direccionTienda", direccionTienda.value);
     formData.append("descripcionTienda", descripcionTienda.value);
+    formData.append("telefonoTienda", telefonoTienda.value);
 
     // Añadimos los archivos reales (logoTienda.files[0]), no el blob URL
     if (logoTienda.files[0]) {

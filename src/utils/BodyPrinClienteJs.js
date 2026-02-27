@@ -18,18 +18,6 @@ const btnSiguiente = document.getElementById("btn-siguiente");
 const infoPaginacion = document.getElementById("info-paginacion");
 
 
-
-// Función para convertir a formato 12h AM/PM
-function to12HourFormat(timeStr) {
-  if (!timeStr) return "";
-  const [hourStr, minuteStr] = timeStr.split(":");
-  let hour = parseInt(hourStr, 10);
-  const minute = minuteStr.padStart(2, "0");
-  const ampm = hour >= 12 ? "PM" : "AM";
-  hour = hour % 12 || 12;
-  return `${hour}:${minute} ${ampm}`;
-}
-
 // Función principal para renderizar servicios
 function renderizarServicios() {
   if (!contenedor) return;
@@ -49,10 +37,6 @@ function renderizarServicios() {
   serviciosPagina.forEach((servicio, index) => {
     const servicioNombre = (servicio.Servicio || "").toLowerCase();
     const textoCompleto = `${servicioNombre}`;
-
-
-
-
 
 
     const tarjeta = document.createElement("div");
@@ -105,12 +89,12 @@ function renderizarServicios() {
                   >(128 reseñas)</span
                 >
               </div>
-              <span
+          <!--    <span
                 class="text-xs font-bold text-green-600 flex items-center gap-1"
               >
                 <span class="size-1.5 rounded-full bg-green-500"></span>
                 Abierto ahora
-              </span>
+              </span>-->
             </div>
           </div>
           <div class="mt-6 space-y-5">
@@ -138,7 +122,26 @@ function renderizarServicios() {
                 >
               </div>
             </div>
+            <div
+              class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100"
+            >
+              <span class="material-symbols-outlined text-primary text-xl"
+                >call</span
+              >
+              <div class="flex flex-col">
+                <span
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                  >Teléfono</span
+                >
+                <span
+                  id="phone-preview"
+                  class="text-xs font-medium text-slate-700"
+                  >${servicio.telefono_establecimiento}</span
+                >
+              </div>
+            </div>
           </div>
+          
           <div class="mt-8 grid grid-cols-2 gap-3">
             <button
             id="btn-reservar-${servicio.id}"
