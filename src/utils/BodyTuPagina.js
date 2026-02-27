@@ -352,7 +352,7 @@ function validarCantidadCitas() {
             throw new Error("Respuesta inesperada");
         })
         .then(data => {
-            console.log(data);
+
             if (data.success) {
 
 

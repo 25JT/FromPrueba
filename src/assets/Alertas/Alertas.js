@@ -39,6 +39,18 @@ export function alertaMal(mensaje) {
   });
 }
 
+export function alertaMal2(mensaje) {
+  Swal.fire({
+    icon: "warning",
+    title: "¡Atención!",
+    text: mensaje,
+    confirmButtonColor: "#3085d6",
+  }).then(() => {
+    location.href = "/TuPagina";
+  });
+}
+
+
 export function alertaCheck2(mensaje) {
   Swal.fire({
     icon: "success",
@@ -92,7 +104,7 @@ export function alertaCheck5(mensaje) {
     text: mensaje,
     confirmButtonColor: "#3085d6",
   }).then(() => {
-    location.href = "/VincularWhatsApp";
+    location.href = "/MenuNegocio";
   });
 }
 

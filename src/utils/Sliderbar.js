@@ -1,6 +1,45 @@
-
+import { alertaMal2, alertaMal } from "../assets/Alertas/Alertas.js";
 import { ruta } from "../utils/ruta.js";
 import { cerrarSesion } from "./navJs.js";
+
+
+//Obtener iamgen del usuario  de la bd 
+window.addEventListener("load", function () {
+    fetch(`${ruta}/api/usuario/obtenerImagenUsuario`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error en respuesta: " + response.statusText);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.logo) {
+                sessionStorage.setItem("logo", data.logo);
+                if (document.getElementById("imagenUser")) document.getElementById("imagenUser").style.backgroundImage = `url(${data.logo})`;
+            } else {
+                sessionStorage.setItem("logo", "https://cdn-icons-png.flaticon.com/512/25/25231.png");
+            }
+
+            if (data.fotoUsuario) {
+                sessionStorage.setItem("fotoUsuario", data.fotoUsuario);
+                if (document.getElementById("imagenUser")) document.getElementById("imagenUser").style.backgroundImage = `url(${data.fotoUsuario})`;
+            } else {
+                sessionStorage.setItem("fotoUsuario", "https://cdn-icons-png.flaticon.com/512/25/25231.png");
+            }
+
+
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
+
 // ===== SIDEBAR MANAGEMENT =====
 // Este archivo maneja toda la funcionalidad del sidebar (menú lateral)
 
@@ -99,6 +138,8 @@ if (role === "cliente") {
 
     document.getElementById("VincularWhatsApp").classList.add("hidden");
 
+    document.getElementById("AgregarServicio").classList.add("hidden");
+
 
 }
 if (role === "profesional") {
@@ -147,3 +188,43 @@ if (userid) {
         }
     });
 }
+
+document.getElementById("AgregarServicio").addEventListener("click", validarCantidadCitas);
+
+function validarCantidadCitas() {
+
+    fetch(`${ruta}/api/tienda/catalogo/validarCantalogos`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            if (response.status === 200 || response.status === 500) {
+                return response.json();
+            }
+            throw new Error("Respuesta inesperada");
+        })
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+
+
+                if (data.cantidadServicios >= 6) {
+                    alertaMal2("No puedes agregar más de 6 servicios");
+
+                } else {
+                    window.location.href = "/AgregarServicio";
+                }
+            } else {
+                alertaMal(data.message || "Error al guardar");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+
+
