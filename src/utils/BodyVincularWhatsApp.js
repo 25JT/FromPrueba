@@ -96,3 +96,14 @@ function qrRender(qr) {
         console.error("No se encontró el elemento 'imgQr' en el DOM");
     }
 }
+
+
+//cancelar vianculacion
+document.addEventListener("DOMContentLoaded", () => {
+    const btnCancelar = document.getElementById("btn-cancelar-vinculacion");
+    if (btnCancelar) {
+        btnCancelar.addEventListener("click", () => {
+            window.location.href = "/MenuNegocio    ";
+        });
+    }
+});
