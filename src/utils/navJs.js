@@ -272,7 +272,7 @@ export default async function estadoWhatsApp() {
       } else {
         // 2. Si no está vinculado, obtener el QR e iniciar el "reloj"
         console.log("status 400");
-        alertaFallo("WhatsApp no vinculado");
+        //  alertaFallo("WhatsApp no vinculado");
       }
     })
     .catch(err => {
