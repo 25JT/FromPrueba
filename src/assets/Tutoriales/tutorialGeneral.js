@@ -3,6 +3,7 @@ import "driver.js/dist/driver.css";
 import { ruta } from "../../utils/ruta.js";
 
 window.addEventListener("load", function () {
+    window.tutorialGeneralPresente = true; // Señal para otros scripts
     fetch(`${ruta}/api/tour/general`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -13,9 +14,14 @@ window.addEventListener("load", function () {
             if (data === 0) {
                 console.log(data);
                 tutoGeneral();
+            } else {
+                window.dispatchEvent(new CustomEvent("tutorialTerminado"));
             }
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+            console.error(error);
+            window.dispatchEvent(new CustomEvent("tutorialTerminado"));
+        });
 });
 
 
@@ -24,11 +30,6 @@ function tutoGeneral() {
 
     // Detectar clic en el botón de menú directamente
     const menuBtn = document.getElementById("menuToggle");
-    if (menuBtn) {
-        menuBtn.addEventListener("click", () => {
-            haTocadoElMenu = true;
-        });
-    }
 
     const finalizarTutorial = () => {
         fetch(`${ruta}/api/tour/general/finalizado`, {
@@ -37,7 +38,13 @@ function tutoGeneral() {
             credentials: 'include',
         })
             .then((response) => response.json())
-            .catch((error) => console.error("Error al finalizar tutorial:", error));
+            .then(() => {
+                window.dispatchEvent(new CustomEvent("tutorialTerminado"));
+            })
+            .catch((error) => {
+                console.error("Error al finalizar tutorial:", error);
+                window.dispatchEvent(new CustomEvent("tutorialTerminado"));
+            });
     };
 
     const driverObj = driver({
@@ -66,7 +73,7 @@ function tutoGeneral() {
                 popover: {
                     title: '<div class="flex items-center gap-2 text-blue-600"><span class="material-symbols-outlined">menu</span><span>Menú Principal</span></div>',
                     description: 'Toca el ícono del menú para desplegar todas tus opciones de navegación. <b>Pruébalo ahora</b> para poder continuar.',
-                    side: "left",
+                    side: "bottom",
                     align: 'start',
                     onNextClick: () => {
                         if (!haTocadoElMenu) {
@@ -76,7 +83,7 @@ function tutoGeneral() {
                                 aviso.className = 'aviso-interaccion mt-3 p-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs rounded-lg animate-pulse';
                                 aviso.innerHTML = '⚠️ <b>¡Oye!</b> Abre primero el menú lateral para continuar.';
                                 popover.appendChild(aviso);
-                                setTimeout(() => aviso.remove(), 4000);
+                                setTimeout(() => aviso.remove(), 1500);
                             }
                             return;
                         }
@@ -147,5 +154,17 @@ function tutoGeneral() {
             }
         ]
     });
+
+    if (menuBtn) {
+        menuBtn.addEventListener("click", () => {
+            haTocadoElMenu = true;
+            // Si el driver está activo y en el paso del menú (paso 1, índice 1)
+            // Automáticamente avanzamos al siguiente
+            if (driverObj.isActive() && driverObj.getActiveIndex() === 1) {
+                driverObj.moveNext();
+            }
+        });
+    }
+
     driverObj.drive();
 }

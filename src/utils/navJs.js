@@ -257,7 +257,36 @@ if (forgotForm && !forgotForm.dataset.listenerAdded) {
 //validar vinculacion de wpp
 
 export default async function estadoWhatsApp() {
+  // Primero verificamos el estado del tutorial
+  try {
+    const resTour = await fetch(`${ruta}/api/tour/general`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include',
+    });
+    const tutorialStatus = await resTour.json();
 
+    // Si el tutorial está pendiente (0) y el script del tutorial está en la página
+    if (tutorialStatus === 0 && window.tutorialGeneralPresente) {
+      console.log("Tutorial pendiente, esperando a que termine para validar WhatsApp...");
+
+      // Escuchamos el evento de finalización una sola vez
+      window.addEventListener("tutorialTerminado", () => {
+        console.log("Tutorial detectado como terminado/cerrado, validando WhatsApp...");
+        ejecutarValidacionWhatsApp();
+      }, { once: true });
+
+      return;
+    }
+  } catch (err) {
+    console.error("Error al verificar tutorial desde navJs:", err);
+  }
+
+  // Si el tutorial ya terminó o no está el script, procedemos normalmente
+  ejecutarValidacionWhatsApp();
+}
+
+async function ejecutarValidacionWhatsApp() {
   fetch(`${ruta}/estadoWhatsApp`, {
     method: "GET",
     credentials: 'include',
@@ -266,19 +295,13 @@ export default async function estadoWhatsApp() {
     .then(data => {
       let estado = data.connected;
       if (estado === true) {
-
-        console.log("status 200");
-
+        console.log("WhatsApp vinculado (status 200)");
       } else {
-        // 2. Si no está vinculado, obtener el QR e iniciar el "reloj"
-        console.log("status 400");
-        //  alertaFallo("WhatsApp no vinculado");
+        console.log("WhatsApp no vinculado (status 400)");
+        alertaFallo("WhatsApp no vinculado");
       }
     })
     .catch(err => {
       console.error("Error al verificar estado inicial:", err);
-      // Intentamos iniciar el proceso de todos modos por si es error de red temporal
-
     });
 }
-
