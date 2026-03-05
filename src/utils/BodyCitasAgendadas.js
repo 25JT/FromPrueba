@@ -18,6 +18,32 @@ let citasFiltradas = [];
 let filtroFechaInicio = null;
 let filtroFechaFin = null;
 
+//verificar calificaciones
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetch(`${ruta}/api/notificaciones/${userid}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data === true) {
+                console.log("muesta modal");
+                const modal = document.getElementById("modal-notificacion");
+                if (modal) {
+                    modal.classList.remove("hidden");
+                }
+            } else {
+                console.log("no muestra modal");
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
+
 // Inicializar Flatpickr y eventos
 document.addEventListener("DOMContentLoaded", () => {
     const dateRangeInput = document.getElementById("date-range");
