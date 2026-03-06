@@ -21,21 +21,22 @@ let filtroFechaFin = null;
 //verificar calificaciones
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch(`${ruta}/api/notificaciones/${userid}`, {
-        method: "GET",
+    fetch(`${ruta}/api/notificaciones/validar`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: 'include',
+        body: JSON.stringify({ id: userid }),
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data === true) {
-                console.log("muesta modal");
+            console.log(data);
+            sessionStorage.setItem("calificacion_mostrada", data.id);
+
+            if (data.calificacion_mostrada === 0) {
                 const modal = document.getElementById("modal-notificacion");
                 if (modal) {
                     modal.classList.remove("hidden");
                 }
-            } else {
-                console.log("no muestra modal");
             }
         })
         .catch((error) => {
