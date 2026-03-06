@@ -1,11 +1,11 @@
 import { ruta } from "../utils/ruta.js";
 import { validarInicioProfesional } from "./validarInicio.js";
-import { alertaConfirm, alertaCheck, alertaFallo } from "../assets/Alertas/Alertas.js";
+import { alertaConfirm, alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
 import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
 import estadoWhatsApp from "./navJs.js";
-import { alertaMal } from "../assets/Alertas/Alertas.js";
+import Swal from 'sweetalert2';
 
 estadoWhatsApp();
 validarInicioProfesional();
@@ -138,6 +138,98 @@ function obtenerClaseEstado(estado) {
     return estados[estadoLower] || "bg-gray-100 text-gray-800";
 }
 
+// Función para mostrar el modal personalizado de cambio de estado
+function mostrarModalCambioEstado(agenda) {
+    const modalHTML = `
+    <div id="modal-cambio-estado" class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-60 p-4">
+        <div class="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div class="w-full max-w-md bg-white rounded-xl shadow-lg flex flex-col animate-fade-in">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-gray-900">Cambiar Estado</h2>
+                    <button id="cerrar-modal-estado" class="flex w-auto cursor-pointer items-center justify-center gap-2 rounded-lg h-10 px-4 text-black border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-sm font-bold transition-all">
+                        <span class="material-symbols-outlined text-base">cancel</span>
+                        <span>Cerrar</span>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <p class="text-sm text-gray-500 italic">Selecciona el nuevo estado para la reserva de <strong>${agenda.nombre || 'Cliente'}</strong></p>
+                    <div class="flex flex-col gap-3">
+                        <button class="opcion-estado w-full p-4 rounded-xl border-2 border-gray-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-between group" data-estado="pendiente">
+                            <span class="font-semibold text-gray-700 group-hover:text-white">En curso</span>
+                            <span class="material-symbols-outlined text-blue-500">schedule</span>
+                        </button>
+                        <button class="opcion-estado w-full p-4 rounded-xl border-2 border-gray-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-between group" data-estado="confirmada">
+                            <span class="font-semibold text-gray-700 group-hover:text-white">Finalizada</span>
+                            <span class="material-symbols-outlined text-green-500">check_circle</span>
+                        </button>
+                   
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200">
+                    <button id="confirmar-cambio-estado" disabled class="w-full h-12 bg-gray-100 text-gray-400 font-bold rounded-xl transition-all cursor-not-allowed">
+                        Confirmar Cambio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+    let estadoSeleccionado = null;
+    const btnConfirmar = document.getElementById("confirmar-cambio-estado");
+    const opciones = document.querySelectorAll(".opcion-estado");
+
+    opciones.forEach(op => {
+        op.addEventListener("click", () => {
+            opciones.forEach(o => o.classList.remove("border-blue-500", "bg-blue-50"));
+            op.classList.add("border-blue-500", "bg-blue-50");
+            estadoSeleccionado = op.dataset.estado;
+            btnConfirmar.disabled = false;
+            btnConfirmar.classList.remove("bg-gray-100", "text-gray-400", "cursor-not-allowed");
+            btnConfirmar.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
+        });
+    });
+
+    document.getElementById("cerrar-modal-estado").addEventListener("click", () => {
+        document.getElementById("modal-cambio-estado").remove();
+    });
+
+    btnConfirmar.addEventListener("click", async () => {
+        console.log(`Confirmando cambio de estado a "${estadoSeleccionado}" para el usuario con ID: ${agenda.usuario_id}`);
+
+        // ESPACIO PARA EL FETCH A LA BD
+        /*
+        try {
+            const res = await fetch(`${ruta}/api/Reservas/actualizarEstado`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    agenda_id: agenda.agenda_id, 
+                    nuevoEstado: estadoSeleccionado,
+                    usuario_id: agenda.usuario_id 
+                }),
+                credentials: 'include',
+            });
+            const data = await res.json();
+            if(res.ok) {
+                alertaCheck("Estado actualizado correctamente");
+                location.reload();
+            } else {
+                alertaFallo("Error al actualizar estado");
+            }
+        } catch (error) {
+            console.error("Error en fetch:", error);
+            alertaFallo("Error de conexión");
+        }
+        */
+
+        document.getElementById("modal-cambio-estado").remove();
+        alertaCheck(`✅ Solicitud de cambio a "${estadoSeleccionado}" procesada localmente.`);
+    });
+}
+
 // Función para capitalizar primera letra
 function capitalizar(texto) {
     if (!texto) return "";
@@ -161,7 +253,10 @@ function mostrarDetallesCita(agenda, idPservicio) {
 <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg flex flex-col">
 <div class="p-6 border-b border-gray-200 flex justify-between items-center">
 <h2 class="text-xl font-bold text-gray-900">Detalles de la Reserva</h2>
-
+<button id="cerrar-modal" id="cerrar-modal-btn"  class=" flex w-auto sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined text-base">cancel</span>
+<span>Cerrar</span>
+</button>
 </div>
 <div class="p-6 flex-1 overflow-y-auto space-y-6">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
@@ -196,10 +291,13 @@ function mostrarDetallesCita(agenda, idPservicio) {
 <span class="material-symbols-outlined text-base">edit</span>
 <span>Modificar</span>
 </button>
-<button id="cerrar-modal" id="cerrar-modal-btn" class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="material-symbols-outlined text-base">cancel</span>
-<span>Cerrar</span>
+<button id="cambiar-estado" class="flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 text-black border-2 border-blue-500  hover:bg-blue-500 hover:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined">
+change_circle
+</span>
+<span>Cambiar Estado</span>
 </button>
+
 </div>
 </div>
 </div>
@@ -216,6 +314,15 @@ function mostrarDetallesCita(agenda, idPservicio) {
     document.getElementById("modal-detalles").addEventListener("click", (e) => {
         if (e.target.id === "modal-detalles") cerrarModal();
     });
+
+    // Event listener para cambiar estado
+    const btnCambiarEstado = document.getElementById("cambiar-estado");
+    if (btnCambiarEstado) {
+        btnCambiarEstado.addEventListener("click", () => {
+            console.log("Menu de acciones abierto para el usuario con ID:", agenda.usuario_id);
+            mostrarModalCambioEstado(agenda);
+        });
+    }
 
     // Event listener para editar cita
     document.getElementById("editar-cita").addEventListener("click", () => {
@@ -414,6 +521,7 @@ fetch(`${ruta}/api/Reservas`, {
     .then((response) => response.json())
     .then((respuesta) => {
 
+        console.log(respuesta);
 
         const data = respuesta.data || [];
 

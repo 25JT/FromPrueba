@@ -169,13 +169,11 @@ function mostrarDetallesCita(agenda) {
     });
 
     const modalHTML = `
-    <div id="modal-detalles" class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
-
+<div id="modal-detalles" class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
 <div class="w-full max-w-2xl bg-white  rounded-xl shadow-lg flex flex-col">
 <div class="p-6 border-b border-gray-200  flex justify-between items-center">
 <h2 class="text-xl font-bold text-gray-900 ">Detalles de la Cita</h2>
-
 </div>
 <div class="p-6 flex-1 overflow-y-auto space-y-6">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
@@ -195,7 +193,6 @@ function mostrarDetallesCita(agenda) {
 <p class="text-sm font-medium text-gray-500 ">Servicio</p>
 <p class="text-base font-semibold text-gray-800 ">${agenda.servicio || "Servicio General"}</p>
 </div>
-
 <div>
 <p class="text-sm font-medium text-gray-500 ${obtenerClaseEstado(agenda.estado)} " >${capitalizar(agenda.estado)}</p>
 </div>
@@ -418,10 +415,12 @@ fetch(`${ruta}/mostrarCitas`, {
     .then((data) => {
 
 
+
         if (!data.success) {
             console.error("Error en respuesta:", data.message);
             return;
         }
+
 
         todasLasCitas = data.data;
         citasFiltradas = todasLasCitas; // Inicialmente todas
