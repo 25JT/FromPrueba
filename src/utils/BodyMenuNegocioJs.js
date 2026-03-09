@@ -130,9 +130,11 @@ function obtenerClaseEstado(estado) {
     if (!estado) return "bg-gray-100 text-gray-800";
     const estadoLower = String(estado).toLowerCase();
     const estados = {
-        confirmada: "bg-green-100 text-green-800",
+        confirmada: "bg-purple-100 text-purple-800",
         pendiente: "bg-yellow-100 text-yellow-800",
         cancelada: "bg-red-100 text-red-800",
+        "en curso": "bg-blue-100 text-blue-800",
+        completada: "bg-green-100 text-green-800",
     };
     if (estadoLower == "0") return estados.pendiente;
     return estados[estadoLower] || "bg-gray-100 text-gray-800";
@@ -154,11 +156,11 @@ function mostrarModalCambioEstado(agenda) {
                 <div class="p-6 space-y-4">
                     <p class="text-sm text-gray-500 italic">Selecciona el nuevo estado para la reserva de <strong>${agenda.nombre || 'Cliente'}</strong></p>
                     <div class="flex flex-col gap-3">
-                        <button class="opcion-estado w-full p-4 rounded-xl border-2 border-gray-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-between group" data-estado="pendiente">
+                        <button class="opcion-estado w-full p-4 rounded-xl border-2 border-gray-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-between group" data-estado="curso">
                             <span class="font-semibold text-gray-700 group-hover:text-white">En curso</span>
                             <span class="material-symbols-outlined text-blue-500">schedule</span>
                         </button>
-                        <button class="opcion-estado w-full p-4 rounded-xl border-2 border-gray-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-between group" data-estado="confirmada">
+                        <button class="opcion-estado w-full p-4 rounded-xl border-2 border-gray-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-between group" data-estado="completada">
                             <span class="font-semibold text-gray-700 group-hover:text-white">Finalizada</span>
                             <span class="material-symbols-outlined text-green-500">check_circle</span>
                         </button>
@@ -197,25 +199,25 @@ function mostrarModalCambioEstado(agenda) {
     });
 
     btnConfirmar.addEventListener("click", async () => {
-        console.log(`Confirmando cambio de estado a "${estadoSeleccionado}" para el usuario con ID: ${agenda.usuario_id}`);
+        console.log(`Confirmando cambio de estado a "${estadoSeleccionado}" para el usuario con ID: ${agenda.usuario_id} "ID de agenda:", ${agenda.agenda_id}`);
 
         // ESPACIO PARA EL FETCH A LA BD
-        /*
+
         try {
             const res = await fetch(`${ruta}/api/Reservas/actualizarEstado`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    agenda_id: agenda.agenda_id, 
+                body: JSON.stringify({
+                    agenda_id: agenda.agenda_id,
                     nuevoEstado: estadoSeleccionado,
-                    usuario_id: agenda.usuario_id 
+                    usuario_id: agenda.usuario_id
                 }),
                 credentials: 'include',
             });
             const data = await res.json();
-            if(res.ok) {
+            if (res.ok) {
                 alertaCheck("Estado actualizado correctamente");
-                location.reload();
+                //      location.reload();
             } else {
                 alertaFallo("Error al actualizar estado");
             }
@@ -223,10 +225,10 @@ function mostrarModalCambioEstado(agenda) {
             console.error("Error en fetch:", error);
             alertaFallo("Error de conexión");
         }
-        */
+
 
         document.getElementById("modal-cambio-estado").remove();
-        alertaCheck(`✅ Solicitud de cambio a "${estadoSeleccionado}" procesada localmente.`);
+        alertaCheck(`✅ Solicitud de cambio a "${estadoSeleccionado}" procesada  .`);
     });
 }
 

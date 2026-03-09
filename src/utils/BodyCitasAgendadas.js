@@ -147,9 +147,11 @@ function formatearHora(hora) {
 // Función para obtener clase de estado
 function obtenerClaseEstado(estado) {
     const estados = {
-        confirmada: "bg-green-100 text-green-800",
+        confirmada: "bg-purple-100 text-purple-800",
         pendiente: "bg-yellow-100 text-yellow-800",
         cancelada: "bg-red-100 text-red-800",
+        "en curso": "bg-blue-100 text-blue-800",
+        completada: "bg-green-100 text-green-800",
     };
     return estados[estado.toLowerCase()] || "bg-gray-100 text-gray-800";
 }
