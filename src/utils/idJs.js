@@ -477,7 +477,7 @@ if (form) {
         const fechaEspecialObj = listaFechasEspeciales.find(item => item.fecha.split('T')[0] === fecha);
         const esFechaEspecial = fechaEspecialObj ? (fechaEspecialObj.es_laborable == 1 ? 1 : 0) : null;
 
-        console.log("esFechaEspecial", esFechaEspecial);
+        // console.log("esFechaEspecial", esFechaEspecial);
 
         const response = await fetch(`${ruta}/${citaId ? 'actCita' : 'agendarcita'}`, {
             method: "POST",

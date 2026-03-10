@@ -84,9 +84,9 @@ function renderizarServicios() {
                   class="material-symbols-outlined text-amber-500 text-sm fill-1"
                   >star</span
                 >
-                <span class="text-xs font-bold text-amber-700">4.9</span>
+                <span class="text-xs font-bold text-amber-700">${servicio.media_calificacion}</span>
                 <span class="text-[10px] text-amber-600 font-medium"
-                  >(128 reseñas)</span
+                  >(${servicio.total_calificaciones} reseñas)</span
                 >
               </div>
           <!--    <span
@@ -237,6 +237,8 @@ if (btnSiguiente) {
 fetch(`${ruta}/serviciosDisponibles`, { credentials: 'include' })
   .then((response) => response.json())
   .then((data) => {
+    console.log(data);
+
     if (loader) loader.style.display = "none";
 
     if (!data.success) {

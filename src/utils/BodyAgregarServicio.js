@@ -103,7 +103,7 @@ descripcionServicio.addEventListener("input", () => {
 
 //foto1
 foto1.addEventListener("change", () => {
-    console.log(foto1);
+    // console.log(foto1);
 
     clearTimeout(timer)
     timer = setTimeout(() => {
@@ -127,7 +127,7 @@ foto2.addEventListener("change", () => {
         } else {
             document.getElementById("foto2-preview").src = URL.createObjectURL(foto2.files[0]);
 
-            console.log({ foto2, preview: URL.createObjectURL(foto2.files[0]) });
+            //          console.log({ foto2, preview: URL.createObjectURL(foto2.files[0]) });
         }
     }, 1000);
 });
@@ -141,7 +141,7 @@ foto3.addEventListener("change", () => {
         } else {
             document.getElementById("foto3-preview").src = URL.createObjectURL(foto3.files[0]);
 
-            console.log({ foto3, preview: URL.createObjectURL(foto3.files[0]) });
+            //     console.log({ foto3, preview: URL.createObjectURL(foto3.files[0]) });
         }
     }, 1000);
 });

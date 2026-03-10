@@ -199,7 +199,7 @@ function mostrarModalCambioEstado(agenda) {
     });
 
     btnConfirmar.addEventListener("click", async () => {
-        console.log(`Confirmando cambio de estado a "${estadoSeleccionado}" para el usuario con ID: ${agenda.usuario_id} "ID de agenda:", ${agenda.agenda_id}`);
+        // console.log(`Confirmando cambio de estado a "${estadoSeleccionado}" para el usuario con ID: ${agenda.usuario_id} "ID de agenda:", ${agenda.agenda_id}`);
 
         // ESPACIO PARA EL FETCH A LA BD
 
@@ -321,7 +321,7 @@ change_circle
     const btnCambiarEstado = document.getElementById("cambiar-estado");
     if (btnCambiarEstado) {
         btnCambiarEstado.addEventListener("click", () => {
-            console.log("Menu de acciones abierto para el usuario con ID:", agenda.usuario_id);
+            //     console.log("Menu de acciones abierto para el usuario con ID:", agenda.usuario_id);
             mostrarModalCambioEstado(agenda);
         });
     }
@@ -523,7 +523,7 @@ fetch(`${ruta}/api/Reservas`, {
     .then((response) => response.json())
     .then((respuesta) => {
 
-        console.log(respuesta);
+        // console.log(respuesta);
 
         const data = respuesta.data || [];
 

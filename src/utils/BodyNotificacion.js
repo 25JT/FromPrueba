@@ -7,7 +7,41 @@ const enviarBtn = document.getElementById("btn-enviar-valoracion");
 const ratingBtns = document.querySelectorAll(".rating-btn");
 const starIcons = document.querySelectorAll(".star-icon");
 
+const nombreEstablecimiento = document.getElementById("nombre-establecimiento");
+const Servicio = document.getElementById("servicio");
+
 let selectedRating = 0;
+
+//verificar calificaciones
+const userid = sessionStorage.getItem("Id");
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetch(`${ruta}/api/notificaciones/validar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify({ id: userid }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            //  console.log(data);
+            sessionStorage.setItem("calificacion_mostrada", data.id);
+
+            nombreEstablecimiento.textContent = data.nombre_establecimiento;
+            Servicio.textContent = data.nombre_servicio;
+
+            if (data.calificacion_mostrada === 0) {
+                const modal = document.getElementById("modal-notificacion");
+                if (modal) {
+                    modal.classList.remove("hidden");
+                }
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+
 
 function closeModal() {
     if (modal) {
