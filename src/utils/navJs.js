@@ -26,6 +26,7 @@ export function cerrarSesion() {
     })
     .then((data) => {
       console.log(data);
+      localStorage.clear();
       location.href = "/";
     })
     .catch((error) => {
@@ -36,9 +37,10 @@ export function cerrarSesion() {
 
 
 // ===== INITIALIZE UI BASED ON SESSION =====
-function initializeAuthButtons() {
+export function initializeAuthButtons() {
+  const userid = sessionStorage.getItem("Id");
   if (!userid) {
-    // Usuario NO ha iniciado sesión
+    // Usuario NO ha iniciado sesión (en esta pestaña)
     if (btnIniciar) {
       btnIniciar.classList.remove("hidden");
       btnIniciar.classList.add("border-2", "border-[#135bec]", "rounded-2xl");
@@ -61,8 +63,56 @@ function initializeAuthButtons() {
   }
 }
 
-// Inicializar botones de autenticación
+// Función global para verificar estado con el servidor
+async function verificarEstadoGlobal() {
+  try {
+    const res = await fetch(`${ruta}/api/verificar-estado`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.usuario) {
+        // Guardar datos (asegurando que el rol no sea undefined)
+        sessionStorage.setItem("Id", data.usuario.id);
+
+        // Verificación defensiva del rol (puede venir como 'role' o 'Role')
+        const roleValue = data.usuario.rol;
+        if (roleValue) {
+          sessionStorage.setItem("Role", roleValue);
+        }
+
+        // Capturar estado del negocio si existe
+        const statusNegocio = data.usuario.StatusNegocio ?? data.usuario.negocio_creado ?? data.usuario.status_negocio;
+        if (statusNegocio !== undefined) {
+          sessionStorage.setItem("StatusNegocio", statusNegocio);
+        }
+
+        if (data.usuario.nombre) sessionStorage.setItem("userName", data.usuario.nombre);
+        if (data.usuario.correo) sessionStorage.setItem("userEmail", data.usuario.correo);
+
+        // Notificar a todos los componentes
+        window.dispatchEvent(new CustomEvent('sessionStateChanged'));
+      } else {
+        // Si el servidor dice que no hay sesión, limpiar
+        if (sessionStorage.getItem("Id")) {
+          sessionStorage.clear();
+          window.dispatchEvent(new CustomEvent('sessionStateChanged'));
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error en verificación global:", err);
+  }
+}
+
+// Inicializar al cargar el script
 initializeAuthButtons();
+verificarEstadoGlobal();
+
+// Escuchar cambios en la sesión desde otros scripts
+window.addEventListener("sessionStateChanged", initializeAuthButtons);
 
 // ===== EVENT LISTENERS =====
 
@@ -177,6 +227,7 @@ if (formData && !formData.dataset.listenerAdded) {
 
 
         if (data.success) {
+          localStorage.setItem("Id", data.id);
           sessionStorage.setItem("Id", data.id);
           sessionStorage.setItem("Role", data.role);
           sessionStorage.setItem("StatusNegocio", data.negocio_creado);

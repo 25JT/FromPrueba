@@ -4,7 +4,7 @@ import { cerrarSesion } from "./navJs.js";
 
 
 //Obtener iamgen del usuario  de la bd 
-window.addEventListener("load", function () {
+export function updateImages() {
     fetch(`${ruta}/api/usuario/obtenerImagenUsuario`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -30,14 +30,13 @@ window.addEventListener("load", function () {
             } else {
                 sessionStorage.setItem("fotoUsuario", "https://cdn-icons-png.flaticon.com/512/25/25231.png");
             }
-
-
-
         })
         .catch((error) => {
             console.error(error);
         });
-});
+}
+
+window.addEventListener("load", updateImages);
 
 
 // ===== SIDEBAR MANAGEMENT =====
@@ -54,6 +53,8 @@ const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 const closeSidebar = document.getElementById("closeSidebar");
 const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
+const negocioLink = document.getElementById("Negocio");
+const citasLink = document.getElementById("Citas");
 
 
 
@@ -63,10 +64,60 @@ function cerrarMenu() {
 }
 
 // ===== INITIALIZE SIDEBAR VISIBILITY =====
-function initializeSidebar() {
+export function initializeSidebar() {
+    const userid = sessionStorage.getItem("Id");
+    let role = sessionStorage.getItem("Role");
+    
+    // Si role es nulo o la cadena "undefined", limpiar
+    if (role === "undefined" || !role) {
+        role = null;
+    }
+    
+    if (role) role = role.toLowerCase();
+    
     // Mostrar botón hamburguesa solo si hay sesión activa
     if (userid && menuToggle) {
         menuToggle.classList.remove("hidden");
+    } else if (menuToggle) {
+        menuToggle.classList.add("hidden");
+    }
+
+    // Role-based elements
+    const elements = {
+        negocio: document.getElementById("Negocio"),
+        citas: document.getElementById("Citas"),
+        tuPagina: document.getElementById("TuPagina"),
+        settings: document.getElementById("Settings"),
+        vincularWhatsApp: document.getElementById("VincularWhatsApp"),
+        agregarServicio: document.getElementById("AgregarServicio"),
+        servicios: document.getElementById("Servicios")
+    };
+
+    if (!userid) {
+        // Si no hay sesión, ocultar TODO lo que sea específico de rol
+        Object.values(elements).forEach(el => {
+            if (el) el.classList.add("hidden");
+        });
+        return;
+    }
+
+    // Si hay sesión, mostrar/ocultar según el rol
+    if (role === "cliente") {
+        if (elements.negocio) elements.negocio.classList.add("hidden");
+        if (elements.citas) elements.citas.classList.remove("hidden");
+        if (elements.tuPagina) elements.tuPagina.classList.add("hidden");
+        if (elements.settings) elements.settings.classList.add("hidden");
+        if (elements.vincularWhatsApp) elements.vincularWhatsApp.classList.add("hidden");
+        if (elements.agregarServicio) elements.agregarServicio.classList.add("hidden");
+        if (elements.servicios) elements.servicios.classList.remove("hidden");
+    } else if (role === "profesional") {
+        if (elements.negocio) elements.negocio.classList.remove("hidden");
+        if (elements.citas) elements.citas.classList.add("hidden");
+        if (elements.tuPagina) elements.tuPagina.classList.remove("hidden");
+        if (elements.settings) elements.settings.classList.remove("hidden");
+        if (elements.vincularWhatsApp) elements.vincularWhatsApp.classList.remove("hidden");
+        if (elements.agregarServicio) elements.agregarServicio.classList.remove("hidden");
+        if (elements.servicios) elements.servicios.classList.add("hidden");
     }
 }
 
@@ -99,23 +150,7 @@ if (btnCerrarSidebar) {
 }
 
 // ===== SIDEBAR ROLE-BASED NAVIGATION =====
-const negocioLink = document.getElementById("Negocio");
-const citasLink = document.getElementById("Citas");
-
-
-
 if (negocioLink && citasLink) {
-    // Mostrar/ocultar links según el rol del usuario
-    if (role === "cliente") {
-        negocioLink.classList.add("hidden");
-        citasLink.classList.remove("hidden");
-        document.getElementById("TuPagina").classList.add("hidden");
-    } else {
-        negocioLink.classList.remove("hidden");
-        citasLink.classList.add("hidden");
-        document.getElementById("TuPagina").classList.remove("hidden");
-    }
-
     // Navegación a MenuNegocio
     negocioLink.addEventListener("click", (e) => {
         e.preventDefault();
@@ -129,65 +164,64 @@ if (negocioLink && citasLink) {
     });
 }
 
-
-//DEPNEIDNEOD EL ROL MOSTRARA UNA COSA O OTRA
-if (role === "cliente") {
-    document.getElementById("Negocio").classList.add("hidden");
-
-    document.getElementById("Settings").classList.add("hidden");
-
-    document.getElementById("VincularWhatsApp").classList.add("hidden");
-
-    document.getElementById("AgregarServicio").classList.add("hidden");
-
-
-}
-if (role === "profesional") {
-    document.getElementById("Servicios").classList.add("hidden");
-    document.getElementById("Citas").classList.add("hidden");
-
-
-}
-
 //funciones conexion server
-
-if (userid) {
-    window.addEventListener("load", function () {
-        const cachedName = sessionStorage.getItem("userName");
-        const cachedEmail = sessionStorage.getItem("userEmail");
-
+export function updateUserDetails() {
+    const userid = sessionStorage.getItem("Id");
+    if (!userid) {
+        // Limpiar si no hay sesión
         const nombreUserEl = document.getElementById("nombreUser");
         const correoUserEl = document.getElementById("correoUser");
+        if (nombreUserEl) nombreUserEl.textContent = "...";
+        if (correoUserEl) correoUserEl.textContent = "";
+        return;
+    }
 
-        if (cachedName && cachedEmail) {
-            if (nombreUserEl) nombreUserEl.textContent = cachedName;
-            if (correoUserEl) correoUserEl.textContent = cachedEmail;
-        } else {
-            fetch(`${ruta}/nombreUser`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: 'include',
-                body: JSON.stringify({ userid }),
+    const cachedName = sessionStorage.getItem("userName");
+    const cachedEmail = sessionStorage.getItem("userEmail");
+
+    const nombreUserEl = document.getElementById("nombreUser");
+    const correoUserEl = document.getElementById("correoUser");
+
+    if (cachedName && cachedEmail) {
+        if (nombreUserEl) nombreUserEl.textContent = cachedName;
+        if (correoUserEl) correoUserEl.textContent = cachedEmail;
+    } else {
+        fetch(`${ruta}/nombreUser`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include',
+            body: JSON.stringify({ userid }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error en respuesta: " + response.statusText);
+                }
+                return response.json();
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Error en respuesta: " + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    sessionStorage.setItem("userName", data.nombre);
-                    sessionStorage.setItem("userEmail", data.correo);
+            .then((data) => {
+                sessionStorage.setItem("userName", data.nombre);
+                sessionStorage.setItem("userEmail", data.correo);
 
-                    if (nombreUserEl) nombreUserEl.textContent = data.nombre;
-                    if (correoUserEl) correoUserEl.textContent = data.correo;
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    });
+                if (nombreUserEl) nombreUserEl.textContent = data.nombre;
+                if (correoUserEl) correoUserEl.textContent = data.correo;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 }
+
+window.addEventListener("load", () => {
+    initializeSidebar();
+    updateUserDetails();
+});
+
+// Escuchar cambios en la sesión para actualizar todo el sidebar
+window.addEventListener("sessionStateChanged", () => {
+    initializeSidebar();
+    updateUserDetails();
+    updateImages();
+});
 
 document.getElementById("AgregarServicio").addEventListener("click", validarCantidadCitas);
 
