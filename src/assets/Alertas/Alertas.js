@@ -28,6 +28,20 @@ export function alertaFallo(mensaje) {
     text: mensaje,
     confirmButtonColor: "#3085d6",
   });
+
+}
+
+export function alertaFalloDesaparece(mensaje) {
+  Swal.fire({
+    icon: "error",
+    title: "¡Error!",
+    text: mensaje,
+    confirmButtonColor: "#3085d6",
+  });
+  //quitar alerta despues de 2 segundos
+  setTimeout(() => {
+    Swal.close();
+  }, 2000);
 }
 
 export function alertaMal(mensaje) {

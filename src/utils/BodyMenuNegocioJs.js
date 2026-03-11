@@ -5,7 +5,7 @@ import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
 import estadoWhatsApp from "./navJs.js";
-import Swal from 'sweetalert2';
+
 
 estadoWhatsApp();
 validarInicioProfesional();

@@ -1,9 +1,5 @@
 import { ruta } from "../utils/ruta.js";
-import {
-  alertaCheck2,
-  alertaFallo,
-  alertaMal,
-} from "../assets/Alertas/Alertas.js";
+import { alertaCheck2, alertaFallo, alertaMal, alertaFalloDesaparece } from "../assets/Alertas/Alertas.js";
 
 // ===== SESSION MANAGEMENT =====
 const userid = sessionStorage.getItem("Id");
@@ -298,7 +294,7 @@ async function ejecutarValidacionWhatsApp() {
         console.log("WhatsApp vinculado (status 200)");
       } else {
         console.log("WhatsApp no vinculado (status 400)");
-        alertaFallo("WhatsApp no vinculado");
+        alertaFalloDesaparece("WhatsApp no vinculado");
       }
     })
     .catch(err => {
