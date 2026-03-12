@@ -1,3 +1,4 @@
+import { io } from "socket.io-client";
 import { ruta } from "../utils/ruta.js";
 import { validarInicioProfesional } from "./validarInicio.js";
 import { alertaConfirm, alertaCheck, alertaFallo, alertaMal } from "../assets/Alertas/Alertas.js";
@@ -5,6 +6,7 @@ import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
 import estadoWhatsApp from "./navJs.js";
+
 
 
 estadoWhatsApp();
@@ -217,7 +219,6 @@ function mostrarModalCambioEstado(agenda) {
             const data = await res.json();
             if (res.ok) {
                 alertaCheck("Estado actualizado correctamente");
-                //      location.reload();
             } else {
                 alertaFallo("Error al actualizar estado");
             }
@@ -226,9 +227,8 @@ function mostrarModalCambioEstado(agenda) {
             alertaFallo("Error de conexión");
         }
 
-
-        document.getElementById("modal-cambio-estado").remove();
-        alertaCheck(`✅ Solicitud de cambio a "${estadoSeleccionado}" procesada  .`);
+        const modal = document.getElementById("modal-cambio-estado");
+        if (modal) modal.remove();
     });
 }
 
@@ -365,10 +365,6 @@ async function cancelarCita(Agid, Useid, estado) {
 
         if (res.ok) {
             alertaCheck("✅ Cita cancelada con éxito");
-            // Recargar o re-renderizar
-            setTimeout(() => {
-                location.reload();
-            }, 700);
         } else {
             alertaFallo("❌ Error al cancelar la cita: " + (respuesta.message || "Intenta de nuevo"));
         }
@@ -514,46 +510,65 @@ function cambiarPagina(direccion) {
 }
 
 // Cargar citas desde el servidor
-fetch(`${ruta}/api/Reservas`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userid }),
-    credentials: 'include',
-})
-    .then((response) => response.json())
-    .then((respuesta) => {
+function cargarCitasMenu() {
 
-        // console.log(respuesta);
-
-        const data = respuesta.data || [];
-
-        const nombreEstablecimiento = respuesta.NombreEstablecimiento;
-        globalIdPservicio = respuesta.idPservicio || (data.length > 0 ? data[0].idPservicio : null); // Capturamos el ID
-
-        todasLasCitas = data;
-        citasFiltradas = todasLasCitas; // Inicialmente todas
-        totalCitas = todasLasCitas.length;
-
-        const nombreNegocioEl = document.getElementById("nombreNegocio");
-        if (nombreNegocioEl && nombreEstablecimiento) {
-            nombreNegocioEl.innerHTML = `HOLA ${nombreEstablecimiento}`;
-        }
-
-        // Renderizar primera página
-        renderizarCitas();
-
-        // Configurar event listeners para botones de paginación
-        const btnAnterior = document.getElementById("btn-anterior");
-        const btnSiguiente = document.getElementById("btn-siguiente");
-
-        if (btnAnterior) {
-            btnAnterior.addEventListener("click", () => cambiarPagina("anterior"));
-        }
-
-        if (btnSiguiente) {
-            btnSiguiente.addEventListener("click", () => cambiarPagina("siguiente"));
-        }
+    fetch(`${ruta}/api/Reservas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userid }),
+        credentials: 'include',
     })
-    .catch((error) => {
-        console.error("Error al obtener datos:", error);
-    });
+        .then((response) => response.json())
+        .then((respuesta) => {
+
+            const data = respuesta.data || [];
+            const nombreEstablecimiento = respuesta.NombreEstablecimiento;
+            globalIdPservicio = respuesta.idPservicio || (data.length > 0 ? data[0].idPservicio : null);
+
+            todasLasCitas = data;
+            citasFiltradas = todasLasCitas;
+            totalCitas = todasLasCitas.length;
+
+
+
+            const nombreNegocioEl = document.getElementById("nombreNegocio");
+            if (nombreNegocioEl && nombreEstablecimiento) {
+                nombreNegocioEl.innerHTML = `HOLA ${nombreEstablecimiento}`;
+            }
+
+            renderizarCitas();
+        })
+        .catch((error) => {
+            console.error("❌ Error al obtener datos:", error);
+        });
+}
+
+// Carga inicial
+cargarCitasMenu();
+
+// Configurar event listeners para botones de paginación
+document.addEventListener("DOMContentLoaded", () => {
+    const btnAnterior = document.getElementById("btn-anterior");
+    const btnSiguiente = document.getElementById("btn-siguiente");
+    if (btnAnterior) btnAnterior.addEventListener("click", () => cambiarPagina("anterior"));
+    if (btnSiguiente) btnSiguiente.addEventListener("click", () => cambiarPagina("siguiente"));
+});
+
+// Configuración de Socket.io para tiempo real
+const socket = io(ruta, {
+    withCredentials: true,
+    transports: ["websocket", "polling"]
+});
+
+socket.on("connect", () => {
+    // console.log("🚀 [Socket.io] Conectado exitosamente al servidor en:", ruta);
+    // console.log("ID de Socket:", socket.id);
+});
+
+socket.on("actualizar_estado_citas", (data) => {
+    cargarCitasMenu();
+});
+
+socket.on("connect_error", (error) => {
+    // console.error("❌ [Socket.io] Error de conexión:", error.message);
+});

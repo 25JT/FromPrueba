@@ -1,9 +1,11 @@
+import { io } from "socket.io-client";
 import { ruta } from "../utils/ruta.js";
 import { validarInicioCliente } from "../utils/validarInicio.js";
 import { alertaCheck, alertaFallo, alertaMal, alertaConfirm } from "../assets/Alertas/Alertas.js";
 import flatpickr from "flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/flatpickr.min.css";
+
 validarInicioCliente();
 const userid = sessionStorage.getItem("Id");
 
@@ -240,9 +242,6 @@ async function cancelarCita(id, estado) {
                 return;
             }
             alertaCheck("Cita cancelada correctamente");
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
         })
         .catch((error) => {
             console.error("Error al cancelar cita:", error);
@@ -381,32 +380,56 @@ function cambiarPagina(direccion) {
         }
     }
 }
-// Cargar citas desde el servidor
-fetch(`${ruta}/mostrarCitas`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userid }),
-    credentials: 'include',
-})
-    .then((response) => response.json())
-    .then((data) => {
-
-
-
-        if (!data.success) {
-            console.error("Error en respuesta:", data.message);
-            return;
-        }
-
-
-        todasLasCitas = data.data;
-        citasFiltradas = todasLasCitas; // Inicialmente todas
-        totalCitas = todasLasCitas.length;
-
-        // Renderizar primera página
-        renderizarCitas();
+// Función para cargar citas desde el servidor
+function cargarCitas() {
+    fetch(`${ruta}/mostrarCitas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userid }),
+        credentials: 'include',
     })
-    .catch((error) => {
-        console.error("Error al obtener datos:", error);
-        alertaFallo("Error al cargar las citas");
-    });
+        .then((response) => response.json())
+        .then((data) => {
+
+            if (!data.success) {
+                console.error("❌ Error en respuesta:", data.message);
+                return;
+            }
+
+            todasLasCitas = data.data;
+            citasFiltradas = todasLasCitas; // Inicialmente todas
+            totalCitas = todasLasCitas.length;
+
+
+            // Renderizar página actual
+            renderizarCitas();
+        })
+        .catch((error) => {
+            // console.error("❌ Error al obtener datos:", error);
+            alertaFallo("Error al cargar las citas");
+        });
+}
+
+// Carga inicial
+cargarCitas();
+
+// --- Configuración de Socket.io para tiempo real ---
+
+const socket = io(ruta, {
+    withCredentials: true
+});
+
+socket.on("connect", () => {
+    // console.log("🚀 [Socket.io] Conectado exitosamente al servidor en:", ruta);
+    // console.log("ID de Socket:", socket.id);
+});
+
+// Escuchar cambios de estado desde el backend
+socket.on("actualizar_estado_citas", (data) => {
+    cargarCitas();
+});
+
+socket.on("connect_error", (error) => {
+    //   console.error("❌ [Socket.io] Error de conexión:", error.message);
+    console.log("Asegúrate de que 'ruta' coincida con tu servidor activo:", ruta);
+});
