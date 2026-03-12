@@ -72,6 +72,9 @@ const { title } = Astro.props;
       property="og:description"
       content="Gestiona tus citas de manera sencilla, rápida y profesional con Horalista. Ideal para negocios de servicios como peluquerías, manicura, consultorios y más."
     />
+    <script>
+      import "../utils/fetchInterceptor.js";
+    </script>
   </head>
   <body>
     <slot />
