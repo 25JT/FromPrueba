@@ -56,8 +56,18 @@ function cargarAnimacionesProgresivamente() {
 	}
 }
 
-// Iniciar carga progresiva
-cargarAnimacionesProgresivamente();
+// Iniciar carga progresiva esperando a que las fuentes estén listas
+if (document.fonts) {
+	document.fonts.ready.then(() => {
+		cargarAnimacionesProgresivamente();
+	}).catch((err) => {
+		console.error("Error cargando fuentes, iniciando animaciones de todos modos:", err);
+		cargarAnimacionesProgresivamente();
+	});
+} else {
+	// Fallback para navegadores antiguos
+	window.onload = cargarAnimacionesProgresivamente;
+}
 
 const formData = document.getElementById("registro");
 let formSubmitted = false; // Bandera para controlar envíos

@@ -225,8 +225,10 @@ if (formData && !formData.dataset.listenerAdded) {
       .then((res) => res.json())
       .then((data) => {
 
-
         if (data.success) {
+          const loginDropdown = document.getElementById("loginDropdown");
+          if (loginDropdown) loginDropdown.classList.add("hidden");
+
           localStorage.setItem("Id", data.id);
           sessionStorage.setItem("Id", data.id);
           sessionStorage.setItem("Role", data.role);

@@ -210,3 +210,9 @@ body {
   border-radius: 8px !important;
 }
 
+
+/* Prevención de FOUC para elementos animados con GSAP */
+.gsap-reveal {
+  opacity: 0;
+  visibility: hidden;
+}

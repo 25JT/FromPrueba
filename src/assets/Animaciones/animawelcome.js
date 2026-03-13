@@ -34,6 +34,9 @@ function getOrInitSplit(target, vars) {
  * Esto se debe llamar ANTES de iniciar cualquier animación para evitar forced reflows.
  */
 export function prepareAnimations() {
+  // Revelar elementos justo antes de procesarlos
+  gsap.set(".gsap-reveal", { autoAlpha: 1 });
+
   // Batch de "Writes" al DOM
   getOrInitSplit("#titulo", { type: "words" });
   getOrInitSplit("#parrafo", { type: "words" });
