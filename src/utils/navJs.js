@@ -1,9 +1,6 @@
 import { ruta } from "../utils/ruta.js";
 import { alertaCheck2, alertaFallo, alertaMal, alertaFalloDesaparece } from "../assets/Alertas/Alertas.js";
 
-// ===== SESSION MANAGEMENT =====
-const userid = sessionStorage.getItem("Id");
-const role = sessionStorage.getItem("Role");
 
 // ===== DOM ELEMENTS =====
 const btnCerrar = document.getElementById("btnCerrar");
@@ -33,7 +30,6 @@ export function cerrarSesion() {
       console.error(error);
     });
 }
-
 
 
 // ===== INITIALIZE UI BASED ON SESSION =====
@@ -354,3 +350,26 @@ async function ejecutarValidacionWhatsApp() {
       console.error("Error al verificar estado inicial:", err);
     });
 }
+
+
+// ===== BLOG NAVIGATION =====
+
+export function setupBlogNavigation() {
+  const btnBlog = document.getElementById("btnBlog");
+  const btnNosotros = document.getElementById("btnNosotros");
+
+  if (btnBlog) {
+    btnBlog.addEventListener("click", () => {
+      window.location.href = "/Blog";
+    });
+  }
+
+  if (btnNosotros) {
+    btnNosotros.addEventListener("click", () => {
+      window.location.href = "/Nosotros";
+    });
+  }
+}
+
+// Inicializar al cargar el script
+document.addEventListener("DOMContentLoaded", setupBlogNavigation);
