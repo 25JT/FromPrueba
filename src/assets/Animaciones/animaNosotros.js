@@ -167,13 +167,93 @@ gsap.to("#img", {
 gsap.to("#caja4", {
     scrollTrigger: {
         trigger: "#caja4",
+        start: "top 40%",
+        end: "top 10%",
+        scrub: true,
+    },
+    opacity: 1,
+    y: -10,
+    ease: "power3.out",
+
+})
+
+gsap.to("#minBox1", {
+    scrollTrigger: {
+        trigger: "#minBox1",
+        start: "top 60%",
+        end: "top 30%",
+        scrub: true,
+    },
+    opacity: 1,
+    x: -10,
+    ease: "power3.out",
+
+})
+gsap.to("#minBox2", {
+    scrollTrigger: {
+        trigger: "#minBox2",
+        start: "top 60%",
+        end: "top 30%",
+        scrub: true,
+    },
+    opacity: 1,
+    x: 10,
+    ease: "power3.out",
+
+})
+gsap.to("#minBox3", {
+    scrollTrigger: {
+        trigger: "#minBox3",
         start: "top 50%",
-        end: "top 20%",
+        end: "top 10%",
+        scrub: true,
+    },
+    opacity: 1,
+    x: -10,
+    ease: "power3.out",
+
+})
+gsap.to("#minBox4", {
+    scrollTrigger: {
+        trigger: "#minBox4",
+        start: "top 50%",
+        end: "top 10%",
         scrub: true,
         markers: true,
     },
     opacity: 1,
-
+    duration: 2,
+    x: -10,
     ease: "power3.out",
 
 })
+
+gsap.to("#caja4", {
+    scrollTrigger: {
+        trigger: "#caja4",
+        start: "top 50%",
+        end: "top 10%",
+        scrub: true,
+
+    },
+    opacity: 1,
+    y: 10,
+    ease: "power3.out",
+
+})
+
+gsap.to("#caja5", {
+    scrollTrigger: {
+        trigger: "#caja5",
+        start: "top 50%",
+        end: "top 10%",
+        scrub: true,
+
+    },
+    opacity: 1,
+    y: -10,
+    ease: "power3.out",
+
+})
+
+
