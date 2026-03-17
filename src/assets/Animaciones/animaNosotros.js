@@ -20,23 +20,8 @@ document.querySelector("#btn-Iniciar2").addEventListener("click", () => {
 })
 
 
+
 //Animaciones
-const splitCache = new Map();
-
-function getOrInitSplit(target, vars) {
-    const element = typeof target === 'string' ? document.querySelector(target) : target;
-    if (!element) return null;
-
-    if (splitCache.has(element)) {
-        return splitCache.get(element);
-    }
-
-    const split = new SplitText(element, vars);
-    splitCache.set(element, split);
-    return split;
-}
-
-
 // Elementos múltiples
 
 const tl = gsap.timeline();
@@ -219,11 +204,11 @@ gsap.to("#minBox4", {
         start: "top 50%",
         end: "top 10%",
         scrub: true,
-        markers: true,
+
     },
     opacity: 1,
     duration: 2,
-    x: -10,
+    x: 10,
     ease: "power3.out",
 
 })
