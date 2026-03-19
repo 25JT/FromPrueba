@@ -388,7 +388,8 @@ export function Rounded() {
   const rounded = document.querySelector("#rounded");
   const rounded2 = document.querySelector("#rounded2");
   const rounded3 = document.querySelector("#rounded3");
-  if (!rounded) return;
+  
+  if (!rounded || !rounded2 || !rounded3) return;
 
   let animacionEjecutada = false;
 
@@ -396,49 +397,35 @@ export function Rounded() {
     entries.forEach(entry => {
       if (entry.isIntersecting && !animacionEjecutada) {
         animacionEjecutada = true;
+
+        // Usamos una línea de tiempo para coordinar que todos salgan "a la vez"
+        // pero con un pequeño desfase (stagger) para que se vea más natural
+        const tl = gsap.timeline();
+
+        [rounded, rounded2, rounded3].forEach((el, index) => {
+          // Animación de entrada: aparecen escalando y con opacidad
+          tl.from(el, {
+            duration: 0.8,
+            autoAlpha: 0,
+            scale: 0,
+            y: 20,
+            ease: "back.out(1.7)",
+          }, index * 0.15); // Stagger de 0.15s entre cada uno
+
+          // Animación de rotación infinita (efecto moneda rodando)
+          // La iniciamos casi al mismo tiempo que aparecen
+          gsap.to(el, {
+            duration: 3,
+            rotateY: 360,
+            repeat: -1,
+            ease: "power1.inOut",
+            delay: index * 0.15 // Mismo desfase para la rotación
+          });
+        });
+
+        // Una vez activada, podemos dejar de observar
+        observer.unobserve(entry.target);
       }
-      const tl = gsap.timeline();
-      tl.from(rounded, {
-        duration: 1,
-
-        ease: "power3.out",
-
-      })
-      tl.to(rounded, {
-        duration: 2,
-        rotateY: 360,
-        repeat: -1,
-        yoyo: true,
-        ease: "power3.out",
-
-      })
-      tl.from(rounded2, {
-        duration: 1,
-
-        ease: "power3.out",
-
-      })
-      tl.to(rounded2, {
-        duration: 2,
-        rotateY: 360,
-        repeat: -1,
-        yoyo: true,
-        ease: "power3.out",
-
-      })
-      tl.from(rounded3, {
-        duration: 1,
-
-        ease: "power3.out",
-
-      })
-      tl.to(rounded3, {
-        duration: 2,
-        rotateY: 360,
-        repeat: -1,
-        yoyo: true,
-        ease: "power3.out",
-      })
     });
   }, {
     threshold: 0.3,

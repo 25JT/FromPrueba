@@ -64,7 +64,7 @@ function tutoAjustes() {
     const driverObj = driver({
         showProgress: true,
         animate: true,
-        allowClose: true,
+        allowClose: false,
         opacity: 0.75,
         stagePadding: 4,
         nextBtnText: 'Siguiente',
@@ -72,6 +72,7 @@ function tutoAjustes() {
         doneBtnText: 'Finalizar',
         progressText: 'Paso {{current}} de {{total}}',
         showButtons: ['next', 'previous'],
+        keyboardControl: false,
         onDestroyed: finalizarTutorial,
         steps: [
             {

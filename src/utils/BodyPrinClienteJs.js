@@ -237,7 +237,7 @@ if (btnSiguiente) {
 fetch(`${ruta}/serviciosDisponibles`, { credentials: 'include' })
   .then((response) => response.json())
   .then((data) => {
-    console.log(data);
+
 
     if (loader) loader.style.display = "none";
 

@@ -111,23 +111,106 @@ import Footter from "../layouts/Footter.astro";
                 />
               </div>
               <div class="flex flex-row gap-2">
-                <div class="w-28">
+                <div class="relative" id="cpWrapper">
                   <label
                     class="block text-xs form-label-small sm:text-sm font-medium text-text-secondary-light mb-1"
-                    for="codePais">País</label
+                    >País</label
                   >
-
-                  <select
-                    class="w-28 h-9 form-input-small sm:h-10 px-2 text-sm rounded-lg border border-border-light bg-background-light focus:ring-2 focus:ring-primary focus:border-primary transition-colors cursor-pointer"
+                  <input
+                    type="hidden"
                     id="codePais"
                     name="codePais"
-                    required
+                    value="57"
+                  />
+
+                  <!-- Botón -->
+                  <button
+                    type="button"
+                    id="cpBtn"
+                    class="h-9 sm:h-10 px-2 flex items-center gap-1.5 text-sm rounded-lg border border-border-light bg-background-light focus:ring focus:ring-primary focus:border-primary transition-colors cursor-pointer whitespace-nowrap"
                   >
-                    <option value="57">🇨🇴 +57</option>
-                    <option value="56">🇨🇱 +56</option>
-                    <option value="34">🇪🇸 +34</option>
-                    <option value="52">🇲🇽 +52</option>
-                  </select>
+                    <img
+                      id="cpFlag"
+                      src="https://flagcdn.com/w20/co.png"
+                      alt="CO"
+                      class="w-5 h-auto rounded-sm"
+                    />
+                    <span id="cpCode" class="text-sm font-medium">+57</span>
+                    <svg
+                      class="w-3 h-3 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      ><path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2.5"
+                        d="M19 9l-7 7-7-7"></path></svg
+                    >
+                  </button>
+
+                  <!-- Lista -->
+                  <ul
+                    id="cpList"
+                    class="hidden absolute z-50 top-full left-0 mt-1 w-40 bg-white border border-border-light rounded-lg shadow-lg overflow-hidden"
+                  >
+                    <li
+                      data-val="57"
+                      data-iso="co"
+                      data-code="+57"
+                      class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                    >
+                      <img
+                        src="https://flagcdn.com/w20/co.png"
+                        alt="CO"
+                        class="w-5 h-auto rounded-sm"
+                      />
+                      <span class="font-medium text-gray-800">+57</span>
+                      <span class="text-gray-400 text-xs">Colombia</span>
+                    </li>
+                    <li
+                      data-val="56"
+                      data-iso="cl"
+                      data-code="+56"
+                      class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                    >
+                      <img
+                        src="https://flagcdn.com/w20/cl.png"
+                        alt="CL"
+                        class="w-5 h-auto rounded-sm"
+                      />
+                      <span class="font-medium text-gray-800">+56</span>
+                      <span class="text-gray-400 text-xs">Chile</span>
+                    </li>
+                    <li
+                      data-val="34"
+                      data-iso="es"
+                      data-code="+34"
+                      class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                    >
+                      <img
+                        src="https://flagcdn.com/w20/es.png"
+                        alt="ES"
+                        class="w-5 h-auto rounded-sm"
+                      />
+                      <span class="font-medium text-gray-800">+34</span>
+                      <span class="text-gray-400 text-xs">España</span>
+                    </li>
+                    <li
+                      data-val="52"
+                      data-iso="mx"
+                      data-code="+52"
+                      class="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                    >
+                      <img
+                        src="https://flagcdn.com/w20/mx.png"
+                        alt="MX"
+                        class="w-5 h-auto rounded-sm"
+                      />
+                      <span class="font-medium text-gray-800">+52</span>
+                      <span class="text-gray-400 text-xs">México</span>
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="w-full">
@@ -489,3 +572,34 @@ import Footter from "../layouts/Footter.astro";
 </div>
 
 <script src="../utils/welcomJs.js"></script>
+
+<script>
+  const cpBtn = document.getElementById("cpBtn") as HTMLButtonElement | null;
+  const cpList = document.getElementById("cpList") as HTMLElement | null;
+  const cpFlag = document.getElementById("cpFlag") as HTMLImageElement | null;
+  const cpCode = document.getElementById("cpCode") as HTMLElement | null;
+  const cpInput = document.getElementById(
+    "codePais",
+  ) as HTMLInputElement | null;
+
+  cpBtn?.addEventListener("click", () => cpList?.classList.toggle("hidden"));
+
+  cpList?.querySelectorAll("li").forEach((li) => {
+    li.addEventListener("click", () => {
+      const el = li as HTMLElement;
+      if (cpFlag) {
+        cpFlag.src = `https://flagcdn.com/w20/${el.dataset.iso}.png`;
+        cpFlag.alt = el.dataset.iso?.toUpperCase() ?? "";
+      }
+      if (cpCode) cpCode.textContent = el.dataset.code ?? "";
+      if (cpInput) cpInput.value = el.dataset.val ?? "";
+      cpList.classList.add("hidden");
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    const wrapper = document.getElementById("cpWrapper");
+    if (wrapper && !wrapper.contains(e.target as Node))
+      cpList?.classList.add("hidden");
+  });
+</script>
