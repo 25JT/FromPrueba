@@ -110,19 +110,40 @@ import Footter from "../layouts/Footter.astro";
                   required
                 />
               </div>
-              <div>
-                <label
-                  class="block text-xs form-label-small sm:text-sm font-medium text-text-secondary-light mb-1"
-                  for="phone">Teléfono</label
-                >
-                <input
-                  class="w-full h-9 form-input-small sm:h-10 px-3 text-sm rounded-lg border border-border-light bg-background-light focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                  id="phone"
-                  name="phone"
-                  placeholder="+57 325 256 66 871"
-                  type="tel"
-                  required
-                />
+              <div class="flex flex-row gap-2">
+                <div class="w-28">
+                  <label
+                    class="block text-xs form-label-small sm:text-sm font-medium text-text-secondary-light mb-1"
+                    for="codePais">País</label
+                  >
+
+                  <select
+                    class="w-28 h-9 form-input-small sm:h-10 px-2 text-sm rounded-lg border border-border-light bg-background-light focus:ring-2 focus:ring-primary focus:border-primary transition-colors cursor-pointer"
+                    id="codePais"
+                    name="codePais"
+                    required
+                  >
+                    <option value="57">🇨🇴 +57</option>
+                    <option value="56">🇨🇱 +56</option>
+                    <option value="34">🇪🇸 +34</option>
+                    <option value="52">🇲🇽 +52</option>
+                  </select>
+                </div>
+
+                <div class="w-full">
+                  <label
+                    class="block text-xs form-label-small sm:text-sm font-medium text-text-secondary-light mb-1"
+                    for="phone">Teléfono</label
+                  >
+                  <input
+                    class="w-full h-9 form-input-small sm:h-10 px-3 text-sm rounded-lg border border-border-light bg-background-light focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                    id="phone"
+                    name="phone"
+                    placeholder="+57 325 256 66 871"
+                    type="tel"
+                    required
+                  />
+                </div>
               </div>
               <div>
                 <fieldset>
