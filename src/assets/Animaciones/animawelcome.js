@@ -1,480 +1,170 @@
 import gsap from "gsap";
-
-import ScrollTrigger from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
-// Registrar plugins una vez al inicio
-gsap.registerPlugin(ScrollTrigger, SplitText);
+// Registrar plugin
+gsap.registerPlugin(SplitText);
 
-// Cache para almacenar las instancias de SplitText y evitar crearlas múltiples veces
-// o intercalar lecturas/escrituras al DOM
 const splitCache = new Map();
 
-/**
- * Obtiene una instancia de SplitText de la caché o crea una nueva si no existe.
- * @param {Element|string} target - El elemento o selector
- * @param {Object} vars - Opciones para SplitText
- * @returns {SplitText}
- */
 function getOrInitSplit(target, vars) {
   const element = typeof target === 'string' ? document.querySelector(target) : target;
   if (!element) return null;
-
-  if (splitCache.has(element)) {
-    return splitCache.get(element);
-  }
-
+  if (splitCache.has(element)) return splitCache.get(element);
   const split = new SplitText(element, vars);
   splitCache.set(element, split);
   return split;
 }
 
-/**
- * Prepara todas las animaciones generando los SplitText de una sola vez.
- * Esto se debe llamar ANTES de iniciar cualquier animación para evitar forced reflows.
- */
-export function prepareAnimations() {
-  // Revelar elementos justo antes de procesarlos
-  gsap.set(".gsap-reveal", { autoAlpha: 1 });
-
-  // Batch de "Writes" al DOM
-  getOrInitSplit("#titulo", { type: "words" });
-  getOrInitSplit("#parrafo", { type: "words" });
-  getOrInitSplit("#titulo2", { type: "chars" });
-  getOrInitSplit("#parrafo2", { type: "words" });
-  getOrInitSplit("#controlCitas", { type: "words" });
-  getOrInitSplit("#titulo3", { type: "chars" });
-  getOrInitSplit("#ctaFinal", { type: "words" });
-
-  // Elementos múltiples
-  document.querySelectorAll("#miniTitulo").forEach(el => {
-    getOrInitSplit(el, { type: "words" });
-  });
-
-  document.querySelectorAll("#parrafo3").forEach(el => {
-    getOrInitSplit(el, { type: "words" });
-  });
+// Función Helper para observar y animar (Compatible con Movimiento.jsx)
+function observarSeccion(elemento, callback) {
+  if (!elemento) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        callback();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 }); // Se activa apenas entra la sección
+  observer.observe(elemento);
 }
 
-export function animarTitulo() {
-  const splitText = getOrInitSplit("#titulo", { type: "words" });
-  if (!splitText) return;
+export function prepareAnimations() {
+  gsap.set(".gsap-reveal", { autoAlpha: 1 });
+  getOrInitSplit("#titulo", { type: "chars,words" });
+  getOrInitSplit("#parrafo", { type: "words,lines" });
+  getOrInitSplit("#titulo2", { type: "chars" });
+  getOrInitSplit("#parrafo2", { type: "words" });
+  getOrInitSplit("#titulo3", { type: "chars" });
+  getOrInitSplit("#ctaFinal", { type: "words" });
+  document.querySelectorAll("#miniTitulo, #parrafo3").forEach(el => getOrInitSplit(el, { type: "words" }));
+}
 
-  const tl = gsap.timeline();
-  tl.from(splitText.words, {
-    duration: 1,
-    y: 20,
-    stagger: {
-      each: 0.1,
-    },
-    autoAlpha: 0,
-    ease: "power3.out",
-  })
-  tl.to(splitText.words, {
-    duration: 1,
-    y: -20,
-    repeat: -1,
-    yoyo: true,
-    stagger: {
-      each: 0.1,
-    },
-    ease: "power3.out",
-  })
+// ===== SECCIÓN 0 (WELCOME) - INMEDIATA =====
+export function animarTitulo() {
+  const element = document.querySelector("#titulo");
+  if (!element) return;
+  element.style.perspective = "1000px";
+  const splitText = getOrInitSplit(element, { type: "chars,words" });
+  
+  gsap.from(splitText.chars, {
+    duration: 1.2,
+    y: 70,
+    rotateX: -100,
+    opacity: 0,
+    stagger: 0.02,
+    ease: "expo.out",
+    transformOrigin: "50% 100% -50",
+  });
+
+  const shineTl = gsap.timeline({ repeat: -1, repeatDelay: 4 });
+  shineTl.to(splitText.chars, {
+    duration: 0.5,
+    color: "#3b82f6",
+    scale: 1.2,
+    fontWeight: "900",
+    stagger: 0.04,
+    ease: "power2.out",
+  }).to(splitText.chars, {
+    duration: 0.5,
+    color: "inherit",
+    scale: 1,
+    fontWeight: "inherit",
+    stagger: 0.04,
+    ease: "power2.in",
+  }, "-=0.3");
 }
 
 export function animarParrafo() {
   const parrafo = document.querySelector("#parrafo");
   if (!parrafo) return;
-
-  parrafo.style.willChange = "transform, opacity, filter";
-
-  const splitText2 = getOrInitSplit(parrafo, { type: "words" });
-
-  gsap.from(splitText2.words, {
-    delay: 1.5,
-    duration: 1,
-    filter: "blur(10px)",
+  const splitText = getOrInitSplit(parrafo, { type: "words,lines" });
+  gsap.from(splitText.words, {
+    delay: 0.6,
+    duration: 0.8,
+    opacity: 0,
     y: 20,
-    stagger: {
-      each: 0.1,
-    },
-    autoAlpha: 0,
-    ease: "power3.out",
-    onComplete: () => {
-      parrafo.style.willChange = "auto";
-    }
-  })
+    stagger: 0.02,
+    ease: "power2.out",
+  });
 }
 
 export function animarFormulario() {
-  const formulario = document.querySelector("#animacionFormulario");
-  if (!formulario) return;
-
-  formulario.style.willChange = "transform, opacity";
-
-  const tl = gsap.timeline({
-    onComplete: () => {
-      formulario.style.willChange = "auto";
-    }
-  });
-
-  tl.from("#animacionFormulario", {
-    delay: 1.2,
-    duration: 2,
-    y: -20,
-    stagger: {
-      each: 0.1,
-    },
-    autoAlpha: 0,
-    ease: "power3.out",
-  })
+  const form = document.querySelector("#animacionFormulario");
+  if (!form) return;
+  gsap.from(form, { delay: 0.8, duration: 1, y: 30, scale: 0.95, autoAlpha: 0, ease: "expo.out" });
 }
 
-// ===== ANIMACIÓN SECCIÓN 2 =====
-
+// ===== SECCIÓN 2 (CARACTERÍSTICAS) =====
 export function animarTitulo2() {
-  const elemento = document.querySelector("#titulo2");
-  if (!elemento) return;
-
-  let animacionEjecutada = false; // Para ejecutar la animación solo una vez
-
-  // Crear el observer
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      // Si el elemento es visible y la animación no se ha ejecutado
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
-
-        const splitText = getOrInitSplit(elemento, { type: "chars" });
-
-        const tl = gsap.timeline();
-        tl.from(splitText.chars, {
-          duration: 1,
-          y: 20,
-          scale: 0.5,
-          stagger: {
-            each: 0.1,
-          },
-          autoAlpha: 0,
-          ease: "power3.out",
-        });
-        tl.to(splitText.chars, {
-          duration: 1,
-          y: 10,
-          scale: 1,
-          repeat: -1,
-          yoyo: true,
-          stagger: {
-            each: 0.1,
-          },
-          ease: "power3.out",
-        });
-
-        // Opcional: dejar de observar después de animar
-        // observer.unobserve(elemento);
-      }
-    });
-  }, {
-    threshold: 0.3, // Se activa cuando el 30% del elemento es visible
+  const titulo = document.querySelector("#titulo2");
+  observarSeccion(titulo, () => {
+    const splitText = getOrInitSplit(titulo, { type: "chars" });
+    gsap.from(splitText.chars, { duration: 0.6, y: 30, scale: 0.5, opacity: 0, stagger: 0.03, ease: "back.out(1.7)" });
   });
-  // Comenzar a observar el elemento
-  observer.observe(elemento);
 }
 
 export function animarParrafo2() {
-  const parrafo = document.querySelector("#parrafo2");
-  if (!parrafo) return;
-
-  let animacionEjecutada = false;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
-
-        parrafo.style.willChange = "transform, opacity, filter";
-
-        const splitText2 = getOrInitSplit(parrafo, { type: "words" });
-
-        gsap.from(splitText2.words, {
-          delay: 0.3,
-          duration: 1,
-          // filter: "blur(10px)",
-          x: 20,
-          stagger: {
-            each: 0.1,
-          },
-          autoAlpha: 0,
-          ease: "power3.out",
-          onComplete: () => {
-            parrafo.style.willChange = "auto";
-          }
-        })
-      }
-    });
-  }, {
-    threshold: 0.3,
+  const p = document.querySelector("#parrafo2");
+  observarSeccion(p, () => {
+    const splitText = getOrInitSplit(p, { type: "words" });
+    gsap.from(splitText.words, { duration: 0.6, opacity: 0, y: 15, stagger: 0.02, ease: "power2.out" });
   });
-
-  observer.observe(parrafo);
 }
 
 export function animarControlCitas() {
-  const controlCitas = document.querySelector("#controlCitas");
-  if (!controlCitas) return;
-
-  let animacionEjecutada = false;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
-
-        controlCitas.style.willChange = "transform, opacity, filter";
-
-        const splitText2 = getOrInitSplit(controlCitas, { type: "words" });
-
-        gsap.from(splitText2.words, {
-          delay: 0.5,
-          duration: 1,
-          // filter: "blur(10px)",
-          x: 20,
-          stagger: {
-            each: 0.1,
-          },
-          autoAlpha: 0,
-          ease: "power3.out",
-          onComplete: () => {
-            controlCitas.style.willChange = "auto";
-          }
-        })
-      }
-    });
-  }, {
-    threshold: 0.3,
+  const grid = document.querySelector("#controlCitas");
+  observarSeccion(grid, () => {
+    gsap.from(grid.children, { duration: 0.6, y: 40, opacity: 0, scale: 0.9, stagger: 0.08, ease: "back.out(1.4)" });
   });
-
-  observer.observe(controlCitas);
 }
 
-// ===== ANIMACIÓN SECCIÓN 3 =====
-
+// ===== SECCIÓN 3 (PASOS) =====
 export function animarTitulo3() {
-  const titulo3 = document.querySelector("#titulo3");
-  if (!titulo3) return;
-
-  let animacionEjecutada = false;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
-
-        const splitText = getOrInitSplit(titulo3, { type: "chars" });
-
-        const tl = gsap.timeline();
-        tl.from(splitText.chars, {
-          duration: 0.8,
-          y: -50,
-          opacity: 0,
-          scale: 0.8,
-          stagger: {
-            each: 0.05,
-            from: "random",
-          },
-          ease: "back.out(1.7)",
-          onComplete: () => {
-            titulo3.style.willChange = "auto";
-          }
-        })
-        tl.to(splitText.chars, {
-          duration: 1,
-          y: 10,
-          scale: 1,
-          repeat: -1,
-          yoyo: true,
-          stagger: {
-            each: 0.1,
-          },
-          ease: "power3.out",
-        });
-      }
-    });
-  }, {
-    threshold: 0.3,
+  const titulo = document.querySelector("#titulo3");
+  observarSeccion(titulo, () => {
+    const splitText = getOrInitSplit(titulo, { type: "chars" });
+    gsap.from(splitText.chars, { duration: 0.5, y: -20, opacity: 0, scale: 0.8, stagger: 0.02, ease: "back.out(1.7)" });
   });
-
-  observer.observe(titulo3);
 }
 
 export function miniTitulo() {
-  const elements = document.querySelectorAll("#miniTitulo");
-  if (!elements.length) return;
-
-  elements.forEach((element) => {
-    let animacionEjecutada = false;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !animacionEjecutada) {
-          animacionEjecutada = true;
-
-          element.style.willChange = "transform, opacity, filter";
-
-          const splitText = getOrInitSplit(element, { type: "words" });
-
-          gsap.from(splitText.words, {
-            delay: 1.5,
-            duration: 1,
-            x: -20,
-            stagger: {
-              each: 0.1,
-            },
-            autoAlpha: 0,
-            ease: "power3.out",
-            onComplete: () => {
-              element.style.willChange = "auto";
-            },
-          });
-        }
-      });
-    }, {
-      threshold: 0.3,
+  document.querySelectorAll("#miniTitulo").forEach(el => {
+    observarSeccion(el, () => {
+      const splitText = getOrInitSplit(el, { type: "words" });
+      gsap.from(splitText.words, { duration: 0.5, x: -15, opacity: 0, stagger: 0.02, ease: "power2.out" });
     });
-
-    observer.observe(element);
   });
 }
 
 export function animarParrafo3() {
-  const elements = document.querySelectorAll("#parrafo3");
-  if (!elements.length) return;
-
-  elements.forEach((element) => {
-    let animacionEjecutada = false;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !animacionEjecutada) {
-          animacionEjecutada = true;
-
-          element.style.willChange = "transform, opacity, filter";
-
-          const splitText = getOrInitSplit(element, { type: "words" });
-
-          gsap.from(splitText.words, {
-            delay: 0.5,
-            duration: 1,
-            x: 20,
-            stagger: {
-              each: 0.1,
-            },
-            autoAlpha: 0,
-            ease: "power3.out",
-            onComplete: () => {
-              element.style.willChange = "auto";
-            },
-          });
-        }
-      });
-    }, {
-      threshold: 0.3,
+  document.querySelectorAll("#parrafo3").forEach(el => {
+    observarSeccion(el, () => {
+      const splitText = getOrInitSplit(el, { type: "words" });
+      gsap.from(splitText.words, { duration: 0.5, x: 15, opacity: 0, stagger: 0.02, ease: "power2.out" });
     });
-
-    observer.observe(element);
   });
 }
+
 export function Rounded() {
   const rounded = document.querySelector("#rounded");
-  const rounded2 = document.querySelector("#rounded2");
-  const rounded3 = document.querySelector("#rounded3");
-  
-  if (!rounded || !rounded2 || !rounded3) return;
-
-  let animacionEjecutada = false;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
-
-        // Usamos una línea de tiempo para coordinar que todos salgan "a la vez"
-        // pero con un pequeño desfase (stagger) para que se vea más natural
-        const tl = gsap.timeline();
-
-        [rounded, rounded2, rounded3].forEach((el, index) => {
-          // Animación de entrada: aparecen escalando y con opacidad
-          tl.from(el, {
-            duration: 0.8,
-            autoAlpha: 0,
-            scale: 0,
-            y: 20,
-            ease: "back.out(1.7)",
-          }, index * 0.15); // Stagger de 0.15s entre cada uno
-
-          // Animación de rotación infinita (efecto moneda rodando)
-          // La iniciamos casi al mismo tiempo que aparecen
-          gsap.to(el, {
-            duration: 3,
-            rotateY: 360,
-            repeat: -1,
-            ease: "power1.inOut",
-            delay: index * 0.15 // Mismo desfase para la rotación
-          });
-        });
-
-        // Una vez activada, podemos dejar de observar
-        observer.unobserve(entry.target);
-      }
+  if (!rounded) return;
+  observarSeccion(rounded, () => {
+    const elements = [rounded, document.querySelector("#rounded2"), document.querySelector("#rounded3")];
+    gsap.from(elements, { duration: 0.6, autoAlpha: 0, scale: 0, y: 20, stagger: 0.1, ease: "back.out(1.7)" });
+    elements.forEach((el, index) => {
+      if (el) gsap.to(el, { duration: 3, rotateY: 360, repeat: -1, ease: "power1.inOut", delay: index * 0.1 });
     });
-  }, {
-    threshold: 0.3,
   });
-
-  observer.observe(rounded);
 }
 
-// ===== ANIMACIÓN SECCIÓN 4 (CTA Final) =====
+// ===== SECCIÓN 4 (CTA FINAL) =====
 export function animarParrafo4() {
-  const ctaFinal = document.querySelector("#ctaFinal");
-  if (!ctaFinal) return;
-
-  let animacionEjecutada = false;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
-
-        ctaFinal.style.willChange = "transform, opacity, filter";
-
-        const splitText = getOrInitSplit(ctaFinal, { type: "words" });
-
-        const tl = gsap.timeline();
-        tl.from(splitText.words, {
-          duration: 1,
-          x: 20,
-          stagger: {
-            each: 0.1,
-          },
-          autoAlpha: 0,
-          ease: "power3.out",
-        })
-        tl.to(splitText.words, {
-          duration: 1,
-          x: 10,
-          yoyo: true,
-          repeat: -1,
-          stagger: {
-            each: 0.1,
-          },
-          ease: "power3.out",
-        })
-      }
+  const cta = document.querySelector("#ctaFinal");
+  observarSeccion(cta, () => {
+    document.querySelectorAll("#ctaFinal").forEach(el => {
+      const splitText = getOrInitSplit(el, { type: "words" });
+      gsap.from(splitText.words, { duration: 0.6, y: 20, opacity: 0, stagger: 0.02, ease: "power2.out" });
     });
-  }, {
-    threshold: 0.3,
   });
-
-  observer.observe(ctaFinal);
 }
