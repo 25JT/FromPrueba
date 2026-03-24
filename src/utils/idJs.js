@@ -90,7 +90,7 @@ async function cargarHorasDisponibles() {
 
 
         if (data.success) {
-            console.log(data);
+            //    console.log(data);
 
             // Actualizar el nombre del servicio en el campo de mensaje/notas dinámicamente
             // Solo si no estamos en modo edición (donde las notas ya vienen de la cita)
