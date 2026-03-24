@@ -10,13 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.2",
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/node": "^10.0.3",
+    "@astrojs/react": "^5.0.1",
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.1.17",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
-    "astro": "^5.16.15",
+    "astro": "^6.0.8",
     "driver.js": "^1.4.0",
     "flatpickr": "^4.6.13",
     "gsap": "^3.13.0",
