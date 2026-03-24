@@ -163,16 +163,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Cerrar modal al hacer click fuera
-  if (loginDropdown && loginForm && forgotForm) {
-    loginDropdown.addEventListener("click", function (e) {
-      if (e.target === loginDropdown) {
-        loginDropdown.classList.add("hidden");
-        loginForm.classList.remove("hidden");
-        forgotForm.classList.add("hidden");
-      }
-    });
-  }
 
   // ===== OPTIMIZACIÓN PARA MÓVILES (TECLADO) =====
   const inputs = document.querySelectorAll('#loginDropdown input');
