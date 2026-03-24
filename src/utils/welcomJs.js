@@ -20,13 +20,13 @@ function cargarAnimacionesProgresivamente() {
 	animarParrafo();
 	animarFormulario();
 
-	// PRIORIDAD BAJA: Cargar otras secciones de forma escalonada
+	// PRIORIDAD BAJA: Cargar otras secciones 
 	// Usamos requestIdleCallback para no bloquear el hilo principal
 	const cargarSeccionesSecundarias = () => {
 		animarTitulo2()
 		animarParrafo2()
 		setTimeout(() => animarControlCitas(), 300)
-		// Aquí puedes agregar animaciones de otras secciones cuando las tengas
+		// agregar animaciones de otras secciones
 		// Por ejemplo:
 		// - Sección 1: cargar después de 100ms
 		// - Sección 2: cargar después de 200ms
