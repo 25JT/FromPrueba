@@ -201,6 +201,14 @@ function mostrarDetallesCita(agenda) {
 
     // Event listener para editar cita
     document.getElementById("editar-cita").addEventListener("click", () => {
+        const estadoCita = String(agenda.estado).toLowerCase();
+        
+        // Solo permitir edición si está pendiente (o es "0")
+        if (estadoCita !== "pendiente" && estadoCita !== "0") {
+            alertaMal("Solo se pueden modificar citas en estado pendiente");
+            return;
+        }
+
         if (agenda.id_pservicio && agenda.id) {
             sessionStorage.setItem("editCitaId", agenda.id);
             window.location.href = `/Agendar/${agenda.id_pservicio}`;
