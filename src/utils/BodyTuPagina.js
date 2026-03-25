@@ -67,7 +67,7 @@ tituloTienda.addEventListener("input", () => {
         } else {
             document.getElementById("shop-name-preview").innerHTML = tituloTienda.value;
 
-            console.log({ tituloTienda, preview: tituloTienda.value });
+            //         console.log({ tituloTienda, preview: tituloTienda.value });
         }
     }, 1000);
 });
@@ -80,7 +80,7 @@ direccionTienda.addEventListener("input", () => {
         } else {
             document.getElementById("location-preview").innerHTML = direccionTienda.value;
 
-            console.log({ direccionTienda, preview: direccionTienda.value });
+            //     console.log({ direccionTienda, preview: direccionTienda.value });
         }
     }, 1000);
 });
@@ -94,7 +94,7 @@ descripcionTienda.addEventListener("input", () => {
         } else {
             document.getElementById("description-preview").innerHTML = descripcionTienda.value;
 
-            console.log({ descripcionTienda, preview: descripcionTienda.value });
+            //   console.log({ descripcionTienda, preview: descripcionTienda.value });
         }
     }, 1000);
 });
@@ -108,7 +108,7 @@ telefonoTienda.addEventListener("input", () => {
         } else {
             document.getElementById("phone-preview").innerHTML = telefonoTienda.value;
 
-            console.log({ telefonoTienda, preview: telefonoTienda.value });
+            //       console.log({ telefonoTienda, preview: telefonoTienda.value });
         }
     }, 1000);
 });
@@ -125,7 +125,7 @@ logoTienda.addEventListener("change", () => {
 
     document.getElementById("logo-preview").src = URL.createObjectURL(logoTienda.files[0]);
 
-    console.log({ logoTienda, preview: URL.createObjectURL(logoTienda.files[0]) });
+    //  console.log({ logoTienda, preview: URL.createObjectURL(logoTienda.files[0]) });
 
 
 });
@@ -143,7 +143,7 @@ bannerTienda.addEventListener("change", () => {
 
     document.getElementById("banner-preview").src = URL.createObjectURL(file);
 
-    console.log({ file, preview: URL.createObjectURL(file) });
+    //  console.log({ file, preview: URL.createObjectURL(file) });
 
 });
 

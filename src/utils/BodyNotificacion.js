@@ -96,7 +96,6 @@ ratingBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
         const rating = parseInt(btn.getAttribute("data-rating") || "0");
         selectedRating = rating;
-        console.log("Calificación seleccionada: " + selectedRating);
         updateStars(selectedRating);
         if (enviarBtn) {
             enviarBtn.disabled = false;
@@ -117,7 +116,7 @@ if (modal) {
 
 if (enviarBtn) {
     enviarBtn.addEventListener("click", () => {
-        console.log("Enviando calificación definitiva: " + selectedRating);
+        //  console.log("Enviando calificación definitiva: " + selectedRating);
         //enviar calificacion a la api
         fetch(`${ruta}/api/Calificar/notificacion`, {
             method: "POST",
@@ -127,7 +126,7 @@ if (enviarBtn) {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                //      console.log(data);
             })
             .catch((error) => {
                 console.error(error);
